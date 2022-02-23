@@ -3,8 +3,9 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
 import errorMiddleware from "./middlewares/errorMiddleware";
+import authRouter from "./routes/authRoute";
 
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 dotenv.config({ path: __dirname + "/.env" });
 
 connectDB();
@@ -15,8 +16,16 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+//Routes
+app.use("/api/auth", authRouter);
+
 app.use(errorMiddleware);
 
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+process.on("unhandledRejection", (err, promise) => {
+  console.log(`Logged error: ${err}`);
+  server.close(() => process.exit(1));
 });

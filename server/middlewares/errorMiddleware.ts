@@ -1,13 +1,24 @@
-import type { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import ErrorResponse from "../utils/errorResponse";
 
-const errorMiddleware: ErrorRequestHandler = (err, req, res, next) => {
-  const status = res.statusCode ? res.statusCode : 500;
-  res.status(status);
+const errorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
+  let error = { ...err };
+  error.message = err.message;
 
-  res.json({
-    status: status,
-    message: err.message,
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+  if (err.code === 11000) {
+    const message = "Duplicate field value";
+    error = new ErrorResponse(message, 400);
+  }
+
+  //Error messages from mongoose validation
+  if (err.name === "ValidationError") {
+    const message = Object.values(err.errors).map((val: any) => val.message);
+    error = new ErrorResponse(message[0], 400);
+  }
+
+  res.status(err.statusCode || 500).json({
+    success: false,
+    error: error.message || "Server error",
   });
 };
 
