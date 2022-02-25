@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
 import connectDB from "./config/db";
 import errorMiddleware from "./middlewares/errorMiddleware";
 import authRouter from "./routes/authRoute";
@@ -12,6 +13,7 @@ connectDB();
 const app = express();
 
 //Middlewares
+app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
