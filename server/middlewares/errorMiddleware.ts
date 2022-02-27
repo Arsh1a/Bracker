@@ -6,7 +6,7 @@ const errorMiddleware = (err: any, req: Request, res: Response, next: NextFuncti
   error.message = err.message;
 
   if (err.code === 11000) {
-    const message = "Duplicate field value";
+    const message = "That user already exists.";
     error = new ErrorResponse(message, 400);
   }
 

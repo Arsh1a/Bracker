@@ -26,8 +26,12 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return next(new ErrorResponse("Please provide email and password", 400));
+  if (!email && !password) {
+    return next(new ErrorResponse("Please provide an email and password", 400));
+  } else if (!password) {
+    return next(new ErrorResponse("Please provide a password", 400));
+  } else if (!email) {
+    return next(new ErrorResponse("Please provide an email", 400));
   }
 
   try {
