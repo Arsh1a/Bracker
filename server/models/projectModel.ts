@@ -10,7 +10,7 @@ const projectSchema = new mongoose.Schema(
     desc: {
       type: String,
     },
-    tasks: taskModel,
+    tasks: [taskModel],
   },
   { timestamps: true }
 );
