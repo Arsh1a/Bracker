@@ -5,6 +5,7 @@ import helmet from "helmet";
 import connectDB from "./config/db";
 import errorMiddleware from "./middlewares/errorMiddleware";
 import authRouter from "./routes/authRoute";
+import projectRouter from "./routes/projectRoute";
 
 const PORT = process.env.PORT || 5000;
 dotenv.config({ path: __dirname + "/.env" });
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 //Routes
 app.use("/api/auth", authRouter);
+app.use("/api/project", projectRouter);
 
 app.use(errorMiddleware);
 

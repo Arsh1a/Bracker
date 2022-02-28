@@ -9,6 +9,11 @@ const taskSchema = new mongoose.Schema(
     desc: {
       type: String,
     },
+    projectID: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "There is no project"],
+      ref: "Project",
+    },
   },
   { timestamps: true }
 );

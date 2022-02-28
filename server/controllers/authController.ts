@@ -1,12 +1,10 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import User from "../models/userModel";
 import ErrorResponse from "../utils/errorResponse";
 
-const sendToken = (user: { getSignedToken: () => any }, statusCode: number, res: Response) => {
-  const token = user.getSignedToken();
-  res.status(statusCode).json({ success: true, token });
-};
-
+// @desc Register new user
+// @route POST /auth/reguister
+// @access Public
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   const { username, email, password } = req.body;
 
@@ -17,12 +15,23 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       email,
       password,
     });
-    sendToken(user, 201, res);
+    if (user) {
+      return res
+        .cookie("access_token", user.getSignedToken(), {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+        })
+        .status(200)
+        .json({ username: user.username, email: user.email });
+    }
   } catch (err) {
     next(err);
   }
 };
 
+// @desc Authenticate a user
+// @route POST /api/auth/login
+// @access Public
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 
@@ -47,8 +56,21 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       return next(new ErrorResponse("Invalid credentials", 401));
     }
 
-    sendToken(user, 200, res);
+    if (user) {
+      return res
+        .cookie("access_token", user.getSignedToken(), {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+        })
+        .status(200)
+        .json({ username: user.username, email: user.email });
+    }
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
   }
+};
+
+const sendToken = (user: { getSignedToken: () => any }, statusCode: number, res: Response) => {
+  const token = user.getSignedToken();
+  res.status(statusCode).json({ success: true, token });
 };

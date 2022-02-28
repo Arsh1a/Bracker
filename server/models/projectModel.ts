@@ -10,7 +10,12 @@ const projectSchema = new mongoose.Schema(
     desc: {
       type: String,
     },
-    tasks: [taskModel],
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "There is no owner"],
+      ref: "User",
+    },
+    otherUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );
