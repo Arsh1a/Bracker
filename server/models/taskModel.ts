@@ -9,9 +9,14 @@ const taskSchema = new mongoose.Schema(
     desc: {
       type: String,
     },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, "There is no owner"],
+      ref: "User",
+    },
     projectID: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, "There is no project"],
+      required: [true, "There is no project assigned"],
       ref: "Project",
     },
   },
