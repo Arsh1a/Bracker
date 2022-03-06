@@ -15,6 +15,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       email,
       password,
     });
+
     if (user) {
       return res
         .cookie("access_token", user.getSignedToken(), {

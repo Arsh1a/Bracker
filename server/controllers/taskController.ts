@@ -27,7 +27,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
       title: title,
       desc: desc,
       createdBy: user._id,
-      projectID: projectID,
+      projectID,
     });
 
     res.status(200).json(task);
@@ -39,4 +39,26 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 // @desc Delete project
 // @route DELETE /project/
 // @access private
-export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {};
+export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
+  const { taskID } = req.body;
+
+  //Checks if provided project id can be casted ot ObjectId
+  if (!isValidObjectId(taskID)) {
+    return next(new ErrorResponse("Invalid task ID", 400));
+  }
+
+  try {
+    const task = await Task.findOneAndDelete({
+      _id: taskID,
+    });
+
+    //Checks if provided task id exists in database
+    if (!task) {
+      return next(new ErrorResponse("Task does not exist", 404));
+    }
+
+    res.status(200).json(task + " deleted");
+  } catch (err) {
+    next(err);
+  }
+};
