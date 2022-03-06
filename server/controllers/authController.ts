@@ -3,7 +3,7 @@ import User from "../models/userModel";
 import ErrorResponse from "../utils/errorResponse";
 
 // @desc Register new user
-// @route POST /auth/reguister
+// @route POST /auth/register
 // @access Public
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   const { username, email, password } = req.body;
@@ -68,9 +68,4 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
   }
-};
-
-const sendToken = (user: { getSignedToken: () => any }, statusCode: number, res: Response) => {
-  const token = user.getSignedToken();
-  res.status(statusCode).json({ success: true, token });
 };
