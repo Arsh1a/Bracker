@@ -36,20 +36,54 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-// @desc Delete project
-// @route DELETE /project/
-// @access private
-export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
-  const { taskID } = req.body;
+/// @desc Update task
+/// @route PUT /task/:id
+/// @access private
+export const updateTask = async (req: Request, res: Response, next: NextFunction) => {
+  const { title, desc } = req.body;
+  const { id } = req.params;
+
+  console.log(id);
 
   //Checks if provided project id can be casted ot ObjectId
-  if (!isValidObjectId(taskID)) {
+  if (!isValidObjectId(id)) {
+    return next(new ErrorResponse("Invalid project ID", 400));
+  }
+
+  try {
+    const task = await Task.findByIdAndUpdate(
+      id,
+      {
+        title: title,
+        desc: desc,
+      },
+      { new: true }
+    );
+
+    if (!task) {
+      return next(new ErrorResponse("Project not found", 404));
+    }
+
+    res.status(200).json(task);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc Delete task
+// @route DELETE /task/:id
+// @access private
+export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  //Checks if provided task id can be casted ot ObjectId
+  if (!isValidObjectId(id)) {
     return next(new ErrorResponse("Invalid task ID", 400));
   }
 
   try {
     const task = await Task.findOneAndDelete({
-      _id: taskID,
+      _id: id,
     });
 
     //Checks if provided task id exists in database
