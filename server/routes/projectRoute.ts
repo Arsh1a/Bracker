@@ -1,10 +1,15 @@
 import express from "express";
 const router = express.Router();
 
-import { createProject, updateProject, deleteProject } from "../controllers/projectController";
+import {
+  getAllProjects,
+  createProject,
+  updateProject,
+  deleteProject,
+} from "../controllers/projectController";
 import authMiddleware from "../middlewares/authMiddleware";
 
-router.route("/").post(authMiddleware, createProject).delete(authMiddleware, deleteProject);
-router.route("/:id").put(authMiddleware, updateProject);
+router.route("/").get(authMiddleware, getAllProjects).post(authMiddleware, createProject);
+router.route("/:id").put(authMiddleware, updateProject).delete(authMiddleware, deleteProject);
 
 export default router;

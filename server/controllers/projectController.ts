@@ -4,8 +4,22 @@ import Task from "../models/taskModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
+// @desc Get all projects
+// @route GET /api/project
+// @access private
+export const getAllProjects = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+
+  try {
+    const projects = await Project.find({ createdBy: user._id });
+    res.status(200).json(projects);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc Create new project
-// @route POST /project/
+// @route POST /api/project/
 // @access private
 export const createProject = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
@@ -25,11 +39,12 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc Update project
-/// @route PUT /project/:id
+/// @route PUT /api/project/:id
 /// @access private
 export const updateProject = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
   const { id } = req.params;
+  const { user } = <any>req;
 
   console.log(id);
 
@@ -39,8 +54,8 @@ export const updateProject = async (req: Request, res: Response, next: NextFunct
   }
 
   try {
-    const project = await Project.findByIdAndUpdate(
-      id,
+    const project = await Project.findOneAndUpdate(
+      { _id: id, createdBy: user._id },
       {
         title: title,
         desc: desc,
@@ -59,10 +74,11 @@ export const updateProject = async (req: Request, res: Response, next: NextFunct
 };
 
 // @desc Delete project
-// @route DELETE /project/:id
+// @route DELETE /api/project/:id
 // @access private
 export const deleteProject = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
+  const { user } = <any>req;
 
   //Checks if provided project id can be casted ot ObjectId
   if (!isValidObjectId(id)) {
@@ -70,9 +86,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
   }
 
   try {
-    const project = await Project.findOneAndDelete({
-      _id: id,
-    });
+    const project = await Project.findOneAndDelete({ _id: id, createdBy: user._id });
 
     //Checks if provided project id exists in database
     if (!project) {
