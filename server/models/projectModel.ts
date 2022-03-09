@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import taskModel from "./taskModel";
+import Task from "./taskModel";
 
-const projectSchema = new mongoose.Schema(
+const ProjectSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -20,4 +20,6 @@ const projectSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Project", projectSchema);
+const Project = mongoose.model("Project", ProjectSchema);
+
+export default Project;

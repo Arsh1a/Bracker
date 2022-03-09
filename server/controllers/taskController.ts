@@ -96,11 +96,6 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
       return next(new ErrorResponse("Project not found", 404));
     }
 
-    //Check if user is the owner of the task
-    if (task.createdBy.toString() !== user._id.toString()) {
-      return next(new ErrorResponse("There was an error", 401));
-    }
-
     res.status(200).json(task);
   } catch (err) {
     next(err);

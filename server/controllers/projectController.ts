@@ -41,7 +41,7 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
 /// @desc Update project
 /// @route PUT /api/project/:id
 /// @access private
-export const updateProject = async (req: Request, res: Response, next: NextFunction) => {
+export const updateProjectInfo = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
   const { id } = req.params;
   const { user } = <any>req;
@@ -97,6 +97,43 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
     await Task.deleteMany({ id });
 
     res.status(200).json(project + " deleted");
+  } catch (err) {
+    next(err);
+  }
+};
+
+/// @desc Add user to project
+/// @route PUT /api/project/:id/user/:userID
+/// @access private
+export const addUserToProject = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  const { userID } = req.params;
+  const { user } = <any>req;
+
+  //Checks if provided project id can be casted ot ObjectId
+  if (!isValidObjectId(id)) {
+    return next(new ErrorResponse("Invalid project ID", 400));
+  }
+
+  //Checks if provided user id can be casted ot ObjectId
+  if (!isValidObjectId(userID)) {
+    return next(new ErrorResponse("Invalid user ID", 400));
+  }
+
+  try {
+    const project = await Project.findOneAndUpdate(
+      { _id: id, createdBy: user._id },
+      { $addToSet: { otherUsers: userID } },
+      { new: true }
+    );
+
+    //TODO: Have to figure out how to return an error if user already exists
+
+    if (!project) {
+      return next(new ErrorResponse("Project not found", 404));
+    }
+
+    res.status(200).json(project);
   } catch (err) {
     next(err);
   }
