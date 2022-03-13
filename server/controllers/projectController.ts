@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Project from "../models/projectModel";
 import Task from "../models/taskModel";
+import User from "../models/userModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
@@ -121,16 +122,35 @@ export const addUserToProject = async (req: Request, res: Response, next: NextFu
   }
 
   try {
+    //Check if user exist in database
+    const userExist = await User.findOne({ _id: userID });
+    if (!userExist) {
+      return next(new ErrorResponse("User not found", 404));
+    }
+
+    const previousProject = await Project.findOne({
+      _id: id,
+      createdBy: user._id,
+    });
+
+    //Checks if the user is the owner of the project
+    if (previousProject.createdBy.toString() === userID) {
+      return next(new ErrorResponse("This user is the owner of the project", 400));
+    }
+
     const project = await Project.findOneAndUpdate(
       { _id: id, createdBy: user._id },
       { $addToSet: { otherUsers: userID } },
       { new: true }
     );
 
-    //TODO: Have to figure out how to return an error if user already exists
+    //Checks if user already added to the project
+    if (previousProject.otherUsers.toString() === project.otherUsers.toString()) {
+      return next(new ErrorResponse("User is already added in the project", 400));
+    }
 
     if (!project) {
-      return next(new ErrorResponse("Project not found", 404));
+      return next(new ErrorResponse("There was an error adding a user", 400));
     }
 
     res.status(200).json(project);
