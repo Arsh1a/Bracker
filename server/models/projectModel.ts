@@ -10,7 +10,7 @@ const ProjectSchema = new mongoose.Schema(
     desc: {
       type: String,
     },
-    createdBy: {
+    owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "There is no owner"],
       ref: "User",

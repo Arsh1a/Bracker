@@ -12,7 +12,7 @@ export const getAllProjects = async (req: Request, res: Response, next: NextFunc
   const { user } = <any>req;
 
   try {
-    const projects = await Project.find({ createdBy: user._id });
+    const projects = await Project.find({ owner: user._id });
     res.status(200).json(projects);
   } catch (err) {
     next(err);
@@ -30,7 +30,7 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
     const project = await Project.create({
       title: title,
       desc: desc,
-      createdBy: user._id,
+      owner: user._id,
     });
 
     res.status(200).json(project);
@@ -56,7 +56,7 @@ export const updateProjectInfo = async (req: Request, res: Response, next: NextF
 
   try {
     const project = await Project.findOneAndUpdate(
-      { _id: id, createdBy: user._id },
+      { _id: id, owner: user._id },
       {
         title: title,
         desc: desc,
@@ -87,7 +87,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
   }
 
   try {
-    const project = await Project.findOneAndDelete({ _id: id, createdBy: user._id });
+    const project = await Project.findOneAndDelete({ _id: id, owner: user._id });
 
     //Checks if provided project id exists in database
     if (!project) {
@@ -130,16 +130,16 @@ export const addUserToProject = async (req: Request, res: Response, next: NextFu
 
     const previousProject = await Project.findOne({
       _id: id,
-      createdBy: user._id,
+      owner: user._id,
     });
 
     //Checks if the user is the owner of the project
-    if (previousProject.createdBy.toString() === userID) {
+    if (previousProject.owner.toString() === userID) {
       return next(new ErrorResponse("This user is the owner of the project", 400));
     }
 
     const project = await Project.findOneAndUpdate(
-      { _id: id, createdBy: user._id },
+      { _id: id, owner: user._id },
       { $addToSet: { otherUsers: userID } },
       { new: true }
     );
