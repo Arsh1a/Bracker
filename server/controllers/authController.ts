@@ -9,7 +9,6 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
   const { username, email, password } = req.body;
 
   try {
-    console.log("Registering user...");
     const user = await User.create({
       username,
       email,

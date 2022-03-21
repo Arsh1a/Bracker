@@ -5,10 +5,10 @@ import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
 // @desc Get tasks for a project
-// @route GET /api/task/
+// @route GET /api/projects/:projectID/tasks
 // @access private
 export const getTasksForProject = async (req: Request, res: Response, next: NextFunction) => {
-  const { projectID } = req.body;
+  const { projectID } = req.params;
   const { user } = <any>req;
 
   //Checks if provided project id can be casted ot ObjectId
@@ -16,15 +16,13 @@ export const getTasksForProject = async (req: Request, res: Response, next: Next
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
-  //Check if project exist
-  const project = await Project.findById(projectID);
+  //Checks if provided project id exists in database and the user is part of the project
+  const project = await Project.findById(projectID).or([
+    { owner: user._id },
+    { otherUsers: user._id },
+  ]);
   if (!project) {
-    return next(new ErrorResponse("Project not found", 404));
-  }
-
-  //Check if user is the owner of the project
-  if (project.createdBy.toString() !== user._id.toString()) {
-    return next(new ErrorResponse("There was an error", 403));
+    return next(new ErrorResponse("There was an error fetching tasks", 400));
   }
 
   try {
@@ -36,10 +34,11 @@ export const getTasksForProject = async (req: Request, res: Response, next: Next
 };
 
 // @desc Create new task
-// @route POST /api/task/
+// @route POST /api/projects/:projectID/tasks
 // @access private
 export const createTask = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, desc, projectID } = req.body;
+  const { title, desc } = req.body;
+  const { projectID } = req.params;
   const { user } = <any>req;
 
   //Checks if provided project id can be casted ot ObjectId
@@ -47,17 +46,20 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
-  //Checks if provided project id exists in database
-  const project = await Project.findById(projectID);
+  //Checks if provided project id exists in database and the user is part of the project
+  const project = await Project.findById(projectID).or([
+    { owner: user._id },
+    { otherUsers: user._id },
+  ]);
   if (!project) {
-    return next(new ErrorResponse("Project does not exist", 404));
+    return next(new ErrorResponse("There was an error creating the task", 400));
   }
 
   try {
     const task = await Task.create({
       title: title,
       desc: desc,
-      createdBy: user._id,
+      owner: user._id,
       projectID,
     });
 
@@ -68,23 +70,36 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 };
 
 /// @desc Update task
-/// @route PUT /api/task/:id
+/// @route PUT /api/projects/:projectID/tasks/:taskID
 /// @access private
 export const updateTask = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
-  const { id } = req.params;
+  const { projectID, taskID } = req.params;
   const { user } = <any>req;
 
-  console.log(id);
-
   //Checks if provided project id can be casted ot ObjectId
-  if (!isValidObjectId(id)) {
+  if (!isValidObjectId(projectID)) {
     return next(new ErrorResponse("Invalid project ID", 400));
+  }
+
+  //Checks if provided task id can be casted ot ObjectId
+  if (!isValidObjectId(taskID)) {
+    return next(new ErrorResponse("Invalid task ID", 400));
+  }
+
+  //Checks if provided project id exists in database and the user is part of the project
+  const project = await Project.findById(projectID).or([
+    { owner: user._id },
+    { otherUsers: user._id },
+  ]);
+
+  if (!project) {
+    return next(new ErrorResponse("There was an error updating the task", 400));
   }
 
   try {
     const task = await Task.findOneAndUpdate(
-      { _id: id, createdBy: user._id },
+      { _id: taskID, projectID },
       {
         title: title,
         desc: desc,
@@ -93,7 +108,7 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
     );
 
     if (!task) {
-      return next(new ErrorResponse("Project not found", 404));
+      return next(new ErrorResponse("There was an error updating the task", 404));
     }
 
     res.status(200).json(task);
@@ -103,19 +118,34 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
 };
 
 // @desc Delete task
-// @route DELETE /api/task/:id
+// @route DELETE /api/projects/:projectID/tasks/:taskID
 // @access private
 export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
+  const { projectID, taskID } = req.params;
   const { user } = <any>req;
 
-  //Checks if provided task id can be casted ot ObjectId
-  if (!isValidObjectId(id)) {
+  //Checks if provided task id can be casted to ObjectId
+  if (!isValidObjectId(projectID)) {
+    return next(new ErrorResponse("Invalid project ID", 400));
+  }
+
+  //Checks if provided task id can be casted to ObjectId
+  if (!isValidObjectId(taskID)) {
     return next(new ErrorResponse("Invalid task ID", 400));
   }
 
+  //Checks if provided project id exists in database and the user is part of the project
+  const project = await Project.findById(projectID).or([
+    { owner: user._id },
+    { otherUsers: user._id },
+  ]);
+
+  if (!project) {
+    return next(new ErrorResponse("There was an error deleting the task", 400));
+  }
+
   try {
-    const task = await Task.findOneAndDelete({ _id: id, createdBy: user._id });
+    const task = await Task.findOneAndDelete({ _id: taskID, projectID });
 
     //Checks if provided task id exists in database
     if (!task) {

@@ -5,8 +5,8 @@ import User from "../models/userModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
-// @desc Get all projects
-// @route GET /api/project
+// @desc Get all for a user projects
+// @route GET /api/projects
 // @access private
 export const getAllProjects = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
@@ -20,7 +20,7 @@ export const getAllProjects = async (req: Request, res: Response, next: NextFunc
 };
 
 // @desc Create new project
-// @route POST /api/project/
+// @route POST /api/projects/
 // @access private
 export const createProject = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
@@ -40,23 +40,21 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc Update project
-/// @route PUT /api/project/:id
+/// @route PUT /api/projects/:projectID
 /// @access private
 export const updateProjectInfo = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
-  const { id } = req.params;
+  const { projectID } = req.params;
   const { user } = <any>req;
 
-  console.log(id);
-
   //Checks if provided project id can be casted ot ObjectId
-  if (!isValidObjectId(id)) {
+  if (!isValidObjectId(projectID)) {
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
   try {
     const project = await Project.findOneAndUpdate(
-      { _id: id, owner: user._id },
+      { _id: projectID, owner: user._id },
       {
         title: title,
         desc: desc,
@@ -75,19 +73,19 @@ export const updateProjectInfo = async (req: Request, res: Response, next: NextF
 };
 
 // @desc Delete project
-// @route DELETE /api/project/:id
+// @route DELETE /api/projects/:projectID
 // @access private
 export const deleteProject = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
+  const { projectID } = req.params;
   const { user } = <any>req;
 
   //Checks if provided project id can be casted ot ObjectId
-  if (!isValidObjectId(id)) {
+  if (!isValidObjectId(projectID)) {
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
   try {
-    const project = await Project.findOneAndDelete({ _id: id, owner: user._id });
+    const project = await Project.findOneAndDelete({ _id: projectID, owner: user._id });
 
     //Checks if provided project id exists in database
     if (!project) {
@@ -95,7 +93,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
     }
 
     //Delete project tasks
-    await Task.deleteMany({ id });
+    await Task.deleteMany({ id: projectID });
 
     res.status(200).json(project + " deleted");
   } catch (err) {
@@ -104,15 +102,15 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc Add user to project
-/// @route PUT /api/project/:id/user/:userID
+/// @route PUT /api/projects/:projectID/users/
 /// @access private
 export const addUserToProject = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
-  const { userID } = req.params;
+  const { projectID } = req.params;
+  const { userID } = req.body;
   const { user } = <any>req;
 
   //Checks if provided project id can be casted ot ObjectId
-  if (!isValidObjectId(id)) {
+  if (!isValidObjectId(projectID)) {
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
@@ -129,7 +127,7 @@ export const addUserToProject = async (req: Request, res: Response, next: NextFu
     }
 
     const previousProject = await Project.findOne({
-      _id: id,
+      _id: projectID,
       owner: user._id,
     });
 
@@ -139,7 +137,7 @@ export const addUserToProject = async (req: Request, res: Response, next: NextFu
     }
 
     const project = await Project.findOneAndUpdate(
-      { _id: id, owner: user._id },
+      { _id: projectID, owner: user._id },
       { $addToSet: { otherUsers: userID } },
       { new: true }
     );
@@ -150,7 +148,7 @@ export const addUserToProject = async (req: Request, res: Response, next: NextFu
     }
 
     if (!project) {
-      return next(new ErrorResponse("There was an error adding a user", 400));
+      return next(new ErrorResponse("There was an error adding the user", 400));
     }
 
     res.status(200).json(project);
