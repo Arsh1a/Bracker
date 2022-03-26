@@ -5,7 +5,7 @@ import User from "../models/userModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
-// @desc Get all for a user projects
+// @desc Get all projects for a user
 // @route GET /api/projects
 // @access private
 export const getAllProjects = async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +40,7 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc Update project
-/// @route PUT /api/projects/:projectID
+/// @route PATCH /api/projects/:projectID
 /// @access private
 export const updateProjectInfo = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;

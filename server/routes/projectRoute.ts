@@ -22,7 +22,7 @@ import authMiddleware from "../middlewares/authMiddleware";
 router.route("/").get(authMiddleware, getAllProjects).post(authMiddleware, createProject);
 router
   .route("/:projectID")
-  .put(authMiddleware, updateProjectInfo)
+  .patch(authMiddleware, updateProjectInfo)
   .delete(authMiddleware, deleteProject);
 router.route("/:projectID/users").put(authMiddleware, addUserToProject);
 /*Task routes*/
