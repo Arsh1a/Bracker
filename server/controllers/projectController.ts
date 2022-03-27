@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Project from "../models/projectModel";
 import Task from "../models/taskModel";
 import User from "../models/userModel";
+import Invite from "../models/inviteModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
@@ -11,8 +12,12 @@ import { isValidObjectId } from "mongoose";
 export const getAllProjects = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
 
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
   try {
-    const projects = await Project.find({ owner: user._id });
+    const projects = await Project.find().or([{ owner: user._id }, { otherUsers: user._id }]);
     res.status(200).json(projects);
   } catch (err) {
     next(err);
@@ -102,9 +107,9 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc Add user to project
-/// @route PUT /api/projects/:projectID/users/
+/// @route PATCH /api/projects/:projectID/users/
 /// @access private
-export const addUserToProject = async (req: Request, res: Response, next: NextFunction) => {
+export const inviteToProject = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { userID } = req.body;
   const { user } = <any>req;
@@ -121,37 +126,37 @@ export const addUserToProject = async (req: Request, res: Response, next: NextFu
 
   try {
     //Check if user exist in database
-    const userExist = await User.findOne({ _id: userID });
-    if (!userExist) {
+    const invitedUser = await User.findOne({ _id: userID });
+    if (!invitedUser) {
       return next(new ErrorResponse("User not found", 404));
     }
 
-    const previousProject = await Project.findOne({
+    const projectBeforeInviting = await Project.findOne({
       _id: projectID,
       owner: user._id,
     });
 
     //Checks if the user is the owner of the project
-    if (previousProject.owner.toString() === userID) {
+    if (projectBeforeInviting.owner.toString() === userID) {
       return next(new ErrorResponse("This user is the owner of the project", 400));
     }
 
-    const project = await Project.findOneAndUpdate(
-      { _id: projectID, owner: user._id },
-      { $addToSet: { otherUsers: userID } },
-      { new: true }
-    );
-
-    //Checks if user already added to the project
-    if (previousProject.otherUsers.toString() === project.otherUsers.toString()) {
-      return next(new ErrorResponse("User is already added in the project", 400));
+    //Checks if the user already is in the project
+    if (projectBeforeInviting.otherUsers.includes(userID)) {
+      return next(new ErrorResponse("This user is already in the project", 400));
     }
 
-    if (!project) {
-      return next(new ErrorResponse("There was an error adding the user", 400));
+    //Checks if the user is already invited to the project
+    if (await Invite.findOne({ projectID: projectID, invitedUser: userID })) {
+      return next(new ErrorResponse("User is already invited to the project", 400));
     }
 
-    res.status(200).json(project);
+    const invite = await Invite.create({
+      invitedUser: userID,
+      projectID,
+    });
+
+    res.status(200).json(invitedUser.username + " has been invited");
   } catch (err) {
     next(err);
   }

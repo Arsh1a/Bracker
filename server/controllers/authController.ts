@@ -1,10 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/userModel";
 import ErrorResponse from "../utils/errorResponse";
+import Project from "../models/projectModel";
+import Invite from "../models/inviteModel";
+import { isValidObjectId } from "mongoose";
 
 // @desc Register new user
 // @route POST /auth/register
-// @access Public
+// @access public
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   const { username, email, password } = req.body;
 
@@ -31,7 +34,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
 // @desc Authenticate a user
 // @route POST /api/auth/login
-// @access Public
+// @access public
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 
@@ -67,5 +70,77 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+/// @desc Handle Project Invites
+/// @route GET /api/auth/invites
+/// @access private
+export const getAllInvites = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  try {
+    const invites = await Invite.find({ invitedUser: user._id });
+    res.status(200).json(invites);
+  } catch (err) {
+    next(err);
+  }
+};
+
+/// @desc Handle Project Invites
+/// @route POST /api/auth/invites/:inviteID
+/// @access private
+export const handleInvite = async (req: Request, res: Response, next: NextFunction) => {
+  const { accepted } = req.body;
+  const { inviteID } = req.params;
+  const { user } = <any>req;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  //Checks if provided invite id can be casted ot ObjectId
+  if (!isValidObjectId(inviteID)) {
+    return next(new ErrorResponse("Invalid invite ID", 400));
+  }
+
+  const invite = await Invite.findById(inviteID);
+
+  if (!invite) {
+    return next(new ErrorResponse("Invite not found", 404));
+  }
+
+  if (invite.invitedUser.toString() !== user._id.toString()) {
+    return next(new ErrorResponse("You dont have any invites", 404));
+  }
+
+  try {
+    if (accepted === true) {
+      const project = await Project.findOneAndUpdate(
+        { _id: invite.projectID },
+        { $addToSet: { otherUsers: user._id } },
+        { new: true }
+      );
+
+      if (!project) {
+        return next(new ErrorResponse("There was an error adding the user", 400));
+      }
+
+      invite.remove();
+
+      res.status(200).json(project);
+    } else if (accepted === false) {
+      invite.remove();
+
+      res.status(200).json({ success: true });
+    } else {
+      return next(new ErrorResponse("Invalid request", 400));
+    }
+  } catch (err) {
+    next(err);
   }
 };

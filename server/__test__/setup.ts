@@ -1,7 +1,7 @@
 import db from "./config/db";
 
 //Ignores console.logs from non-test files
-// jest.spyOn(global.console, "log").mockImplementation(() => jest.fn());
+jest.spyOn(global.console, "log").mockImplementation(() => jest.fn());
 
 //Runs before all tests
 beforeAll(async () => await db.connect());

@@ -6,7 +6,7 @@ import {
   createProject,
   updateProjectInfo,
   deleteProject,
-  addUserToProject,
+  inviteToProject,
 } from "../controllers/projectController";
 
 import {
@@ -24,7 +24,7 @@ router
   .route("/:projectID")
   .patch(authMiddleware, updateProjectInfo)
   .delete(authMiddleware, deleteProject);
-router.route("/:projectID/users").put(authMiddleware, addUserToProject);
+router.route("/:projectID/users").patch(authMiddleware, inviteToProject);
 /*Task routes*/
 router
   .route("/:projectID/tasks")
@@ -32,7 +32,7 @@ router
   .post(authMiddleware, createTask);
 router
   .route("/:projectID/tasks/:taskID")
-  .put(authMiddleware, updateTask)
+  .patch(authMiddleware, updateTask)
   .delete(authMiddleware, deleteTask);
 
 export default router;

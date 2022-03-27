@@ -70,7 +70,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 };
 
 /// @desc Update task
-/// @route PUT /api/projects/:projectID/tasks/:taskID
+/// @route PATCH /api/projects/:projectID/tasks/:taskID
 /// @access private
 export const updateTask = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
