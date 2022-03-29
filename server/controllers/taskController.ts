@@ -59,7 +59,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
     const task = await Task.create({
       title: title,
       desc: desc,
-      owner: user._id,
+      reporter: user._id,
       projectID,
     });
 
