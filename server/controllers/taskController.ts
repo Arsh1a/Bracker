@@ -37,7 +37,7 @@ export const getTasksForProject = async (req: Request, res: Response, next: Next
 // @route POST /api/projects/:projectID/tasks
 // @access private
 export const createTask = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, desc } = req.body;
+  const { title, desc, severity, status, content, assignee } = req.body;
   const { projectID } = req.params;
   const { user } = <any>req;
 
@@ -57,8 +57,12 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 
   try {
     const task = await Task.create({
-      title: title,
-      desc: desc,
+      title,
+      desc,
+      severity,
+      status,
+      content,
+      assignee,
       reporter: user._id,
       projectID,
     });
@@ -73,7 +77,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 /// @route PATCH /api/projects/:projectID/tasks/:taskID
 /// @access private
 export const updateTask = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, desc } = req.body;
+  const { title, desc, severity, status, content, assignee } = req.body;
   const { projectID, taskID } = req.params;
   const { user } = <any>req;
 
@@ -101,10 +105,14 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
     const task = await Task.findOneAndUpdate(
       { _id: taskID, projectID },
       {
-        title: title,
-        desc: desc,
+        title,
+        desc,
+        severity,
+        status,
+        content,
+        assignee,
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!task) {

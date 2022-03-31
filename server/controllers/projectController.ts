@@ -64,7 +64,7 @@ export const updateProjectInfo = async (req: Request, res: Response, next: NextF
         title: title,
         desc: desc,
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!project) {

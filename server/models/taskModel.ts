@@ -12,13 +12,11 @@ const TaskSchema = new mongoose.Schema(
     severity: {
       type: String,
       enum: ["low", "medium", "high"],
-      default: "low",
       required: [true, "Please add a severity"],
     },
     status: {
       type: String,
       enum: ["open", "closed", "in progress"],
-      default: "open",
       required: [true, "Please add a status"],
     },
     content: {
@@ -28,6 +26,10 @@ const TaskSchema = new mongoose.Schema(
     reporter: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "There is no owner"],
+      ref: "User",
+    },
+    assignee: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
     projectID: {
