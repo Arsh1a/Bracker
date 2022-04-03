@@ -25,6 +25,7 @@ router
   .patch(authMiddleware, updateProjectInfo)
   .delete(authMiddleware, deleteProject);
 router.route("/:projectID/users").patch(authMiddleware, inviteToProject);
+
 /*Task routes*/
 router
   .route("/:projectID/tasks")

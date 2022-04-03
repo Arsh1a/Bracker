@@ -5,11 +5,9 @@ import { getAllInvites, handleInvite, login, register } from "../controllers/aut
 import authMiddleware from "../middlewares/authMiddleware";
 
 router.route("/register").post(register);
-
 router.route("/login").post(login);
 
 router.route("/invites").get(authMiddleware, getAllInvites);
-
 router.route("/invites/:inviteID").post(authMiddleware, handleInvite);
 
 export default router;
