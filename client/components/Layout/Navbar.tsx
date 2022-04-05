@@ -1,16 +1,19 @@
 import styled from "styled-components";
-import Button from "../Common/Button/Button";
+import Button from "../Common/Button";
+import Link from "next/link";
 
-const Wrapper = styled.div`
+const Wrapper = styled.nav`
   border-bottom: 1px solid #cecece;
-  padding: 1rem;
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 20px;
 `;
 
 const Logo = styled.h1`
   font-size: 1.5rem;
+  cursor: pointer;
 `;
 
 const Links = styled.ul`
@@ -20,9 +23,12 @@ const Links = styled.ul`
   align-items: center;
   gap: 2rem;
 
-  & li {
+  li {
     font-size: 1rem;
     cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 
@@ -31,11 +37,17 @@ interface Props {}
 const Navbar = ({}: Props) => {
   return (
     <Wrapper>
-      <Logo>Bracker</Logo>
+      <Link href="/" passHref>
+        <Logo>Bracker</Logo>
+      </Link>
       <Links>
-        <li>Login</li>
+        <Link href="/login" passHref>
+          <li>Login</li>
+        </Link>
         <li>
-          <Button color="primary">Register</Button>
+          <Link href={"/signup"} passHref>
+            <Button color="primary">Sing Up</Button>
+          </Link>
         </li>
       </Links>
     </Wrapper>

@@ -6,6 +6,17 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html,
+  body, #__next {
+    height: 100%;
+    margin: 0;
+  }
+  
+  #__next {
+    display: flex;
+    flex-direction: column;
+  }
+
   body {
     margin: 0;
     padding: 0;
