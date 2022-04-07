@@ -1,9 +1,10 @@
+import { useEffect } from "react";
 import type { AppProps } from "next/app";
-import Navbar from "../components/Layout/Navbar";
+import Navbar from "../components/Layout/Navbar/Navbar";
 import StyledThemeProvider from "../components/Theme/StyledThemeProvider";
 import GlobalStyle from "../styles/globalStyle";
 import Head from "next/head";
-import Footer from "../components/Layout/Footer";
+import Footer from "../components/Layout/Footer/Footer";
 import { Provider } from "react-redux";
 import NextNProgress from "nextjs-progressbar";
 import { theme } from "../styles/theme";
@@ -36,4 +37,5 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
 export default MyApp;

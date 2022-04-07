@@ -47,7 +47,7 @@ UserSchema.methods.matchPasswords = async function (password: string) {
 
 //Sign JWT Token
 UserSchema.methods.getSignedToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET as string, { expiresIn: 120000 });
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET as string);
 };
 
 const User = mongoose.model("User", UserSchema);

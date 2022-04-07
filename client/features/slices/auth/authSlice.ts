@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
+import Cookies from "js-cookie";
 
-const user = typeof window !== "undefined" ? localStorage.getItem("user") : null;
+let cookie = Cookies.get("user");
+
+const user = cookie?.toString();
 
 const initialState = {
   user: user ? user : null,
@@ -48,6 +51,11 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
 });
 
+//Get user info (if cookie still exists)
+export const getUser = createAsyncThunk("auth/getUser", async () => {
+  await authService.getUserInfo();
+});
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -91,6 +99,9 @@ export const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+      })
+      .addCase(getUser.fulfilled, (state, action: any) => {
+        state.user = action.payload;
       });
   },
 });

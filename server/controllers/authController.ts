@@ -19,10 +19,16 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     });
 
     if (user) {
-      return res
+      res.cookie("user", `{"name":"${user.name}", "email":"${user.email}"}`, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        expires: new Date(Date.now() + 900000),
+      });
+      res
         .cookie("access_token", user.getSignedToken(), {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
+          expires: new Date(Date.now() + 900000),
         })
         .status(200)
         .json({ name: user.name, email: user.email });
@@ -60,10 +66,16 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
 
     if (user) {
-      return res
+      res.cookie("user", `{"name":"${user.name}", "email":"${user.email}"}`, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        expires: new Date(Date.now() + 900000),
+      });
+      res
         .cookie("access_token", user.getSignedToken(), {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
+          expires: new Date(Date.now() + 900000),
         })
         .status(200)
         .json({ name: user.name, email: user.email });

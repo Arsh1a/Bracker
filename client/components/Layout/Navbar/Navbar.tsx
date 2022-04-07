@@ -1,10 +1,12 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Button from "../Common/Button";
+import Button from "../../Common/Button";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { RootState } from "../../features/context/store";
-import { logout, reset } from "../../features/slices/auth/authSlice";
+import { RootState } from "../../../features/context/store";
+import { logout, reset } from "../../../features/slices/auth/authSlice";
+import UserStuff from "./UserStuff";
 
 const Wrapper = styled.nav`
   border-bottom: 1px solid ${(props) => props.theme.colors.light};
@@ -46,8 +48,10 @@ interface Props {}
 const Navbar = ({}: Props) => {
   const dispatch = useDispatch();
   const router = useRouter();
-
   const { user } = useSelector((state: RootState) => state.auth);
+  //The reason we use useState here instead of directly using user from selector
+  //Is because Next.js throws an error
+  const [currUser, setCurrUser] = useState<string | null>();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -55,27 +59,16 @@ const Navbar = ({}: Props) => {
     router.push("/");
   };
 
+  useEffect(() => {
+    setCurrUser(user);
+  }, [user]);
+
   return (
     <Wrapper>
       <Link href="/" passHref>
         <Logo>Bracker</Logo>
       </Link>
-      {!user ? (
-        <Links>
-          <Link href="/login" passHref>
-            <li>Login</li>
-          </Link>
-          <li>
-            <Link href={"/signup"} passHref>
-              <Button color="primary">Sign up</Button>
-            </Link>
-          </li>
-        </Links>
-      ) : (
-        <Button color={"secondary"} onClick={handleLogout}>
-          Logout
-        </Button>
-      )}
+      <UserStuff currentUser={currUser} handleLogout={handleLogout} />
     </Wrapper>
   );
 };

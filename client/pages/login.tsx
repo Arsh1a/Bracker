@@ -77,8 +77,6 @@ const Login = ({}: Props) => {
     (state: RootState) => state.auth
   );
 
-  console.log(errorMessage);
-
   useEffect(() => {
     if (isError) {
       setErrorMessage(message);
