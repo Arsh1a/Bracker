@@ -11,7 +11,7 @@ const Wrapper = styled.button<StyledProps>`
   color: white;
   cursor: pointer;
   transition: 0.3s;
-  width: 100%;
+  ${(props) => props.fullWidth && "width: 100%"};
   &:hover {
     opacity: 0.8;
   }
@@ -21,20 +21,21 @@ interface Props extends React.ComponentPropsWithRef<"button"> {
   children: React.ReactNode;
   color: "primary" | "secondary" | "light" | "dark";
   borderRadius?: string;
+  fullWidth?: boolean;
 }
 
 interface StyledProps {
   color: "primary" | "secondary" | "light" | "dark";
+  fullWidth?: boolean;
   borderRadius?: string;
-  href?: string;
 }
 
-const Button = React.forwardRef<Props, any>(function Button(
-  { children, color, borderRadius, ...rest },
+const Button = React.forwardRef<any, Props>(function Button(
+  { children, fullWidth, color, borderRadius, ...rest },
   ref
 ) {
   return (
-    <Wrapper color={color} borderRadius={borderRadius} {...rest}>
+    <Wrapper fullWidth={fullWidth} color={color} borderRadius={borderRadius} {...rest}>
       {children}
     </Wrapper>
   );

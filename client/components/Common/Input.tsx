@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.input<StyledProps>`
-  background-color: ${(props) => props.theme.colors.light};
+  background-color: white;
   border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "12px")};
   border: none;
   padding: 15px;
   width: 100%;
   transition: 0.3s;
-  outline: 1px solid #aeaeae;
+  outline: 1px solid ${(props) => props.theme.colors.light};
   &:focus {
     outline: 2px solid ${(props) => props.theme.colors.primary};
   }

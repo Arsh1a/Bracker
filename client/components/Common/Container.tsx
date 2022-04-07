@@ -6,6 +6,8 @@ const Wrapper = styled.div`
   margin: auto auto;
   max-width: 1400px;
   width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 interface Props {

@@ -9,11 +9,11 @@ import { isValidObjectId } from "mongoose";
 // @route POST /auth/register
 // @access public
 export const register = async (req: Request, res: Response, next: NextFunction) => {
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   try {
     const user = await User.create({
-      username,
+      name,
       email,
       password,
     });
@@ -25,7 +25,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
-        .json({ username: user.username, email: user.email });
+        .json({ name: user.name, email: user.email });
     }
   } catch (err) {
     next(err);
@@ -50,13 +50,13 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return next(new ErrorResponse("Invalid credentials", 401));
+      return next(new ErrorResponse("Invalid credentials", 404));
     }
 
     const isMatch = await user.matchPasswords(password);
 
     if (!isMatch) {
-      return next(new ErrorResponse("Invalid credentials", 401));
+      return next(new ErrorResponse("Invalid credentials", 404));
     }
 
     if (user) {
@@ -66,10 +66,38 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
-        .json({ username: user.username, email: user.email });
+        .json({ name: user.name, email: user.email });
     }
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+/// @desc Logout user
+/// @route GET /api/auth/logout
+/// @access private
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
+  return res.clearCookie("access_token").status(200).json({ message: "Successfully logged out" });
+};
+
+///@desc Gets user information
+///@route GET /api/auth/user
+///@access private
+export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  try {
+    const loggedInUser = await User.findById(user._id);
+    res.status(200).json({
+      name: loggedInUser.name,
+      email: loggedInUser.email,
+    });
+  } catch (err) {
+    next(err);
   }
 };
 

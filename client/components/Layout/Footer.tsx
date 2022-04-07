@@ -6,7 +6,7 @@ const Wrapper = styled.footer`
   justify-content: center;
   align-items: center;
   height: 70px;
-  border-top: 1px solid #cecece;
+  border-top: 1px solid ${(props) => props.theme.colors.light};
 `;
 
 interface Props {}

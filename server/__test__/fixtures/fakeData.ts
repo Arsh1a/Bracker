@@ -4,7 +4,7 @@ import Project from "../../models/projectModel";
 export const userOneId = new mongoose.Types.ObjectId();
 export const userOne = {
   _id: userOneId,
-  username: "FirstUserTesting",
+  name: "FirstUserTesting",
   email: "FirstUserTesting@testing.com",
   password: "12345678",
 };

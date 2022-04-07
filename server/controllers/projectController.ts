@@ -156,7 +156,7 @@ export const inviteToProject = async (req: Request, res: Response, next: NextFun
       projectID,
     });
 
-    res.status(200).json(invitedUser.username + " has been invited");
+    res.status(200).json(invitedUser.name + " has been invited");
   } catch (err) {
     next(err);
   }

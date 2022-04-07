@@ -6,7 +6,7 @@ const errorMiddleware = (err: any, req: Request, res: Response, next: NextFuncti
   error.message = err.message;
 
   if (err.code === 11000) {
-    const message = "There was an error.";
+    const message = "That user already exists";
     error = new ErrorResponse(message, 400);
   }
 
@@ -16,9 +16,9 @@ const errorMiddleware = (err: any, req: Request, res: Response, next: NextFuncti
     error = new ErrorResponse(message[0], 400);
   }
 
-  res.status(err.statusCode || 500).json({
+  res.status(err.statusCode || error.statusCode || 500).json({
     success: false,
-    error: error.message || "Server error",
+    message: error.message || "Server error",
   });
 };
 
