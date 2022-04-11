@@ -1,14 +1,13 @@
-import { useEffect } from "react";
+import React from "react";
 import type { AppProps } from "next/app";
-import Navbar from "../components/Layout/Navbar/Navbar";
 import StyledThemeProvider from "../components/Theme/StyledThemeProvider";
 import GlobalStyle from "../styles/globalStyle";
 import Head from "next/head";
-import Footer from "../components/Layout/Footer/Footer";
 import { Provider } from "react-redux";
 import NextNProgress from "nextjs-progressbar";
 import { theme } from "../styles/theme";
-import { store } from "../features/context/store";
+import { store } from "../features/store";
+import Layout from "../components/Layout/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -29,9 +28,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             showOnShallow={true}
             options={{ showSpinner: false, easing: "ease", speed: 500 }}
           />
-          <Navbar />
-          <Component {...pageProps} />
-          <Footer />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </StyledThemeProvider>
       </Provider>
     </>

@@ -5,20 +5,13 @@ import Button from "../components/Common/Button";
 import Input from "../components/Common/Input";
 import { useSelector, useDispatch } from "react-redux";
 import { login, reset } from "../features/slices/auth/authSlice";
-import { RootState } from "../features/context/store";
+import { RootState } from "../features/store";
 import { useRouter } from "next/router";
 import Loading from "../components/Common/Loading";
 import Container from "../components/Common/Container";
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  height: 100%;
-  margin: 0 auto;
-  max-width: 1400px;
-  width: 100%;
+const AuthContainer = styled(Container)`
+  margin: auto auto;
 `;
 
 const InnerWrapper = styled.div`
@@ -82,7 +75,7 @@ const Login = ({}: Props) => {
       setErrorMessage(message);
     }
     if (isSuccess || user) {
-      router.push("/");
+      router.push(`/dashboard`);
     }
 
     dispatch(reset());
@@ -94,7 +87,7 @@ const Login = ({}: Props) => {
     dispatch(login(userData));
   };
   return (
-    <Container>
+    <AuthContainer center={true}>
       <InnerWrapper>
         <h1>Login</h1>
         <Form onSubmit={handleSubmit}>
@@ -126,7 +119,7 @@ const Login = ({}: Props) => {
         </Link>
         {isLoading && <Loading />}
       </InnerWrapper>
-    </Container>
+    </AuthContainer>
   );
 };
 

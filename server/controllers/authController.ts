@@ -9,29 +9,27 @@ import { isValidObjectId } from "mongoose";
 // @route POST /auth/register
 // @access public
 export const register = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
   try {
     const user = await User.create({
-      name,
+      username,
       email,
       password,
     });
 
     if (user) {
-      res.cookie("user", `{"name":"${user.name}", "email":"${user.email}"}`, {
+      res.cookie("user", `{"username":"${user.username}", "email":"${user.email}"}`, {
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
-        expires: new Date(Date.now() + 900000),
       });
       res
         .cookie("access_token", user.getSignedToken(), {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          expires: new Date(Date.now() + 900000),
         })
         .status(200)
-        .json({ name: user.name, email: user.email });
+        .json({ username: user.username, email: user.email });
     }
   } catch (err) {
     next(err);
@@ -66,19 +64,17 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
 
     if (user) {
-      res.cookie("user", `{"name":"${user.name}", "email":"${user.email}"}`, {
+      res.cookie("user", `{"username":"${user.username}", "email":"${user.email}"}`, {
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
-        expires: new Date(Date.now() + 900000),
       });
       res
         .cookie("access_token", user.getSignedToken(), {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          expires: new Date(Date.now() + 900000),
         })
         .status(200)
-        .json({ name: user.name, email: user.email });
+        .json({ username: user.username, email: user.email });
     }
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
@@ -105,7 +101,7 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
   try {
     const loggedInUser = await User.findById(user._id);
     res.status(200).json({
-      name: loggedInUser.name,
+      username: loggedInUser.username,
       email: loggedInUser.email,
     });
   } catch (err) {

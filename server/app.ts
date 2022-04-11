@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 
 //Routes
 app.use("/api/auth", authRouter);
-app.use("/api/projects", projectRouter);
+app.use("/api/project", projectRouter);
 
 app.use(errorMiddleware);
 

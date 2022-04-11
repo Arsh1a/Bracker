@@ -2,12 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
 import Cookies from "js-cookie";
 
+// Get user info cookie from browser
 let cookie = Cookies.get("user");
-
 const user = cookie?.toString();
 
 const initialState = {
-  user: user ? user : null,
+  user: user ? JSON.parse(user) : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -17,7 +17,7 @@ const initialState = {
 //Register user
 export const register = createAsyncThunk(
   "auth/register",
-  async (user: { name: string; email: string; password: string }, thunkAPI) => {
+  async (user: { username: string; email: string; password: string }, thunkAPI) => {
     try {
       return await authService.register(user);
     } catch (error: any) {

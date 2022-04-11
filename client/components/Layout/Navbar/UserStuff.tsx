@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Button from "../../Common/Button";
 import Link from "next/link";
+import Image from "next/image";
+import UserSetting from "./UserSetting";
 
 const Wrapper = styled.div``;
 
@@ -29,12 +31,7 @@ interface Props {
 const UserStuff = ({ currentUser, handleLogout }: Props) => {
   if (currentUser === undefined) return null;
 
-  if (currentUser)
-    return (
-      <Button color={"secondary"} onClick={handleLogout}>
-        Logout
-      </Button>
-    );
+  if (currentUser) return <UserSetting handleLogout={handleLogout} />;
 
   return (
     <Links>

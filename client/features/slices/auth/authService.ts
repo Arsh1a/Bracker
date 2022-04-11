@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/auth/`;
 
 //Register
-const register = async (userData: { name: string; email: string; password: string }) => {
+const register = async (userData: { username: string; email: string; password: string }) => {
   const response = await axios.post(API_URL + "register", userData, { withCredentials: true });
   return response.data;
 };

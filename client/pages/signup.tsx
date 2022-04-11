@@ -5,10 +5,14 @@ import Button from "../components/Common/Button";
 import Input from "../components/Common/Input";
 import { useSelector, useDispatch } from "react-redux";
 import { register, reset } from "../features/slices/auth/authSlice";
-import { RootState } from "../features/context/store";
+import { RootState } from "../features/store";
 import { useRouter } from "next/router";
 import Loading from "../components/Common/Loading";
 import Container from "../components/Common/Container";
+
+const AuthContainer = styled(Container)`
+  margin: auto auto;
+`;
 
 const InnerWrapper = styled.div`
   display: flex;
@@ -56,7 +60,7 @@ interface Props {}
 
 const Signup = ({}: Props) => {
   const [userData, setUserData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -74,7 +78,7 @@ const Signup = ({}: Props) => {
       setErrorMessage(message);
     }
     if (isSuccess || user) {
-      router.push("/");
+      router.push(`/dashboard`);
     }
 
     dispatch(reset());
@@ -87,18 +91,18 @@ const Signup = ({}: Props) => {
   };
 
   return (
-    <Container>
+    <AuthContainer center={true}>
       <InnerWrapper>
         <h1>Sign up</h1>
         <Form onSubmit={handleSubmit}>
           <Input
             borderRadius="6px"
             type="text"
-            name="name"
-            placeholder="Name"
+            name="username"
+            placeholder="Username"
             required
-            value={userData.name}
-            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+            value={userData.username}
+            onChange={(e) => setUserData({ ...userData, username: e.target.value })}
           />
           <Input
             borderRadius="6px"
@@ -128,7 +132,7 @@ const Signup = ({}: Props) => {
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
         {isLoading && <Loading />}
       </InnerWrapper>
-    </Container>
+    </AuthContainer>
   );
 };
 export default Signup;

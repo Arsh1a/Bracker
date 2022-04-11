@@ -1,20 +1,32 @@
 import React from "react";
 import styled from "styled-components";
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<StyledProps>`
   padding: 20px;
-  margin: auto auto;
+  margin: 0 auto;
   max-width: 1400px;
   width: 100%;
   display: flex;
-  justify-content: center;
+  ${(props) => props.center && "justify-content: center;"}
+  ${(props) => props.flexDirection && `flex-direction: ${props.flexDirection};`}
 `;
 
-interface Props {
+interface Props extends React.ComponentPropsWithoutRef<"div"> {
   children: React.ReactNode;
+  center?: boolean;
+  flexDirection?: "row" | "column";
 }
 
-const Container = ({ children, ...rest }: Props) => {
-  return <Wrapper {...rest}>{children}</Wrapper>;
+interface StyledProps {
+  center?: boolean;
+  flexDirection?: "row" | "column";
+}
+
+const Container = ({ children, center, flexDirection, ...rest }: Props) => {
+  return (
+    <Wrapper center={center} flexDirection={flexDirection} {...rest}>
+      {children}
+    </Wrapper>
+  );
 };
 export default Container;

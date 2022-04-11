@@ -7,7 +7,7 @@ import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
 // @desc Get all projects for a user
-// @route GET /api/projects
+// @route GET /api/project/
 // @access private
 export const getAllProjects = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
@@ -25,7 +25,7 @@ export const getAllProjects = async (req: Request, res: Response, next: NextFunc
 };
 
 // @desc Create new project
-// @route POST /api/projects/
+// @route POST /api/project/
 // @access private
 export const createProject = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
@@ -45,7 +45,7 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc Update project
-/// @route PATCH /api/projects/:projectID
+/// @route PATCH /api/project/:projectID
 /// @access private
 export const updateProjectInfo = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc } = req.body;
@@ -78,7 +78,7 @@ export const updateProjectInfo = async (req: Request, res: Response, next: NextF
 };
 
 // @desc Delete project
-// @route DELETE /api/projects/:projectID
+// @route DELETE /api/project/:projectID
 // @access private
 export const deleteProject = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
@@ -107,7 +107,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc Add user to project
-/// @route PATCH /api/projects/:projectID/users/
+/// @route PATCH /api/project/:projectID/users/
 /// @access private
 export const inviteToProject = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
@@ -156,7 +156,7 @@ export const inviteToProject = async (req: Request, res: Response, next: NextFun
       projectID,
     });
 
-    res.status(200).json(invitedUser.name + " has been invited");
+    res.status(200).json(invitedUser.username + " has been invited");
   } catch (err) {
     next(err);
   }
