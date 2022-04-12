@@ -11,8 +11,8 @@ const ProjectsList = ({ data }: Props) => {
   return (
     <Wrapper>
       {data &&
-        data.map((project, id) => {
-          return <div key={id}>{project.title}</div>;
+        data.map((project) => {
+          return <div key={project._id}>{project.title}</div>;
         })}
     </Wrapper>
   );
