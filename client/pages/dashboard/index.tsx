@@ -1,12 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { GetServerSideProps } from "next";
-import axios from "axios";
-import ProjectsList from "../../components/Dashboard/ProjectsList";
 import Container from "../../components/Common/Container";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../features/store";
-import { useRouter } from "next/router";
 import { fetchUserInfo } from "../../lib/requestApi";
 
 const Wrapper = styled.div``;
@@ -16,11 +11,6 @@ interface Props {
 }
 
 const Profile = ({ userInfo }: Props) => {
-  console.log(userInfo);
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state: RootState) => state.auth
-  );
-
   return <Container>s</Container>;
 };
 

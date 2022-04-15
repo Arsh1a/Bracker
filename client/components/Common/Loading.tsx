@@ -3,13 +3,13 @@ import styled from "styled-components";
 
 /*Thanks to https://codepen.io/nzbin/pen/GGrXbp */
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<StyledProps>`
   position: relative;
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: ${(props) => props.theme.colors.primary};
-  color: ${(props) => props.theme.colors.primary};
+  background-color: ${(props) => props.theme.colors[props.color]};
+  color: ${(props) => props.theme.colors[props.color]};
   animation: dotElastic 1s infinite linear;
   align-self: center;
 
@@ -26,8 +26,8 @@ const Wrapper = styled.div`
     width: 10px;
     height: 10px;
     border-radius: 5px;
-    background-color: ${(props) => props.theme.colors.primary};
-    color: ${(props) => props.theme.colors.primary};
+    background-color: ${(props) => props.theme.colors[props.color]};
+    color: ${(props) => props.theme.colors[props.color]};
     animation: dotElasticBefore 1s infinite linear;
   }
 
@@ -36,8 +36,8 @@ const Wrapper = styled.div`
     width: 10px;
     height: 10px;
     border-radius: 5px;
-    background-color: ${(props) => props.theme.colors.primary};
-    color: ${(props) => props.theme.colors.primary};
+    background-color: ${(props) => props.theme.colors[props.color]};
+    color: ${(props) => props.theme.colors[props.color]};
     animation: dotElasticAfter 1s infinite linear;
   }
 
@@ -96,9 +96,15 @@ const Wrapper = styled.div`
   }
 `;
 
-interface Props {}
+interface Props {
+  color: "primary" | "dark";
+}
 
-const Loading = ({}: Props) => {
-  return <Wrapper></Wrapper>;
+interface StyledProps {
+  color: "primary" | "dark";
+}
+
+const Loading = ({ color }: Props) => {
+  return <Wrapper color={color}></Wrapper>;
 };
 export default Loading;

@@ -2,9 +2,13 @@ import React from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.button<StyledProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${(props) => props.height && `height: ${props.height}`};
   background-color: ${(props) => props.theme.colors[props.color]};
   border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "12px")};
-  padding: 8px 18px;
+  padding: ${(props) => (props.padding ? props.padding : "8px 18px;")};
   border-style: none;
   font-size: 1rem;
   font-weight: 500;
@@ -15,6 +19,11 @@ const Wrapper = styled.button<StyledProps>`
   &:hover {
     opacity: 0.8;
   }
+  &:disabled {
+    background-color: ${(props) => props.theme.colors.light};
+    color: ${(props) => props.theme.colors.dark};
+    opacity: 0.5;
+  }
 `;
 
 interface Props extends React.ComponentPropsWithRef<"button"> {
@@ -22,20 +31,31 @@ interface Props extends React.ComponentPropsWithRef<"button"> {
   color: "primary" | "secondary" | "light" | "dark";
   borderRadius?: string;
   fullWidth?: boolean;
+  height?: string;
+  padding?: string;
 }
 
 interface StyledProps {
   color: "primary" | "secondary" | "light" | "dark";
   fullWidth?: boolean;
   borderRadius?: string;
+  height?: string;
+  padding?: string;
 }
 
 const Button = React.forwardRef<any, Props>(function Button(
-  { children, fullWidth, color, borderRadius, ...rest },
+  { children, fullWidth, color, borderRadius, padding, height, ...rest },
   ref
 ) {
   return (
-    <Wrapper fullWidth={fullWidth} color={color} borderRadius={borderRadius} {...rest}>
+    <Wrapper
+      fullWidth={fullWidth}
+      color={color}
+      borderRadius={borderRadius}
+      padding={padding}
+      height={height}
+      {...rest}
+    >
       {children}
     </Wrapper>
   );

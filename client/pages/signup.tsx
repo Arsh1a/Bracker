@@ -122,15 +122,21 @@ const Signup = ({}: Props) => {
             value={userData.password}
             onChange={(e) => setUserData({ ...userData, password: e.target.value })}
           />
-          <Button fullWidth borderRadius="6px" color="primary" type="submit">
-            Sign up
+          <Button
+            height="40px"
+            disabled={isLoading}
+            fullWidth
+            borderRadius="6px"
+            color="primary"
+            type="submit"
+          >
+            {isLoading ? <Loading color="dark" /> : "Login"}
           </Button>
         </Form>
         <Link href="/login" passHref>
           <span>Already have an account? Log In</span>
         </Link>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-        {isLoading && <Loading />}
       </InnerWrapper>
     </AuthContainer>
   );

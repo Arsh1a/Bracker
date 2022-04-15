@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { GetServerSideProps } from "next";
 import axios from "axios";
 import { fetchProjects } from "../../lib/requestApi";
-import ProjectsList from "../../components/Dashboard/ProjectsList";
+import ProjectsList from "../../components/Dashboard/Projects/ProjectsList";
 import Container from "../../components/Common/Container";
 
 const Wrapper = styled.div``;

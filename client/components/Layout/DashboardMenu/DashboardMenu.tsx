@@ -34,7 +34,7 @@ const MenuLink = styled.li<StyledProps>`
     color: ${(props) => props.theme.colors.primary};
   }
   svg {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 `;
 
