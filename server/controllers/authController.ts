@@ -109,6 +109,36 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+///@desc Search users
+///@route GET /api/auth/user/search
+///@access private
+export const searchUsers = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  const { username } = req.query;
+
+  if (!username) {
+    return next(new ErrorResponse("Please provide a username", 400));
+  }
+
+  const regex = `^${username.toString()}`;
+
+  try {
+    const users = await User.find({
+      username: { $regex: regex },
+    })
+      .select("username")
+      .limit(10);
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
 /// @desc Handle Project Invites
 /// @route GET /api/auth/invites
 /// @access private
@@ -158,7 +188,7 @@ export const handleInvite = async (req: Request, res: Response, next: NextFuncti
     if (accepted === true) {
       const project = await Project.findOneAndUpdate(
         { _id: invite.projectID },
-        { $addToSet: { otherUsers: user._id } },
+        { $addToSet: { members: user._id } },
         { new: true }
       );
 

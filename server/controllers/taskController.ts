@@ -19,7 +19,7 @@ export const getTasksForProject = async (req: Request, res: Response, next: Next
   //Checks if provided project id exists in database and the user is part of the project
   const project = await Project.findById(projectID).or([
     { owner: user._id },
-    { otherUsers: user._id },
+    { members: user._id },
   ]);
   if (!project) {
     return next(new ErrorResponse("There was an error fetching tasks", 400));
@@ -49,7 +49,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
   //Checks if provided project id exists in database and the user is part of the project
   const project = await Project.findById(projectID).or([
     { owner: user._id },
-    { otherUsers: user._id },
+    { members: user._id },
   ]);
   if (!project) {
     return next(new ErrorResponse("There was an error creating the task", 400));
@@ -94,7 +94,7 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
   //Checks if provided project id exists in database and the user is part of the project
   const project = await Project.findById(projectID).or([
     { owner: user._id },
-    { otherUsers: user._id },
+    { members: user._id },
   ]);
 
   if (!project) {
@@ -145,7 +145,7 @@ export const deleteTask = async (req: Request, res: Response, next: NextFunction
   //Checks if provided project id exists in database and the user is part of the project
   const project = await Project.findById(projectID).or([
     { owner: user._id },
-    { otherUsers: user._id },
+    { members: user._id },
   ]);
 
   if (!project) {

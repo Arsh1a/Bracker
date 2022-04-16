@@ -24,3 +24,12 @@ export const fetchProjects = async (context: GetServerSidePropsContext) => {
     .then((response) => Promise.resolve(response))
     .catch((error) => Promise.reject(error));
 };
+
+export const searchUsers = async (username: string) => {
+  return axios
+    .get(process.env.NEXT_PUBLIC_API_URL + "/auth/user/search/?username=" + username, {
+      withCredentials: true,
+    })
+    .then((response) => Promise.resolve(response))
+    .catch((error) => Promise.reject(error));
+};

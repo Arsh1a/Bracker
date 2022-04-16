@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
+  min-width: 300px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

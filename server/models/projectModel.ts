@@ -14,7 +14,7 @@ const ProjectSchema = new mongoose.Schema(
       required: [true, "There is no owner"],
       ref: "User",
     },
-    otherUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    members: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

@@ -17,7 +17,7 @@ export const getAllProjects = async (req: Request, res: Response, next: NextFunc
   }
 
   try {
-    const projects = await Project.find().or([{ owner: user._id }, { otherUsers: user._id }]);
+    const projects = await Project.find().or([{ owner: user._id }, { members: user._id }]);
     res.status(200).json(projects);
   } catch (err) {
     next(err);
@@ -142,7 +142,7 @@ export const inviteToProject = async (req: Request, res: Response, next: NextFun
     }
 
     //Checks if the user already is in the project
-    if (projectBeforeInviting.otherUsers.includes(userID)) {
+    if (projectBeforeInviting.members.includes(userID)) {
       return next(new ErrorResponse("This user is already in the project", 400));
     }
 

@@ -7,6 +7,8 @@ const UserSchema = new mongoose.Schema(
     username: {
       type: String,
       required: [true, "Please provide a username"],
+      minlength: [3, "Username must be at least 3 characters"],
+      maxlength: [12, "Username must be at most 12 characters"],
       unique: true,
     },
     email: {
@@ -29,6 +31,8 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+UserSchema.index({ username: "text" });
 
 //Hash password and save it
 UserSchema.pre("save", async function (next) {

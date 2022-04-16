@@ -11,7 +11,7 @@ const initialState = {
 
 export const createProject = createAsyncThunk(
   "projects/create",
-  async (projectData: { title: string; desc?: string }, thunkAPI) => {
+  async (projectData: { title: string; desc?: string; members?: any[] }, thunkAPI) => {
     try {
       return await projectService.createProject(projectData);
     } catch (error: any) {

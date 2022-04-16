@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Modal from "../../Common/Modal";
 import Input from "../../Common/Input";
 import Loading from "../../Common/Loading";
 import Button from "../../Common/Button";
 import { GrClose } from "react-icons/gr";
+import MemberSearch from "./MemberSearch";
+import { searchUsers } from "../../../lib/requestApi";
 import { useSelector, useDispatch } from "react-redux";
-import TagsInput from "../../Common/TagsInput";
+import { createProject } from "../../../features/slices/project/projectSlice";
+import { RootState } from "../../../features/store";
+import { useRouter } from "next/router";
 
 const ModalInnerWrapper = styled.div`
   position: relative;
@@ -43,17 +47,8 @@ const ModalInput = styled(Input)`
   margin-bottom: 30px;
 `;
 
-const AlternativeSpan = styled.span`
-  margin-top: 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.3s;
-  color: ${(props) => props.theme.colors.primary};
-  align-self: center;
-  font-size: 0.8rem;
-  &:hover {
-    text-decoration: underline;
-  }
+const SecondStepButton = styled(Button)`
+  margin-top: 30px;
 `;
 
 interface Props {
@@ -65,8 +60,12 @@ const ProjectModal = ({ setIsModalOpen }: Props) => {
   const [projectData, setProjectData] = React.useState({
     title: "",
     desc: "",
-    members: "",
+    members: [],
   });
+
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { isLoading } = useSelector((state: RootState) => state.project);
 
   const renderStep = () => {
     switch (currentStep) {
@@ -106,14 +105,24 @@ const ProjectModal = ({ setIsModalOpen }: Props) => {
               <label htmlFor="member-name">
                 Memeber&apos;s username <span>(Optional)</span>
               </label>
-              <TagsInput />
-              <Button height="45px" padding="12px 0" type="submit" color="primary">
-                Create project
-              </Button>
+              <MemberSearch passDataToParent={handleMemberSearch} handleData={searchUsers} />
+              <SecondStepButton
+                disabled={isLoading}
+                height="45px"
+                padding="12px 0"
+                type="submit"
+                color="primary"
+              >
+                {isLoading ? <Loading color="dark" /> : "Create Project"}
+              </SecondStepButton>
             </form>
           </>
         );
     }
+  };
+
+  const handleMemberSearch = (data: any) => {
+    setProjectData({ ...projectData, members: data[0] });
   };
 
   const handleFirstStep = (e: { preventDefault: () => void }) => {
@@ -123,6 +132,10 @@ const ProjectModal = ({ setIsModalOpen }: Props) => {
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    dispatch(createProject(projectData));
+    router.push("/dashboard/projects");
+    setIsModalOpen(false);
+    console.log(projectData);
   };
 
   return (
