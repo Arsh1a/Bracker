@@ -104,13 +104,18 @@ const MemberSearch = ({ handleData, passDataToParent, borderRadius, ...rest }: P
       setSuggestedTags(response.data);
     };
     if (inputValue.length >= 3) {
-      fetchData();
+      // Delays the fetching of data to prevent unnecessary requests
+      setTimeout(() => {
+        fetchData();
+      }, 1000);
     } else {
+      // Clears the data if the input is less than 3 characters
       setSuggestedTags([]);
     }
   }, [handleData, inputValue]);
 
   useEffect(() => {
+    // Passes data to parent component
     passDataToParent([tags]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tags]);
