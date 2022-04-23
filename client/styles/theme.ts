@@ -4,7 +4,7 @@ export const theme = {
     lightPrimary: "#E8EFF9",
     secondary: "#9C9C9C",
     tertiary: "#47818F",
-    light: "#d1d1d1",
+    light: "#e3e3e3",
     dark: "#1E1B1E",
     error: "#EB5A46",
   },

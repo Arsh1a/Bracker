@@ -20,9 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     //Check if response is OK
     if (response.status === 200) {
       return {
-        props: {
-          userInfo: response.data,
-        },
+        props: {},
       };
     }
   }
@@ -31,7 +29,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       userInfo: {},
-      data: [],
     },
     redirect: {
       destination: "/login",

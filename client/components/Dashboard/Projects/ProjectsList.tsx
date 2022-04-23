@@ -6,7 +6,7 @@ import ProjectModal from "./ProjectModal";
 
 const Wrapper = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 20px;
   flex-wrap: wrap;
   overflow-y: auto;
 `;

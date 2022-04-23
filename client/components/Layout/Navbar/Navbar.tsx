@@ -29,22 +29,6 @@ const Logo = styled.div`
   }
 `;
 
-const Links = styled.ul`
-  list-style: none;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 2rem;
-
-  li {
-    font-size: 1rem;
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
 interface Props {}
 
 const Navbar = ({}: Props) => {

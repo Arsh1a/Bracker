@@ -2,14 +2,15 @@ import React from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  min-width: 300px;
   display: flex;
+  flex-grow: 1;
+  width: 300px;
   flex-direction: column;
   flex-wrap: wrap;
   gap: 10px;
   background-color: white;
   border-radius: 12px;
-  padding: 20px;
+  padding: 30px;
   border: 1px solid ${(props) => props.theme.colors.light};
 `;
 

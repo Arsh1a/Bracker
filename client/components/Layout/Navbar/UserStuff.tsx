@@ -13,13 +13,12 @@ const Links = styled.ul`
   justify-content: space-around;
   align-items: center;
   gap: 2rem;
-
   li {
     font-size: 1rem;
     cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
+  }
+  .login:hover {
+    text-decoration: underline;
   }
 `;
 
@@ -36,10 +35,10 @@ const UserStuff = ({ currentUser, handleLogout }: Props) => {
   return (
     <Links>
       <Link href="/login" passHref>
-        <li>Login</li>
+        <li className="login">Login</li>
       </Link>
       <li>
-        <Link href={"/signup"} passHref>
+        <Link href="/signup" passHref>
           <Button color="primary">Sign up</Button>
         </Link>
       </li>

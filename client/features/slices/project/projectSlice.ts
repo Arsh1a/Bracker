@@ -9,6 +9,18 @@ const initialState = {
   message: "",
 };
 
+export const getProjects = createAsyncThunk("project/getProjects", async (_, thunkAPI) => {
+  try {
+    return await projectService.getProjects();
+  } catch (error: any) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue({ message });
+  }
+});
+
 export const createProject = createAsyncThunk(
   "projects/create",
   async (projectData: { title: string; desc?: string; members?: any[] }, thunkAPI) => {
@@ -30,18 +42,37 @@ export const projectSlice = createSlice({
   reducers: { reset: (state) => initialState },
   extraReducers: (builder) => {
     builder
-      .addCase(createProject.pending, (state) => {
+      .addCase(getProjects.pending, (state, action) => {
         state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = "";
       })
-      .addCase(createProject.fulfilled, (state: any, action) => {
+      .addCase(getProjects.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.isError = false;
         state.isSuccess = true;
-        state.projects.push(action.payload);
+        state.message = "";
+        state.projects = action.payload;
       })
-      .addCase(createProject.rejected, (state: any, action) => {
+      .addCase(getProjects.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.isSuccess = false;
+        state.message = action.payload as string;
+      })
+      .addCase(createProject.pending, (state: typeof initialState) => {
+        state.isLoading = true;
+      })
+      .addCase(createProject.fulfilled, (state: typeof initialState, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.projects.push(action.payload as never);
+      })
+      .addCase(createProject.rejected, (state: typeof initialState, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload as string;
       });
   },
 });

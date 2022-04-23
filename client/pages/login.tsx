@@ -28,7 +28,6 @@ const InnerWrapper = styled.div`
   max-width: 350px;
   h1 {
     font-size: 1.5rem;
-    color: ${({ theme }) => theme.colors.secondary};
   }
   span {
     font-size: 0.8rem;

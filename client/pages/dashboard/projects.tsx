@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { GetServerSideProps } from "next";
-import { fetchProjects } from "../../lib/requestApi";
+import React, { useEffect, useState } from "react";
 import ProjectsList from "../../components/Dashboard/Projects/ProjectsList";
 import Container from "../../components/Common/Container";
 import styled from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
+import { GetServerSideProps } from "next";
+import { fetchUserInfo } from "../../lib/requestApi";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../features/store";
+import { getProjects } from "../../features/slices/project/projectSlice";
 
 const InnerWrapper = styled.div`
   display: flex;
@@ -15,7 +18,7 @@ const Header = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   span {
     display: flex;
     align-items: center;
@@ -32,12 +35,19 @@ const Header = styled.div`
   }
 `;
 
-interface Props {
-  data: any[];
-}
+interface Props {}
 
-const Projects = ({ data }: Props) => {
+const Projects = ({}: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const dispatch = useDispatch();
+  const { projects, isLoading, isError, message } = useSelector(
+    (state: RootState) => state.project
+  );
+
+  useEffect(() => {
+    dispatch(getProjects());
+  }, [dispatch]);
 
   return (
     <Container>
@@ -48,23 +58,23 @@ const Projects = ({ data }: Props) => {
             <AiOutlinePlus />
           </span>
         </Header>
-        <ProjectsList data={data} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+        {isError && <h1>{message}</h1>}
+        <ProjectsList data={projects} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
       </InnerWrapper>
     </Container>
   );
 };
 
+//This is for SSR redirecting
 export const getServerSideProps: GetServerSideProps = async (context) => {
   //Check if any cookie exists
   if (context.req.headers.cookie) {
     //Get user info
-    const response = await fetchProjects(context);
+    const response = await fetchUserInfo(context);
     //Check if response is OK
     if (response.status === 200) {
       return {
-        props: {
-          data: response.data,
-        },
+        props: {},
       };
     }
   }
@@ -72,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   //Redirect to login page
   return {
     props: {
-      data: [],
+      userInfo: {},
     },
     redirect: {
       destination: "/login",
