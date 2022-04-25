@@ -16,6 +16,8 @@ const Wrapper = styled.nav`
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  top: 0;
+  background-color: white;
 `;
 
 const Logo = styled.div`

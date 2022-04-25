@@ -8,9 +8,6 @@ import NextNProgress from "nextjs-progressbar";
 import { theme } from "../styles/theme";
 import { store } from "../features/store";
 import Layout from "../components/Layout/Layout";
-import { QueryClient, QueryClientProvider } from "react-query";
-
-const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -22,20 +19,18 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <Provider store={store}>
         <StyledThemeProvider>
-          <QueryClientProvider client={queryClient}>
-            <GlobalStyle />
-            <NextNProgress
-              color={theme.colors.primary}
-              startPosition={0.3}
-              stopDelayMs={200}
-              height={4}
-              showOnShallow={true}
-              options={{ showSpinner: false, easing: "ease", speed: 500 }}
-            />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </QueryClientProvider>
+          <GlobalStyle />
+          <NextNProgress
+            color={theme.colors.primary}
+            startPosition={0.3}
+            stopDelayMs={200}
+            height={4}
+            showOnShallow={true}
+            options={{ showSpinner: false, easing: "ease", speed: 500 }}
+          />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </StyledThemeProvider>
       </Provider>
     </>

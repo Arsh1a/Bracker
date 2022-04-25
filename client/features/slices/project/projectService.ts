@@ -13,9 +13,33 @@ const createProject = async (projectData: { title: string; desc?: string; member
   return response.data;
 };
 
+const updateProject = async (projectData: { id: string; title: string; desc?: string }) => {
+  const response = await axios.patch(API_URL + projectData.id, projectData, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
+const deleteProject = async (id: string) => {
+  const response = await axios.delete(API_URL + id, { withCredentials: true });
+  return response.data;
+};
+
+const inviteToProject = async (id: string, usersID: string[]) => {
+  const response = await axios.patch(
+    API_URL + id + "/users",
+    { usersID },
+    { withCredentials: true }
+  );
+  return response.data;
+};
+
 const projectService = {
   createProject,
   getProjects,
+  updateProject,
+  deleteProject,
+  inviteToProject,
 };
 
 export default projectService;

@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import Modal from "../../Common/Modal";
 import Input from "../../Common/Input";
 import Loading from "../../Common/Loading";
 import Button from "../../Common/Button";
-import { GrClose } from "react-icons/gr";
 import MemberSearch from "./MemberSearch";
 import { searchUsers } from "../../../lib/requestApi";
 import { useSelector, useDispatch } from "react-redux";
-import { createProject } from "../../../features/slices/project/projectSlice";
+import { createProject, inviteToProject } from "../../../features/slices/project/projectSlice";
 import { RootState } from "../../../features/store";
-import { useRouter } from "next/router";
 
 const ModalInnerWrapper = styled.div`
   position: relative;
@@ -32,17 +30,6 @@ const ModalInnerWrapper = styled.div`
   }
 `;
 
-const CloseIcon = styled.div`
-  position: absolute;
-  font-size: 1.2rem;
-  right: 0;
-  cursor: pointer;
-  transition: 0.3s;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-
 const ModalInput = styled(Input)`
   margin-bottom: 30px;
 `;
@@ -55,17 +42,20 @@ interface Props {
   setIsModalOpen: (status: boolean) => void;
 }
 
-const ProjectModal = ({ setIsModalOpen }: Props) => {
+const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
   const [currentStep, setCurrentStep] = React.useState(1);
-  const [projectData, setProjectData] = React.useState({
+  const [projectData, setProjectData] = React.useState<{
+    title: string;
+    desc: string;
+    ids: any;
+  }>({
     title: "",
     desc: "",
-    members: [],
+    ids: [],
   });
 
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { isLoading } = useSelector((state: RootState) => state.project);
+  const { projects, isLoading } = useSelector((state: RootState) => state.project);
 
   const renderStep = () => {
     switch (currentStep) {
@@ -121,32 +111,35 @@ const ProjectModal = ({ setIsModalOpen }: Props) => {
     }
   };
 
-  const handleMemberSearch = (data: any) => {
-    setProjectData({ ...projectData, members: data[0] });
+  const handleMemberSearch = (ids: any) => {
+    console.log(ids);
+    setProjectData({ ...projectData, ids });
   };
 
   const handleFirstStep = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    dispatch(createProject(projectData));
     setCurrentStep(currentStep + 1);
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    dispatch(createProject(projectData));
-    router.push("/dashboard/projects");
+    const inviteData = {
+      id: projects[projects.length - 1]._id, // Last project
+      usersID: projectData.ids,
+    };
+
+    console.log(inviteData);
+    dispatch(inviteToProject(inviteData));
     setIsModalOpen(false);
-    console.log(projectData);
   };
 
+  console.log(projectData);
+
   return (
-    <Modal>
-      <ModalInnerWrapper>
-        <CloseIcon onClick={() => setIsModalOpen(false)}>
-          <GrClose />
-        </CloseIcon>
-        {renderStep()}
-      </ModalInnerWrapper>
+    <Modal closeModal={() => setIsModalOpen(false)}>
+      <ModalInnerWrapper>{renderStep()}</ModalInnerWrapper>
     </Modal>
   );
 };
-export default ProjectModal;
+export default ProjectCreateModal;

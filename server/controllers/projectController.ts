@@ -100,7 +100,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
     //Delete project tasks
     await Task.deleteMany({ id: projectID });
 
-    res.status(200).json(project + " deleted");
+    res.status(200).json(projectID);
   } catch (err) {
     next(err);
   }
@@ -111,7 +111,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
 /// @access private
 export const inviteToProject = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
-  const { userID } = req.body;
+  const { usersID } = req.body; //Array of user ids
   const { user } = <any>req;
 
   //Checks if provided project id can be casted ot ObjectId
@@ -119,44 +119,46 @@ export const inviteToProject = async (req: Request, res: Response, next: NextFun
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
-  //Checks if provided user id can be casted ot ObjectId
-  if (!isValidObjectId(userID)) {
-    return next(new ErrorResponse("Invalid user ID", 400));
-  }
-
   try {
-    //Check if user exist in database
-    const invitedUser = await User.findOne({ _id: userID });
-    if (!invitedUser) {
-      return next(new ErrorResponse("User not found", 404));
+    // Loops through all user ids provided in request body
+    for (let i = 0; i < usersID.length; i++) {
+      if (!isValidObjectId(usersID[i])) {
+        return next(new ErrorResponse("Invalid user ID", 400));
+      }
+
+      //Check if user exist in database
+      const invitedUser = await User.findOne({ _id: usersID[i] });
+      if (!invitedUser) {
+        return next(new ErrorResponse("User does not exist", 404));
+      }
+
+      const projectBeforeInviting = await Project.findOne({
+        _id: projectID,
+        owner: user._id,
+      });
+
+      //Checks if the user is the owner of the project
+      if (projectBeforeInviting.owner.toString() === usersID[i]) {
+        return next(new ErrorResponse("You can't invite yourself", 400));
+      }
+
+      //Checks if the user already is in the project
+      if (projectBeforeInviting.members.includes(usersID[i])) {
+        return next(new ErrorResponse("User already in project", 400));
+      }
+
+      //Checks if the user is already invited to the project
+      if (await Invite.findOne({ projectID: projectID, invitedUser: usersID[i] })) {
+        return next(new ErrorResponse("User already invited", 400));
+      }
+
+      const invite = await Invite.create({
+        invitedUser: usersID[i],
+        projectID,
+      });
     }
 
-    const projectBeforeInviting = await Project.findOne({
-      _id: projectID,
-      owner: user._id,
-    });
-
-    //Checks if the user is the owner of the project
-    if (projectBeforeInviting.owner.toString() === userID) {
-      return next(new ErrorResponse("This user is the owner of the project", 400));
-    }
-
-    //Checks if the user already is in the project
-    if (projectBeforeInviting.members.includes(userID)) {
-      return next(new ErrorResponse("This user is already in the project", 400));
-    }
-
-    //Checks if the user is already invited to the project
-    if (await Invite.findOne({ projectID: projectID, invitedUser: userID })) {
-      return next(new ErrorResponse("User is already invited to the project", 400));
-    }
-
-    const invite = await Invite.create({
-      invitedUser: userID,
-      projectID,
-    });
-
-    res.status(200).json(invitedUser.username + " has been invited");
+    res.status(200).json("Users has been invited");
   } catch (err) {
     next(err);
   }

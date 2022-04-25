@@ -58,7 +58,7 @@ const Projects = ({}: Props) => {
             <AiOutlinePlus />
           </span>
         </Header>
-        {isError && <h1>{message}</h1>}
+        {isError && <h3>{message}</h3>}
         <ProjectsList data={projects} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
       </InnerWrapper>
     </Container>

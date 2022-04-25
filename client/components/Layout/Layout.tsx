@@ -26,7 +26,6 @@ const Layout = ({ children }: Props) => {
           <DashboardMenu />
           {children}
         </Wrapper>
-        <Footer />
       </>
     );
   }

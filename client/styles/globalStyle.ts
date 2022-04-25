@@ -6,6 +6,27 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #999; 
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #777; 
+  }
+
   html,
   body, #__next {
     height: 100%;

@@ -54,6 +54,7 @@ const Button = React.forwardRef<any, Props>(function Button(
       borderRadius={borderRadius}
       padding={padding}
       height={height}
+      ref={ref}
       {...rest}
     >
       {children}

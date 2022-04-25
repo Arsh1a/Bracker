@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
 import { useRouter } from "next/router";
+import DropDown from "../../Common/DropDown";
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,31 +18,6 @@ const Wrapper = styled.div`
   span {
     font-weight: 600;
     color: ${(props) => props.theme.colors.secondary};
-  }
-`;
-
-const DropDown = styled.ul`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  flex-direction: column;
-  gap: 5px;
-  padding: 10px 0;
-  right: 15px;
-  top: 60px;
-  width: 130px;
-  background-color: white;
-  border: 1px solid ${(props) => props.theme.colors.light};
-  border-radius: 10px;
-  list-style: none;
-  font-weight: 500;
-  li {
-    cursor: pointer;
-    &:hover {
-      background-color: ${(props) => props.theme.colors.light};
-    }
-    padding: 5px 0;
   }
 `;
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { GrClose } from "react-icons/gr";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -16,6 +17,7 @@ const Wrapper = styled.div`
 `;
 
 const InnerWrapper = styled.div`
+  position: relative;
   background-color: white;
   margin: auto;
   padding: 20px;
@@ -24,14 +26,32 @@ const InnerWrapper = styled.div`
   width: 600px;
 `;
 
+const CloseIcon = styled.div`
+  position: absolute;
+  font-size: 1.2rem;
+  right: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  z-index: 100;
+  &:hover {
+    opacity: 0.5;
+  }
+`;
+
 interface Props {
   children: React.ReactNode;
+  closeModal: () => void;
 }
 
-const Modal = ({ children }: Props) => {
+const Modal = ({ children, closeModal }: Props) => {
   return (
     <Wrapper>
-      <InnerWrapper>{children}</InnerWrapper>
+      <InnerWrapper>
+        <CloseIcon onClick={closeModal}>
+          <GrClose />
+        </CloseIcon>
+        {children}
+      </InnerWrapper>
     </Wrapper>
   );
 };

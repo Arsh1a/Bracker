@@ -92,7 +92,7 @@ interface SuggestionDropDownItemProps {
 }
 
 const MemberSearch = ({ handleData, passDataToParent, borderRadius, ...rest }: Props) => {
-  const [tags, setTags] = useState<any[]>([]);
+  const [tags, setTags] = useState<{ _id: string; username: string }[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [suggestedTags, setSuggestedTags] = useState([]);
 
@@ -115,28 +115,29 @@ const MemberSearch = ({ handleData, passDataToParent, borderRadius, ...rest }: P
   }, [handleData, inputValue]);
 
   useEffect(() => {
-    // Passes data to parent component
-    passDataToParent([tags]);
+    const ids = tags.map((tag) => tag._id);
+    // Passes ids to parent component
+    passDataToParent(ids);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tags]);
 
-  const handleOnTagClick = (tag: string) => {
+  const handleOnTagClick = (tag: { _id: string; username: string }) => {
     if (tags.includes(tag) || user.username === tag) return;
     setTags([...tags, tag]);
     setSuggestedTags([]);
     setInputValue("");
   };
 
-  const handleDeleteItem = (tag: string) => {
-    setTags(tags.filter((item) => item !== tag));
+  const handleDeleteItem = (tagID: string) => {
+    setTags(tags.filter((item) => item._id !== tagID));
   };
 
   return (
     <>
       <Wrapper borderRadius={borderRadius} suggestedTagsExist={suggestedTags.length > 0}>
         {tags.map((tag) => (
-          <Tag key={tag}>
-            {tag} <GrClose onClick={() => handleDeleteItem(tag)} />
+          <Tag key={tag._id}>
+            {tag.username} <GrClose onClick={() => handleDeleteItem(tag._id)} />
           </Tag>
         ))}
         <Input
@@ -152,7 +153,7 @@ const MemberSearch = ({ handleData, passDataToParent, borderRadius, ...rest }: P
             <SuggestionDropDownItem
               userAlreadyAdded={tags.includes(tag.username) || user.username === tag.username}
               key={tag._id}
-              onClick={() => handleOnTagClick(tag.username)}
+              onClick={() => handleOnTagClick(tag)}
             >
               {tag.username}
               {user.username === tag.username && <span>(You)</span>}
