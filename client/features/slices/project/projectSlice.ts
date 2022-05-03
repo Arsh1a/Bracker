@@ -118,10 +118,12 @@ export const projectSlice = createSlice({
       })
       .addCase(updateProject.pending, (state: typeof initialState) => {
         state.isLoading = true;
+        state.message = "";
       })
       .addCase(updateProject.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.message = "";
         state.projects = state.projects.map((project) =>
           project._id === action.payload._id ? action.payload : project
         );

@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
 import ProjectsList from "../../components/Dashboard/Projects/ProjectsList";
-import Container from "../../components/Common/Container";
 import styled from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
 import { GetServerSideProps } from "next";
-import { fetchUserInfo } from "../../lib/requestApi";
+import { getSession } from "../../lib/requestApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { getProjects } from "../../features/slices/project/projectSlice";
-
-const InnerWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+import DashboardPagesLayout from "../../components/Dashboard/DashboardPagesLayout";
+import ErrorMessage from "../../components/Common/ErrorMessage";
 
 const Header = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
-  margin-bottom: 20px;
   span {
     display: flex;
     align-items: center;
@@ -35,6 +30,9 @@ const Header = styled.div`
   }
 `;
 
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 20px;
+`;
 interface Props {}
 
 const Projects = ({}: Props) => {
@@ -50,43 +48,40 @@ const Projects = ({}: Props) => {
   }, [dispatch]);
 
   return (
-    <Container>
-      <InnerWrapper>
+    <DashboardPagesLayout
+      headerContent={
         <Header>
           <h1>Projects</h1>
           <span onClick={() => setIsModalOpen(true)}>
             <AiOutlinePlus />
           </span>
         </Header>
-        {isError && <h3>{message}</h3>}
-        <ProjectsList data={projects} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
-      </InnerWrapper>
-    </Container>
+      }
+    >
+      {isError && (
+        <ErrorMessageWrapper>
+          <ErrorMessage>{message}</ErrorMessage>
+        </ErrorMessageWrapper>
+      )}
+      <ProjectsList data={projects} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+    </DashboardPagesLayout>
   );
 };
 
 //This is for SSR redirecting
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  //Check if any cookie exists
-  if (context.req.headers.cookie) {
-    //Get user info
-    const response = await fetchUserInfo(context);
-    //Check if response is OK
-    if (response.status === 200) {
-      return {
-        props: {},
-      };
-    }
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: true,
+      },
+    };
   }
 
-  //Redirect to login page
   return {
-    props: {
-      userInfo: {},
-    },
-    redirect: {
-      destination: "/login",
-    },
+    props: {},
   };
 };
 

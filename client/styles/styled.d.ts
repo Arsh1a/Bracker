@@ -9,7 +9,8 @@ declare module "styled-components" {
       tertiary: string;
       light: string;
       dark: string;
-      error: string;
+      danger: string;
+      success: string;
     };
   }
 }

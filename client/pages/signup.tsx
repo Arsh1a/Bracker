@@ -9,6 +9,7 @@ import { RootState } from "../features/store";
 import { useRouter } from "next/router";
 import Loading from "../components/Common/Loading";
 import Container from "../components/Common/Container";
+import ErrorMessage from "../components/Common/ErrorMessage";
 
 const AuthContainer = styled(Container)`
   margin: auto auto;
@@ -44,15 +45,6 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
   gap: 20px;
-`;
-
-const ErrorMessage = styled.p`
-  background-color: ${(props) => props.theme.colors.error};
-  color: white;
-  padding: 10px 20px;
-  font-size: 0.8rem;
-  text-align: left;
-  border-radius: 10px;
 `;
 
 interface Props {}

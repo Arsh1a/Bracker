@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { MdOutlineDashboard, MdOutlineSettings, MdMailOutline, MdOutlineDvr } from "react-icons/md";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../features/store";
+import { getInvites } from "../../../features/slices/invite/inviteSlice";
 
 const Menu = styled.ul`
   list-style: none;
@@ -36,6 +39,13 @@ const MenuLink = styled.li<StyledProps>`
   svg {
     font-size: 1.5rem;
   }
+  .total-invites {
+    font-size: 0.8rem;
+    background-color: ${(props) => props.theme.colors.danger};
+    color: white;
+    border-radius: 100%;
+    padding: 1px 6px;
+  }
 `;
 
 interface StyledProps {
@@ -46,7 +56,25 @@ interface Props {}
 
 const DashboardMenu = ({}: Props) => {
   const [active, setActive] = useState("");
+  const [invitesCount, setInvitesCount] = useState(0);
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state: RootState) => state.auth);
+  const { invites } = useSelector((state: RootState) => state.invite);
+
+  useEffect(() => {
+    dispatch(getInvites());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (invites !== null && invites.length > 0) {
+      setInvitesCount(invites.length);
+    }
+    if (invites === null) {
+      setInvitesCount(user.invites);
+    }
+  }, [invites, user]);
 
   useEffect(() => {
     if (router.pathname === "/dashboard") {
@@ -79,7 +107,7 @@ const DashboardMenu = ({}: Props) => {
         <Link href={`/dashboard/invites`} passHref>
           <MenuLink isActive={active === "invites" ? true : false}>
             <MdMailOutline />
-            Invites
+            Invites {invitesCount > 0 && <span className="total-invites">{invitesCount}</span>}
           </MenuLink>
         </Link>
         <Link href={`/dashboard/settings`} passHref>

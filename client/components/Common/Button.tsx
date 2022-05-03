@@ -28,7 +28,7 @@ const Wrapper = styled.button<StyledProps>`
 
 interface Props extends React.ComponentPropsWithRef<"button"> {
   children: React.ReactNode;
-  color: "primary" | "secondary" | "light" | "dark";
+  color: "primary" | "secondary" | "light" | "dark" | "danger" | "success";
   borderRadius?: string;
   fullWidth?: boolean;
   height?: string;
@@ -36,7 +36,7 @@ interface Props extends React.ComponentPropsWithRef<"button"> {
 }
 
 interface StyledProps {
-  color: "primary" | "secondary" | "light" | "dark";
+  color: "primary" | "secondary" | "light" | "dark" | "danger" | "success";
   fullWidth?: boolean;
   borderRadius?: string;
   height?: string;

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { GetServerSideProps } from "next";
 import axios from "axios";
-import { fetchUserInfo } from "../../lib/requestApi";
+import { getSession } from "../../lib/requestApi";
 
 const Wrapper = styled.div``;
 
@@ -13,26 +13,18 @@ const Settings = ({}: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  //Check if any cookie exists
-  if (context.req.headers.cookie) {
-    //Get user info
-    const response = await fetchUserInfo(context);
-    //Check if response is OK
-    if (response.status === 200) {
-      return {
-        props: {},
-      };
-    }
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: true,
+      },
+    };
   }
 
-  //Redirect to login page
   return {
-    props: {
-      userInfo: {},
-    },
-    redirect: {
-      destination: "/login",
-    },
+    props: {},
   };
 };
 

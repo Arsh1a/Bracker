@@ -140,7 +140,7 @@ export const searchUsers = async (req: Request, res: Response, next: NextFunctio
 };
 
 /// @desc Handle Project Invites
-/// @route GET /api/auth/invites
+/// @route GET /api/auth/invite
 /// @access private
 export const getAllInvites = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
@@ -158,7 +158,7 @@ export const getAllInvites = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc Handle Project Invites
-/// @route POST /api/auth/invites/:inviteID
+/// @route POST /api/auth/invite/:inviteID
 /// @access private
 export const handleInvite = async (req: Request, res: Response, next: NextFunction) => {
   const { accepted } = req.body;
@@ -198,11 +198,11 @@ export const handleInvite = async (req: Request, res: Response, next: NextFuncti
 
       invite.remove();
 
-      res.status(200).json(project);
+      res.status(200).json({ inviteID, success: true });
     } else if (accepted === false) {
       invite.remove();
 
-      res.status(200).json({ success: true });
+      res.status(200).json({ inviteID, success: true });
     } else {
       return next(new ErrorResponse("Invalid request", 400));
     }

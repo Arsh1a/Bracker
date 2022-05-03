@@ -1,18 +1,16 @@
+import { GetServerSideProps } from "next";
 import React from "react";
 import styled from "styled-components";
-import { GetServerSideProps } from "next";
-import Container from "../../components/Common/Container";
-import { getSession } from "../../lib/requestApi";
+import { getSession, getTasks } from "../../lib/requestApi";
 
 const Wrapper = styled.div``;
 
-interface Props {
-  userInfo: { username: string; email: string };
-}
+interface Props {}
 
-const Profile = ({ userInfo }: Props) => {
-  return <Container>s</Container>;
+const Project = ({}: Props) => {
+  return <Wrapper></Wrapper>;
 };
+export default Project;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -29,5 +27,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {},
   };
 };
-
-export default Profile;

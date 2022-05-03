@@ -1,16 +1,22 @@
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 
-export const fetchUserInfo = async (context: GetServerSidePropsContext) => {
+export const getSession = async (context: GetServerSidePropsContext) => {
+  if (!context.req.headers.cookie || !context.req.headers.cookie.includes("access_token")) {
+    return null;
+  }
+
   return axios
     .get(process.env.NEXT_PUBLIC_API_URL + "/auth/user", {
       withCredentials: true,
       headers: {
-        Cookie: context.req.headers.cookie!,
+        Cookie: context.req.headers.cookie,
       },
     })
     .then((response) => Promise.resolve(response))
-    .catch((error) => Promise.reject(error));
+    .catch((error) => {
+      return null;
+    });
 };
 
 export const fetchProjects = async (context: GetServerSidePropsContext) => {
@@ -29,6 +35,18 @@ export const searchUsers = async (username: string) => {
   return axios
     .get(process.env.NEXT_PUBLIC_API_URL + "/auth/user/search/?username=" + username, {
       withCredentials: true,
+    })
+    .then((response) => Promise.resolve(response))
+    .catch((error) => Promise.reject(error));
+};
+
+export const getTasks = async (context: GetServerSidePropsContext, slug: string | string[]) => {
+  return axios
+    .get(process.env.NEXT_PUBLIC_API_URL + "/project/" + slug + "/tasks", {
+      withCredentials: true,
+      headers: {
+        Cookie: context.req.headers.cookie!,
+      },
     })
     .then((response) => Promise.resolve(response))
     .catch((error) => Promise.reject(error));

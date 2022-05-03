@@ -1,38 +1,55 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { GetServerSideProps } from "next";
-import axios from "axios";
-import { fetchUserInfo } from "../../lib/requestApi";
+import { getSession } from "../../lib/requestApi";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../features/store";
+import { getInvites } from "../../features/slices/invite/inviteSlice";
+import DashboardPagesLayout from "../../components/Dashboard/DashboardPagesLayout";
+import InvitesList from "../../components/Dashboard/Invites/InvitesList";
+import ErrorMessage from "../../components/Common/ErrorMessage";
 
-const Wrapper = styled.div``;
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 20px;
+`;
 
 interface Props {}
 
 const Invites = ({}: Props) => {
-  return <Wrapper></Wrapper>;
+  const dispatch = useDispatch();
+  const { invites, isError, message } = useSelector((state: RootState) => state.invite);
+
+  useEffect(() => {
+    dispatch(getInvites());
+  }, [dispatch]);
+
+  console.log(invites);
+
+  return (
+    <DashboardPagesLayout headerContent={<h1>Invites</h1>}>
+      {isError && (
+        <ErrorMessageWrapper>
+          <ErrorMessage>{message}</ErrorMessage>
+        </ErrorMessageWrapper>
+      )}
+      <InvitesList data={invites!} />
+    </DashboardPagesLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  //Check if any cookie exists
-  if (context.req.headers.cookie) {
-    //Get user info
-    const response = await fetchUserInfo(context);
-    //Check if response is OK
-    if (response.status === 200) {
-      return {
-        props: {},
-      };
-    }
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: true,
+      },
+    };
   }
 
-  //Redirect to login page
   return {
-    props: {
-      userInfo: {},
-    },
-    redirect: {
-      destination: "/login",
-    },
+    props: {},
   };
 };
 

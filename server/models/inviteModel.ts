@@ -12,6 +12,14 @@ const InviteSchema = new mongoose.Schema(
       required: [true, "There is no project assigned"],
       ref: "Project",
     },
+    invitedByUsername: {
+      type: String,
+      required: [true, "There is no invited by user"],
+    },
+    projectName: {
+      type: String,
+      required: [true, "There is no project name"],
+    },
   },
   { timestamps: true }
 );

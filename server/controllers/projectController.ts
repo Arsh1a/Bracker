@@ -6,7 +6,7 @@ import Invite from "../models/inviteModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
-// @desc Get all projects for a user
+// @desc Get all project for a user
 // @route GET /api/project/
 // @access private
 export const getAllProjects = async (req: Request, res: Response, next: NextFunction) => {
@@ -58,18 +58,20 @@ export const updateProjectInfo = async (req: Request, res: Response, next: NextF
   }
 
   try {
-    const project = await Project.findOneAndUpdate(
-      { _id: projectID, owner: user._id },
-      {
-        title: title,
-        desc: desc,
-      },
-      { new: true, runValidators: true }
-    );
+    const project = await Project.findOne({ _id: projectID });
 
+    //Checks if provided project id exists in database
     if (!project) {
       return next(new ErrorResponse("Project not found", 404));
     }
+
+    //Checks if provided project id belongs to user
+    if (project.owner.toString() !== user._id.toString()) {
+      return next(new ErrorResponse("You are not owner of the project", 403));
+    }
+
+    project.title = title;
+    project.desc = desc;
 
     res.status(200).json(project);
   } catch (err) {
@@ -90,12 +92,19 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
   }
 
   try {
-    const project = await Project.findOneAndDelete({ _id: projectID, owner: user._id });
+    const project = await Project.findOne({ _id: projectID });
 
     //Checks if provided project id exists in database
     if (!project) {
-      return next(new ErrorResponse("Project does not exist", 404));
+      return next(new ErrorResponse("Project not found", 404));
     }
+
+    //Checks if provided project id belongs to user
+    if (project.owner.toString() !== user._id.toString()) {
+      return next(new ErrorResponse("You are not owner of the project", 403));
+    }
+
+    await project.remove();
 
     //Delete project tasks
     await Task.deleteMany({ id: projectID });
@@ -137,6 +146,9 @@ export const inviteToProject = async (req: Request, res: Response, next: NextFun
         owner: user._id,
       });
 
+      //Get inviter username
+      const invitedByUsername = await User.findOne({ _id: user._id });
+
       //Checks if the user is the owner of the project
       if (projectBeforeInviting.owner.toString() === usersID[i]) {
         return next(new ErrorResponse("You can't invite yourself", 400));
@@ -152,9 +164,11 @@ export const inviteToProject = async (req: Request, res: Response, next: NextFun
         return next(new ErrorResponse("User already invited", 400));
       }
 
-      const invite = await Invite.create({
+      await Invite.create({
         invitedUser: usersID[i],
         projectID,
+        projectName: projectBeforeInviting.title,
+        invitedByUsername: invitedByUsername.username,
       });
     }
 

@@ -18,7 +18,7 @@ router.route("/logout").get(authMiddleware, logout);
 router.route("/user").get(authMiddleware, getUserInfo);
 router.route("/user/search").get(authMiddleware, searchUsers);
 
-router.route("/invites").get(authMiddleware, getAllInvites);
-router.route("/invites/:inviteID").post(authMiddleware, handleInvite);
+router.route("/invite").get(authMiddleware, getAllInvites);
+router.route("/invite/:inviteID").post(authMiddleware, handleInvite);
 
 export default router;

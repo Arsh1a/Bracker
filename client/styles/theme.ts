@@ -6,6 +6,7 @@ export const theme = {
     tertiary: "#47818F",
     light: "#d6d6d6",
     dark: "#1E1B1E",
-    error: "#EB5A46",
+    danger: "#EB5A46",
+    success: "#4CAF50",
   },
 };

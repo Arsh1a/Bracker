@@ -55,8 +55,6 @@ const ProjectEditModal = ({ closeModal, id, title, desc }: Props) => {
     closeModal();
   };
 
-  console.log(projectInfo.id);
-
   return (
     <Modal closeModal={closeModal}>
       <ModalInnerWrapper>

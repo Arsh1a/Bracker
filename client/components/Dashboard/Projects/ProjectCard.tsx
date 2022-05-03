@@ -29,7 +29,7 @@ const Wrapper = styled.div`
     }
   }
   .delete {
-    color: red;
+    color: ${(props) => props.theme.colors.danger};
   }
 `;
 

@@ -112,7 +112,6 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
   };
 
   const handleMemberSearch = (ids: any) => {
-    console.log(ids);
     setProjectData({ ...projectData, ids });
   };
 
@@ -129,12 +128,9 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
       usersID: projectData.ids,
     };
 
-    console.log(inviteData);
     dispatch(inviteToProject(inviteData));
     setIsModalOpen(false);
   };
-
-  console.log(projectData);
 
   return (
     <Modal closeModal={() => setIsModalOpen(false)}>

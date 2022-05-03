@@ -5,7 +5,7 @@ import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
 // @desc Get tasks for a project
-// @route GET /api/projects/:projectID/tasks
+// @route GET /api/project/:projectID/tasks
 // @access private
 export const getTasksForProject = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
@@ -34,7 +34,7 @@ export const getTasksForProject = async (req: Request, res: Response, next: Next
 };
 
 // @desc Create new task
-// @route POST /api/projects/:projectID/tasks
+// @route POST /api/project/:projectID/tasks
 // @access private
 export const createTask = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
@@ -74,7 +74,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 };
 
 /// @desc Update task
-/// @route PATCH /api/projects/:projectID/tasks/:taskID
+/// @route PATCH /api/project/:projectID/tasks/:taskID
 /// @access private
 export const updateTask = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
@@ -126,7 +126,7 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
 };
 
 // @desc Delete task
-// @route DELETE /api/projects/:projectID/tasks/:taskID
+// @route DELETE /api/project/:projectID/tasks/:taskID
 // @access private
 export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID, taskID } = req.params;
