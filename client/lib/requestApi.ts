@@ -19,18 +19,6 @@ export const getSession = async (context: GetServerSidePropsContext) => {
     });
 };
 
-export const fetchProjects = async (context: GetServerSidePropsContext) => {
-  return axios
-    .get(process.env.NEXT_PUBLIC_API_URL + "/project", {
-      withCredentials: true,
-      headers: {
-        Cookie: context.req.headers.cookie!,
-      },
-    })
-    .then((response) => Promise.resolve(response))
-    .catch((error) => Promise.reject(error));
-};
-
 export const searchUsers = async (username: string) => {
   return axios
     .get(process.env.NEXT_PUBLIC_API_URL + "/auth/user/search/?username=" + username, {
@@ -40,14 +28,17 @@ export const searchUsers = async (username: string) => {
     .catch((error) => Promise.reject(error));
 };
 
-export const getTasks = async (context: GetServerSidePropsContext, slug: string | string[]) => {
+export const getProjectSession = async (context: GetServerSidePropsContext) => {
+  // I'm checking if user can fetch tasks from the project (probably there is a better way to check if user is authorized)
   return axios
-    .get(process.env.NEXT_PUBLIC_API_URL + "/project/" + slug + "/tasks", {
+    .get(process.env.NEXT_PUBLIC_API_URL + "/project/" + context.params!.slug + "/tasks", {
       withCredentials: true,
       headers: {
         Cookie: context.req.headers.cookie!,
       },
     })
     .then((response) => Promise.resolve(response))
-    .catch((error) => Promise.reject(error));
+    .catch((error) => {
+      return null;
+    });
 };

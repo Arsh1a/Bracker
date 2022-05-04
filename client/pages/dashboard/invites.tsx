@@ -23,8 +23,6 @@ const Invites = ({}: Props) => {
     dispatch(getInvites());
   }, [dispatch]);
 
-  console.log(invites);
-
   return (
     <DashboardPagesLayout headerContent={<h1>Invites</h1>}>
       {isError && (

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import { BsGear, BsColumnsGap, BsJournals, BsMailbox } from "react-icons/bs";
+import { BsListTask, BsHouse, BsGear } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../features/store";
+import { useDispatch } from "react-redux";
 import { getInvites } from "../../../features/slices/invite/inviteSlice";
 
 const Menu = styled.ul`
@@ -80,31 +79,21 @@ interface StyledProps {
 
 interface Props {}
 
-const DashboardMenu = ({}: Props) => {
+const ProjectMenu = ({}: Props) => {
   const [active, setActive] = useState("");
-  const [invitesCount, setInvitesCount] = useState(0);
   const router = useRouter();
   const dispatch = useDispatch();
-
-  const { user } = useSelector((state: RootState) => state.auth);
-  const { invites } = useSelector((state: RootState) => state.invite);
 
   useEffect(() => {
     dispatch(getInvites());
   }, [dispatch]);
 
   useEffect(() => {
-    setInvitesCount(invites.length);
-  }, [invites, user]);
-
-  useEffect(() => {
-    if (router.pathname === "/dashboard") {
-      setActive("dashboard");
-    } else if (router.pathname === "/dashboard/projects") {
-      setActive("projects");
-    } else if (router.pathname === "/dashboard/invites") {
-      setActive("invites");
-    } else if (router.pathname === "/dashboard/settings") {
+    if (router.pathname === `/p/[slug]`) {
+      setActive("home");
+    } else if (router.pathname === `/p/[slug]/my-tasks`) {
+      setActive("my-tasks");
+    } else if (router.pathname === `/p/[slug]/settings`) {
       setActive("settings");
     }
   }, [router.pathname]);
@@ -116,26 +105,37 @@ const DashboardMenu = ({}: Props) => {
           <Image src="/images/logo.svg" layout="fill" objectFit="contain" alt="Logo" />
         </Logo>
       </Link>
-      <Link href={`/dashboard`} passHref>
-        <MenuLink isActive={active === "dashboard" ? true : false}>
-          <BsColumnsGap />
-          Dashboard
+      <Link
+        href={{
+          pathname: "/p/[slug]/",
+          query: { slug: router.query.slug },
+        }}
+        passHref
+      >
+        <MenuLink isActive={active === "home"}>
+          <BsHouse />
+          Home
         </MenuLink>
       </Link>
-
-      <Link href={`/dashboard/projects`} passHref>
-        <MenuLink isActive={active === "projects" ? true : false}>
-          <BsJournals />
-          Projects
+      <Link
+        href={{
+          pathname: "/p/[slug]/my-tasks",
+          query: { slug: router.query.slug },
+        }}
+        passHref
+      >
+        <MenuLink isActive={active === "my-tasks"}>
+          <BsListTask />
+          My tasks
         </MenuLink>
       </Link>
-      <Link href={`/dashboard/invites`} passHref>
-        <MenuLink isActive={active === "invites" ? true : false}>
-          <BsMailbox />
-          Invites {invitesCount > 0 && <span className="total-invites">{invitesCount}</span>}
-        </MenuLink>
-      </Link>
-      <Link href={`/dashboard/settings`} passHref>
+      <Link
+        href={{
+          pathname: "/p/[slug]/settings",
+          query: { slug: router.query.slug },
+        }}
+        passHref
+      >
         <MenuLink isActive={active === "settings" ? true : false}>
           <BsGear />
           Settings
@@ -144,4 +144,4 @@ const DashboardMenu = ({}: Props) => {
     </Menu>
   );
 };
-export default DashboardMenu;
+export default ProjectMenu;

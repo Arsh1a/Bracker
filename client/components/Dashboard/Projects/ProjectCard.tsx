@@ -5,6 +5,7 @@ import ProjectEditModal from "./ProjectEditModal";
 import DropDown from "../../Common/DropDown";
 import { useDispatch } from "react-redux";
 import { deleteProject } from "../../../features/slices/project/projectSlice";
+import { useRouter } from "next/router";
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,6 +19,7 @@ const Wrapper = styled.div`
   padding: 30px;
   border: 1px solid ${(props) => props.theme.colors.light};
   justify-content: space-between;
+  cursor: pointer;
   svg {
     position: relative;
     top: 2px;
@@ -49,6 +51,7 @@ const ProjectCard = ({ title, description, id }: Props) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const dropDownRef = useRef<HTMLUListElement>(null);
   const dotIconRef = useRef<HTMLDivElement>(null);
@@ -76,7 +79,7 @@ const ProjectCard = ({ title, description, id }: Props) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper onClick={() => router.push(`/p/${id}`)}>
       <Info>
         <h3>{title}</h3>
         <p>{description}</p>

@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import React from "react";
 import styled from "styled-components";
-import { getSession, getTasks } from "../../lib/requestApi";
+import { getProjectSession } from "../../../lib/requestApi";
 
 const Wrapper = styled.div``;
 
@@ -13,7 +13,7 @@ const Project = ({}: Props) => {
 export default Project;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await getProjectSession(context);
   if (!session) {
     return {
       redirect: {
