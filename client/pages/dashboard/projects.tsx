@@ -58,7 +58,7 @@ const Projects = ({}: Props) => {
         </Header>
       }
     >
-      {isError && (
+      {message && (
         <ErrorMessageWrapper>
           <ErrorMessage>{message}</ErrorMessage>
         </ErrorMessageWrapper>

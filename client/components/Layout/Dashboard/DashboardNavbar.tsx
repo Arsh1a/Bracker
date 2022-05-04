@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Button from "../../Common/Button";
-import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RootState } from "../../../features/store";
 import { logout, reset } from "../../../features/slices/auth/authSlice";
-import UserStuff from "./UserStuff";
-import Image from "next/image";
+import UserStuff from "../Navbar/UserStuff";
 
 const Wrapper = styled.nav`
-  border: 1px solid ${(props) => props.theme.colors.light};
   border-top: none;
-  padding: 20px;
+  padding: 30px;
+  padding-bottom: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -21,20 +18,13 @@ const Wrapper = styled.nav`
   background-color: white;
 `;
 
-const Logo = styled.div`
-  cursor: pointer;
-  width: 110px;
-  height: 100%;
-  position: relative;
-  transition: 0.3s;
-  &:hover {
-    opacity: 0.6;
-  }
+const UserStuffWrapper = styled.div`
+  margin-left: auto;
 `;
 
 interface Props {}
 
-const Navbar = ({}: Props) => {
+const DashboardNavbar = ({}: Props) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -54,13 +44,10 @@ const Navbar = ({}: Props) => {
 
   return (
     <Wrapper>
-      <Link href="/" passHref>
-        <Logo>
-          <Image src="/images/logo.svg" layout="fill" objectFit="contain" alt="Logo" />
-        </Logo>
-      </Link>
-      <UserStuff currentUser={currUser} handleLogout={handleLogout} />
+      <UserStuffWrapper>
+        <UserStuff currentUser={currUser} handleLogout={handleLogout} />
+      </UserStuffWrapper>
     </Wrapper>
   );
 };
-export default Navbar;
+export default DashboardNavbar;

@@ -3,12 +3,18 @@ import styled from "styled-components";
 import Footer from "./Footer/Footer";
 import Navbar from "./Navbar/Navbar";
 import { useRouter } from "next/router";
-import DashboardMenu from "./DashboardMenu/DashboardMenu";
+import DashboardMenu from "./Dashboard/DashboardMenu";
 import Cookies from "js-cookie";
+import DashboardNavbar from "./Dashboard/DashboardNavbar";
 
 const Wrapper = styled.div`
-  height: 100%;
   display: flex;
+`;
+
+const InnerLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 
 interface Props {
@@ -18,17 +24,21 @@ interface Props {
 const Layout = ({ children }: Props) => {
   const router = useRouter();
 
+  // Layout for the dashboard
   if (router.asPath.includes("dashboard")) {
     return (
       <>
-        <Navbar />
         <Wrapper>
           <DashboardMenu />
-          {children}
+          <InnerLayout>
+            <DashboardNavbar />
+            {children}
+          </InnerLayout>
         </Wrapper>
       </>
     );
   }
+  // Layout for the other pages
   return (
     <>
       <Navbar />

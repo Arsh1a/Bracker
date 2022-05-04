@@ -10,8 +10,8 @@ const Wrapper = styled.ul`
   flex-direction: column;
   gap: 5px;
   padding: 10px 0;
-  right: 15px;
-  top: 60px;
+  right: 25px;
+  top: 65px;
   width: 130px;
   background-color: white;
   border: 1px solid ${(props) => props.theme.colors.light};

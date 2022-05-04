@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   * {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Quicksand', sans-serif;
     box-sizing: border-box;
   }
 
@@ -44,7 +44,6 @@ const GlobalStyle = createGlobalStyle`
     background: white;
     font-family: Open-Sans, Helvetica, Sans-Serif;
     color: ${({ theme }) => theme.colors.dark};
-    overflow-x: hidden;
   }
 
   h1,h2,h3,h4,h5,h6,p {

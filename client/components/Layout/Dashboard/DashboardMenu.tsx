@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import styled from "styled-components";
 import { MdOutlineDashboard, MdOutlineSettings, MdMailOutline, MdOutlineDvr } from "react-icons/md";
 import Link from "next/link";
@@ -10,35 +11,60 @@ import { getInvites } from "../../../features/slices/invite/inviteSlice";
 const Menu = styled.ul`
   list-style: none;
   font-weight: 700;
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  color: ${(props) => props.theme.colors.secondary};
+  color: ${(props) => props.theme.colors.dark};
   gap: 10px;
-  border-right: 1px solid ${(props) => props.theme.colors.light};
-  height: 100%;
+  border: 1px solid ${(props) => props.theme.colors.light};
+  position: sticky;
+  height: 100vh;
+  top: 0;
+  min-width: 200px;
+`;
+
+const Logo = styled.div`
+  cursor: pointer;
+  width: 110px;
+  height: 50px;
+  position: relative;
+  transition: 0.3s;
+  margin: 15px 32px;
+  margin-bottom: 0;
+  &:hover {
+    opacity: 0.6;
+  }
 `;
 
 const MenuLink = styled.li<StyledProps>`
   cursor: pointer;
-  padding: 10px 20px;
+  position: relative;
+  padding: 10px 30px;
   border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   transition: 0.3s;
-  ${(props) =>
-    props.isActive &&
-    `background-color: ${props.theme.colors.lightPrimary};
-    color: ${props.theme.colors.primary};`}
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.lightPrimary};
-    color: ${(props) => props.theme.colors.primary};
+    opacity: 0.6;
   }
   svg {
     font-size: 1.5rem;
   }
+
+  &:after {
+    content: "";
+    display: none;
+    ${(props) => props.isActive && `display: block;`}
+    width: 3px;
+    position: absolute;
+    top: 11px;
+    right: 0;
+    bottom: 11px;
+    height: 25px;
+    background-color: black;
+  }
+
   .total-invites {
     font-size: 0.8rem;
     background-color: ${(props) => props.theme.colors.danger};
@@ -68,12 +94,7 @@ const DashboardMenu = ({}: Props) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (invites !== null && invites.length > 0) {
-      setInvitesCount(invites.length);
-    }
-    if (invites === null) {
-      setInvitesCount(user.invites);
-    }
+    setInvitesCount(invites.length);
   }, [invites, user]);
 
   useEffect(() => {
@@ -88,36 +109,41 @@ const DashboardMenu = ({}: Props) => {
     }
   }, [router.pathname]);
 
-  return (
-    <>
-      <Menu>
-        <Link href={`/dashboard`} passHref>
-          <MenuLink isActive={active === "dashboard" ? true : false}>
-            <MdOutlineDashboard />
-            Dashboard
-          </MenuLink>
-        </Link>
+  console.log(invitesCount);
 
-        <Link href={`/dashboard/projects`} passHref>
-          <MenuLink isActive={active === "projects" ? true : false}>
-            <MdOutlineDvr />
-            Projects
-          </MenuLink>
-        </Link>
-        <Link href={`/dashboard/invites`} passHref>
-          <MenuLink isActive={active === "invites" ? true : false}>
-            <MdMailOutline />
-            Invites {invitesCount > 0 && <span className="total-invites">{invitesCount}</span>}
-          </MenuLink>
-        </Link>
-        <Link href={`/dashboard/settings`} passHref>
-          <MenuLink isActive={active === "settings" ? true : false}>
-            <MdOutlineSettings />
-            Settings
-          </MenuLink>
-        </Link>
-      </Menu>
-    </>
+  return (
+    <Menu>
+      <Link href="/" passHref>
+        <Logo>
+          <Image src="/images/logo.svg" layout="fill" objectFit="contain" alt="Logo" />
+        </Logo>
+      </Link>
+      <Link href={`/dashboard`} passHref>
+        <MenuLink isActive={active === "dashboard" ? true : false}>
+          <MdOutlineDashboard />
+          Dashboard
+        </MenuLink>
+      </Link>
+
+      <Link href={`/dashboard/projects`} passHref>
+        <MenuLink isActive={active === "projects" ? true : false}>
+          <MdOutlineDvr />
+          Projects
+        </MenuLink>
+      </Link>
+      <Link href={`/dashboard/invites`} passHref>
+        <MenuLink isActive={active === "invites" ? true : false}>
+          <MdMailOutline />
+          Invites {invitesCount > 0 && <span className="total-invites">{invitesCount}</span>}
+        </MenuLink>
+      </Link>
+      <Link href={`/dashboard/settings`} passHref>
+        <MenuLink isActive={active === "settings" ? true : false}>
+          <MdOutlineSettings />
+          Settings
+        </MenuLink>
+      </Link>
+    </Menu>
   );
 };
 export default DashboardMenu;

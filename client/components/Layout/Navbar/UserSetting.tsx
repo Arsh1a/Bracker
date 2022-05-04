@@ -17,7 +17,6 @@ const Wrapper = styled.div`
   }
   span {
     font-weight: 600;
-    color: ${(props) => props.theme.colors.secondary};
   }
 `;
 

@@ -6,12 +6,14 @@ import { getSession } from "../../lib/requestApi";
 
 const Wrapper = styled.div``;
 
-interface Props {
-  userInfo: { username: string; email: string };
-}
+interface Props {}
 
-const Profile = ({ userInfo }: Props) => {
-  return <Container>s</Container>;
+const Profile = ({}: Props) => {
+  return (
+    <Container>
+      <h1>Hello Giantismad</h1>
+    </Container>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
