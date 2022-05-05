@@ -117,26 +117,26 @@ const DashboardMenu = ({}: Props) => {
         </Logo>
       </Link>
       <Link href={`/dashboard`} passHref>
-        <MenuLink isActive={active === "dashboard" ? true : false}>
+        <MenuLink isActive={active === "dashboard"}>
           <BsColumnsGap />
           Dashboard
         </MenuLink>
       </Link>
 
       <Link href={`/dashboard/projects`} passHref>
-        <MenuLink isActive={active === "projects" ? true : false}>
+        <MenuLink isActive={active === "projects"}>
           <BsJournals />
           Projects
         </MenuLink>
       </Link>
       <Link href={`/dashboard/invites`} passHref>
-        <MenuLink isActive={active === "invites" ? true : false}>
+        <MenuLink isActive={active === "invites"}>
           <BsMailbox />
           Invites {invitesCount > 0 && <span className="total-invites">{invitesCount}</span>}
         </MenuLink>
       </Link>
       <Link href={`/dashboard/settings`} passHref>
-        <MenuLink isActive={active === "settings" ? true : false}>
+        <MenuLink isActive={active === "settings"}>
           <BsGear />
           Settings
         </MenuLink>

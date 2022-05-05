@@ -136,7 +136,7 @@ const ProjectMenu = ({}: Props) => {
         }}
         passHref
       >
-        <MenuLink isActive={active === "settings" ? true : false}>
+        <MenuLink isActive={active === "settings"}>
           <BsGear />
           Settings
         </MenuLink>

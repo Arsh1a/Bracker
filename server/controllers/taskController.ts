@@ -4,12 +4,15 @@ import Project from "../models/projectModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 
-// @desc Get tasks for a project
-// @route GET /api/project/:projectID/tasks
+// @desc Get tasks
+// @route GET /api/project/:projectID/task
 // @access private
-export const getTasksForProject = async (req: Request, res: Response, next: NextFunction) => {
+export const getTasks = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { user } = <any>req;
+  const filters = req.query;
+
+  console.log(filters);
 
   //Checks if provided project id can be casted ot ObjectId
   if (!isValidObjectId(projectID)) {
@@ -19,6 +22,7 @@ export const getTasksForProject = async (req: Request, res: Response, next: Next
   //Checks if provided project id exists in database and the user is part of the project
   const project = await Project.findById(projectID).or([
     { owner: user._id },
+
     { members: user._id },
   ]);
   if (!project) {
@@ -26,7 +30,8 @@ export const getTasksForProject = async (req: Request, res: Response, next: Next
   }
 
   try {
-    const tasks = await Task.find({ projectID });
+    const tasks = await Task.find({ projectID, ...filters });
+
     res.status(200).json(tasks);
   } catch (err) {
     next(err);
@@ -34,7 +39,7 @@ export const getTasksForProject = async (req: Request, res: Response, next: Next
 };
 
 // @desc Create new task
-// @route POST /api/project/:projectID/tasks
+// @route POST /api/project/:projectID/task
 // @access private
 export const createTask = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
@@ -74,7 +79,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 };
 
 /// @desc Update task
-/// @route PATCH /api/project/:projectID/tasks/:taskID
+/// @route PATCH /api/project/:projectID/task/:taskID
 /// @access private
 export const updateTask = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
@@ -126,7 +131,7 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
 };
 
 // @desc Delete task
-// @route DELETE /api/project/:projectID/tasks/:taskID
+// @route DELETE /api/project/:projectID/task/:taskID
 // @access private
 export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID, taskID } = req.params;

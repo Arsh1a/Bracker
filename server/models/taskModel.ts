@@ -16,7 +16,7 @@ const TaskSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["open", "closed", "in progress"],
+      enum: ["open", "closed", "inprogress"],
       required: [true, "Please add a status"],
     },
     content: {
