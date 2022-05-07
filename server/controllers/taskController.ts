@@ -10,9 +10,22 @@ import { isValidObjectId } from "mongoose";
 export const getTasks = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { user } = <any>req;
+  // const { title, desc, severity, status, reporter, assignee } = req.query;
   const filters = req.query;
 
-  console.log(filters);
+  // get page and limits from query
+  // Default page=1 and limit=10
+  const page = parseInt(req.query.page as string, 10) || 1;
+  const limit = parseInt(req.query.limit as string, 10) || 10;
+
+  // get sorting and order from query
+  // Default sort=createdAt and order=desc
+  const sort = (req.query.sort as string) || "createdAt";
+  const order = (req.query.order as string) || "desc";
+
+  // Convert order to something that mongoose understands lol
+  // Desc = - , Asc = +
+  const orderToOperator = order === "desc" ? "-" : "+";
 
   //Checks if provided project id can be casted ot ObjectId
   if (!isValidObjectId(projectID)) {
@@ -22,7 +35,6 @@ export const getTasks = async (req: Request, res: Response, next: NextFunction) 
   //Checks if provided project id exists in database and the user is part of the project
   const project = await Project.findById(projectID).or([
     { owner: user._id },
-
     { members: user._id },
   ]);
   if (!project) {
@@ -30,9 +42,19 @@ export const getTasks = async (req: Request, res: Response, next: NextFunction) 
   }
 
   try {
-    const tasks = await Task.find({ projectID, ...filters });
+    //Magic
+    const tasks = await Task.find({ projectID, ...filters })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      // -createdAt means descending order (newest first)
+      .sort(`${orderToOperator}${sort}`);
 
-    res.status(200).json(tasks);
+    // count how many tasks are in the project
+    const count = await Task.find({ projectID, ...filters }).countDocuments();
+
+    res
+      .status(200)
+      .json({ tasks, totalTasks: count, totalPages: Math.ceil(count / limit), currentPage: page });
   } catch (err) {
     next(err);
   }
