@@ -30,6 +30,7 @@ const TaskSchema = new mongoose.Schema(
     },
     assignee: {
       type: mongoose.Schema.Types.ObjectId,
+      required: [true, "There is no assignee"],
       ref: "User",
     },
     projectID: {

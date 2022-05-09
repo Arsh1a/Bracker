@@ -22,7 +22,7 @@ export const getProjects = createAsyncThunk("project/getProjects", async (_, thu
 });
 
 export const createProject = createAsyncThunk(
-  "projects/create",
+  "project/create",
   async (projectData: { title: string; desc?: string; members?: any[] }, thunkAPI) => {
     try {
       return await projectService.createProject(projectData);
@@ -37,7 +37,7 @@ export const createProject = createAsyncThunk(
 );
 
 export const updateProject = createAsyncThunk(
-  "projects/update",
+  "project/update",
   async (projectData: { id: string; title: string; desc?: string }, thunkAPI) => {
     try {
       return await projectService.updateProject(projectData);
@@ -51,7 +51,7 @@ export const updateProject = createAsyncThunk(
   }
 );
 
-export const deleteProject = createAsyncThunk("projects/delete", async (id: string, thunkAPI) => {
+export const deleteProject = createAsyncThunk("project/delete", async (id: string, thunkAPI) => {
   try {
     return await projectService.deleteProject(id);
   } catch (error: any) {
@@ -64,7 +64,7 @@ export const deleteProject = createAsyncThunk("projects/delete", async (id: stri
 });
 
 export const inviteToProject = createAsyncThunk(
-  "projects/invite",
+  "project/invite",
   async (data: { id: string; usersID: string[] }, thunkAPI) => {
     try {
       return await projectService.inviteToProject(data.id, data.usersID);

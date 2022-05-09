@@ -1,9 +1,13 @@
 import { GetServerSideProps } from "next";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsPerson, BsListUl, BsCheck2Circle, BsXCircle } from "react-icons/bs";
 import styled from "styled-components";
 import Container from "../../../components/Common/Container";
 import { getProjectSession } from "../../../lib/requestApi";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../features/store";
+import { countTasks, getTasks } from "../../../features/slices/task/taskSlice";
+import Table from "../../../components/Table";
 
 const Wrapper = styled.div`
   display: flex;
@@ -52,7 +56,40 @@ interface Props {
 }
 
 const Project = ({ data }: Props) => {
-  const { title, desc } = data.project;
+  const { _id, title, desc, members } = data.project;
+
+  const dispatch = useDispatch();
+  const { tasks, taskStats, isLoading, isError, message } = useSelector(
+    (state: RootState) => state.task
+  );
+
+  const [allTasks, setAllTasks] = useState<any[]>([]);
+
+  useEffect(() => {
+    dispatch(countTasks(_id));
+    dispatch(getTasks(_id));
+  }, [_id, dispatch]);
+
+  useEffect(() => {
+    console.log(tasks);
+    setAllTasks(tasks);
+  }, [tasks]);
+
+  const fakeData = [
+    {
+      title: "Task 1",
+      status: "status",
+      severity: "sev",
+      reporter: "repotedsadsr",
+    },
+    {
+      title: "Task 1",
+      status: "status",
+      severity: "sev",
+      reporter: "F",
+    },
+  ];
+
   return (
     <Container>
       <Wrapper>
@@ -64,32 +101,33 @@ const Project = ({ data }: Props) => {
           <ProjectInfoText>
             <BsPerson />
             <div>
-              <h1>16</h1>
+              <h1>{members.length}</h1>
               <p>Members</p>
             </div>
           </ProjectInfoText>
           <ProjectInfoText>
             <BsListUl />
             <div>
-              <h1>50</h1>
+              <h1>{taskStats.totalTasks}</h1>
               <p>Total tasks</p>
             </div>
           </ProjectInfoText>
           <ProjectInfoText>
             <BsCheck2Circle />
             <div>
-              <h1>50</h1>
-              <p>Completed tasks</p>
+              <h1>{taskStats.openTasks}</h1>
+              <p>Open tasks</p>
             </div>
           </ProjectInfoText>
           <ProjectInfoText>
             <BsXCircle />
             <div>
-              <h1>50</h1>
-              <p>Remaining tasks</p>
+              <h1>{taskStats.closedTasks}</h1>
+              <p>Closed tasks</p>
             </div>
           </ProjectInfoText>
         </ProjectInfo>
+        {tasks && <Table data={tasks} />}
       </Wrapper>
     </Container>
   );

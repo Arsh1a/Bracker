@@ -3,9 +3,10 @@ import Task from "../models/taskModel";
 import Project from "../models/projectModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
+import User from "../models/userModel";
 
 // @desc Get tasks
-// @route GET /api/project/:projectID/task
+// @route GET /api/task/:projectID
 // @access private
 export const getTasks = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
@@ -60,8 +61,47 @@ export const getTasks = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
+// @desc Count tasks
+// @route GET /api/task/:projectID/count
+// @access private
+export const countTasks = async (req: Request, res: Response, next: NextFunction) => {
+  const { projectID } = req.params;
+  const { user } = <any>req;
+
+  //Checks if provided project id can be casted ot ObjectId
+  if (!isValidObjectId(projectID)) {
+    return next(new ErrorResponse("Invalid project ID", 400));
+  }
+
+  //Checks if provided project id exists in database and the user is part of the project
+  const project = await Project.findById(projectID).or([
+    { owner: user._id },
+    { members: user._id },
+  ]);
+
+  if (!project) {
+    return next(new ErrorResponse("There was an error fetching tasks", 400));
+  }
+
+  try {
+    const totalTasks = await Task.countDocuments({ projectID });
+    const openTasks = await Task.countDocuments({ projectID, status: "open" });
+    const inProgressTasks = await Task.countDocuments({ projectID, status: "inprogress" });
+    const closedTasks = await Task.countDocuments({ projectID, status: "closed" });
+
+    res.status(200).json({
+      totalTasks,
+      openTasks,
+      inProgressTasks,
+      closedTasks,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc Create new task
-// @route POST /api/project/:projectID/task
+// @route POST /api/task/:projectID
 // @access private
 export const createTask = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
@@ -83,13 +123,16 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
   }
 
   try {
+    // If assignee is not provided, set it to the reporter (the user who created the task)
+    const taskAsignee = assignee ? assignee : user._id;
+
     const task = await Task.create({
       title,
       desc,
       severity,
       status,
       content,
-      assignee,
+      assignee: taskAsignee,
       reporter: user._id,
       projectID,
     });
@@ -101,7 +144,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
 };
 
 /// @desc Update task
-/// @route PATCH /api/project/:projectID/task/:taskID
+/// @route PATCH /api/task/:taskID
 /// @access private
 export const updateTask = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
@@ -153,7 +196,7 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
 };
 
 // @desc Delete task
-// @route DELETE /api/project/:projectID/task/:taskID
+// @route DELETE /api/task/:taskID
 // @access private
 export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID, taskID } = req.params;
