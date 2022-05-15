@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
 import { countTasks, getTasks } from "../../../features/slices/task/taskSlice";
 import Table from "../../../components/Table";
+import axios from "axios";
+import TasksTable from "../../../components/Project/TasksTable";
 
 const Wrapper = styled.div`
   display: flex;
@@ -58,38 +60,7 @@ interface Props {
 const Project = ({ data }: Props) => {
   const { _id, title, desc, members } = data.project;
 
-  const dispatch = useDispatch();
-  const { tasks, taskStats, isLoading, isError, message } = useSelector(
-    (state: RootState) => state.task
-  );
-
-  const [allTasks, setAllTasks] = useState<any[]>([]);
-
-  useEffect(() => {
-    dispatch(countTasks(_id));
-    dispatch(getTasks(_id));
-  }, [_id, dispatch]);
-
-  useEffect(() => {
-    console.log(tasks);
-    setAllTasks(tasks);
-  }, [tasks]);
-
-  const fakeData = [
-    {
-      title: "Task 1",
-      status: "status",
-      severity: "sev",
-      reporter: "repotedsadsr",
-    },
-    {
-      title: "Task 1",
-      status: "status",
-      severity: "sev",
-      reporter: "F",
-    },
-  ];
-
+  const { taskStats, isLoading, isError, message } = useSelector((state: RootState) => state.task);
   return (
     <Container>
       <Wrapper>
@@ -127,7 +98,7 @@ const Project = ({ data }: Props) => {
             </div>
           </ProjectInfoText>
         </ProjectInfo>
-        {tasks && <Table data={tasks} />}
+        <TasksTable projectID={_id} />
       </Wrapper>
     </Container>
   );

@@ -120,7 +120,7 @@ export const taskSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.message = "";
-        state.tasks = action.payload.tasks;
+        state.tasks = action.payload;
       })
       .addCase(getTasks.rejected, (state, action) => {
         state.isLoading = false;
