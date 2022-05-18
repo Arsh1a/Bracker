@@ -14,7 +14,7 @@ const Menu = styled.ul`
   flex-direction: column;
   color: ${(props) => props.theme.colors.dark};
   gap: 10px;
-  border: 1px solid ${(props) => props.theme.colors.light};
+  background-color: white;
   position: sticky;
   height: 100vh;
   top: 0;
@@ -61,7 +61,7 @@ const MenuLink = styled.li<StyledProps>`
     right: 0;
     bottom: 11px;
     height: 25px;
-    background-color: black;
+    background-color: ${(props) => props.theme.colors.primary};
   }
 
   .total-invites {
@@ -91,8 +91,8 @@ const ProjectMenu = ({}: Props) => {
   useEffect(() => {
     if (router.pathname === `/p/[slug]`) {
       setActive("home");
-    } else if (router.pathname === `/p/[slug]/my-tasks`) {
-      setActive("my-tasks");
+    } else if (router.pathname === `/p/[slug]/my-issues`) {
+      setActive("my-issues");
     } else if (router.pathname === `/p/[slug]/settings`) {
       setActive("settings");
     }
@@ -119,14 +119,14 @@ const ProjectMenu = ({}: Props) => {
       </Link>
       <Link
         href={{
-          pathname: "/p/[slug]/my-tasks",
+          pathname: "/p/[slug]/my-issues",
           query: { slug: router.query.slug },
         }}
         passHref
       >
-        <MenuLink isActive={active === "my-tasks"}>
+        <MenuLink isActive={active === "my-issues"}>
           <BsListTask />
-          My tasks
+          My issues
         </MenuLink>
       </Link>
       <Link
@@ -138,7 +138,7 @@ const ProjectMenu = ({}: Props) => {
       >
         <MenuLink isActive={active === "settings"}>
           <BsGear />
-          Settings
+          Project Settings
         </MenuLink>
       </Link>
     </Menu>

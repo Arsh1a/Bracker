@@ -10,7 +10,6 @@ import UserStuff from "./UserStuff";
 import Image from "next/image";
 
 const Wrapper = styled.nav`
-  border: 1px solid ${(props) => props.theme.colors.light};
   border-top: none;
   padding: 20px;
   display: flex;

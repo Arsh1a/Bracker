@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Project from "../models/projectModel";
-import Task from "../models/taskModel";
+import Issue from "../models/issueModel";
 import User from "../models/userModel";
 import Invite from "../models/inviteModel";
 import ErrorResponse from "../utils/errorResponse";
@@ -64,6 +64,7 @@ export const createProject = async (req: Request, res: Response, next: NextFunct
       title: title,
       desc: desc,
       owner: user._id,
+      members: [user._id],
     });
 
     res.status(200).json(project);
@@ -134,8 +135,8 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
 
     await project.remove();
 
-    //Delete project tasks
-    await Task.deleteMany({ id: projectID });
+    //Delete project issues
+    await Issue.deleteMany({ id: projectID });
 
     res.status(200).json(projectID);
   } catch (err) {

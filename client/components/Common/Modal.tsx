@@ -21,7 +21,7 @@ const InnerWrapper = styled.div`
   background-color: white;
   margin: auto;
   padding: 20px;
-  border: 1px solid ${(props) => props.theme.colors.light};
+  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
   border-radius: 10px;
   width: 600px;
 `;

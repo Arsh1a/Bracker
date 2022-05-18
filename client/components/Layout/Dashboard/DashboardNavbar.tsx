@@ -15,7 +15,6 @@ const Wrapper = styled.nav`
   justify-content: space-between;
   gap: 20px;
   top: 0;
-  background-color: white;
 `;
 
 const UserStuffWrapper = styled.div`

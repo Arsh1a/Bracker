@@ -41,9 +41,10 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    background: white;
+    background: #F1F1F1;
     font-family: Open-Sans, Helvetica, Sans-Serif;
     color: ${({ theme }) => theme.colors.dark};
+    font-weight: 500;
   }
 
   h1,h2,h3,h4,h5,h6,p {

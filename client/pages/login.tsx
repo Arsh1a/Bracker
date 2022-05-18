@@ -21,7 +21,7 @@ const InnerWrapper = styled.div`
   flex-direction: column;
   background-color: #fff;
   gap: 20px;
-  border: 1px solid ${(props) => props.theme.colors.light};
+  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
   border-radius: 10px;
   padding: 20px;
   text-align: center;

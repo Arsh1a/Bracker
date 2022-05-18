@@ -10,8 +10,6 @@ import {
   inviteToProject,
 } from "../controllers/projectController";
 
-import { createTask, deleteTask, getTasks, updateTask } from "../controllers/taskController";
-
 import authMiddleware from "../middlewares/authMiddleware";
 
 router.route("/").get(authMiddleware, getAllProjects).post(authMiddleware, createProject);

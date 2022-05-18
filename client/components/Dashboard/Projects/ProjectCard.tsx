@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   background-color: white;
   border-radius: 12px;
   padding: 30px;
-  border: 1px solid ${(props) => props.theme.colors.light};
+  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
   justify-content: space-between;
   cursor: pointer;
   svg {

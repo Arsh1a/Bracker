@@ -14,7 +14,7 @@ const Wrapper = styled.ul`
   top: 65px;
   width: 130px;
   background-color: white;
-  border: 1px solid ${(props) => props.theme.colors.light};
+  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
   border-radius: 10px;
   list-style: none;
   font-weight: 500;

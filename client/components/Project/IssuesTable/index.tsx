@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Table from "../../../components/Table";
+import Table from "../../Common/Table";
 import axios from "axios";
 import { Column } from "react-table";
 
@@ -12,11 +12,17 @@ interface Props {
 
 type Cols = { title: string; status: string; severity: string; reporter: string; assignee: string };
 
-const TasksTable = ({ projectID }: Props) => {
-  const [tasks, setTasks] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+const IssuesTable = ({ projectID }: Props) => {
+  const [issues, setIssues] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalTasks, setTotalTasks] = useState(0);
+  const [totalIssues, setTotalIssues] = useState(0);
+  const [filters, setFilters] = useState<{
+    page: number;
+    limit: number;
+    sort: string;
+    order: "desc" | "asc";
+  }>({ page: 1, limit: 5, sort: "createdAt", order: "desc" });
+  const { page, limit, sort, order } = filters;
 
   const columns: Column<Cols>[] = React.useMemo(
     () => [
@@ -47,55 +53,64 @@ const TasksTable = ({ projectID }: Props) => {
   const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`;
 
   useEffect(() => {
-    axios.get(API_URL + `/task/${projectID}?limit=3`, { withCredentials: true }).then((res) => {
-      setTasks(res.data.tasks);
-      setTotalPages(res.data.totalPages);
-      setTotalTasks(res.data.totalTasks);
-    });
-  }, []);
-
-  useEffect(() => {
     axios
-      .get(API_URL + `/task/${projectID}?page=${currentPage}&limit=3`, { withCredentials: true })
+      .get(
+        API_URL + `/issue/${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
-        setTasks(res.data.tasks);
+        setIssues(res.data.issues);
+        setTotalPages(res.data.totalPages);
+        setTotalIssues(res.data.totalIssues);
       });
-  }, [currentPage]);
+  }, [API_URL, filters, limit, order, page, projectID, sort]);
 
   const handleNext = () => {
-    if (currentPage >= totalPages) {
+    if (page >= totalPages) {
       return;
     }
 
-    setCurrentPage(currentPage + 1);
+    setFilters({ ...filters, page: page + 1 });
   };
 
   const handlePrevious = () => {
-    if (currentPage === 1) {
+    if (page === 1) {
       return;
     }
 
-    setCurrentPage(currentPage - 1);
+    setFilters({ ...filters, page: page - 1 });
   };
 
   const handlePageSelect = (page: number) => {
-    setCurrentPage(page);
+    setFilters({ ...filters, page });
   };
 
+  const handleSort = (id: string) => {
+    if (sort === id) {
+      setFilters({ ...filters, order: order === "desc" ? "asc" : "desc" });
+    } else {
+      setFilters({ ...filters, sort: id, order: "desc" });
+    }
+  };
   return (
     <Wrapper>
-      {tasks && (
+      {issues && (
         <Table
           handlePageSelect={handlePageSelect}
-          data={tasks}
+          data={issues}
           totalPages={totalPages}
-          currentPage={currentPage}
+          currentPage={page}
           handlePrevious={handlePrevious}
           handleNext={handleNext}
+          handleSort={handleSort}
           columns={columns}
+          sort={sort}
+          order={order}
         />
       )}
     </Wrapper>
   );
 };
-export default TasksTable;
+export default IssuesTable;

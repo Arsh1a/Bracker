@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import Task from "../models/taskModel";
+import Issue from "../models/issueModel";
 import Project from "../models/projectModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 import User from "../models/userModel";
 
-// @desc Get tasks
-// @route GET /api/task/:projectID
+// @desc Get issues
+// @route GET /api/issue/:projectID
 // @access private
-export const getTasks = async (req: Request, res: Response, next: NextFunction) => {
+export const getIssues = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { user } = <any>req;
   // const { title, desc, severity, status, reporter, assignee } = req.query;
@@ -25,8 +25,8 @@ export const getTasks = async (req: Request, res: Response, next: NextFunction) 
   const order = (req.query.order as string) || "desc";
 
   // Convert order to something that mongoose understands lol
-  // Desc = - , Asc = +
-  const orderToOperator = order === "desc" ? "-" : "+";
+  // Desc = - , Asc = blank
+  const orderToOperator = order === "desc" ? "-" : "";
 
   //Checks if provided project id can be casted ot ObjectId
   if (!isValidObjectId(projectID)) {
@@ -39,32 +39,35 @@ export const getTasks = async (req: Request, res: Response, next: NextFunction) 
     { members: user._id },
   ]);
   if (!project) {
-    return next(new ErrorResponse("There was an error fetching tasks", 400));
+    return next(new ErrorResponse("There was an error fetching issues", 400));
   }
 
   try {
     //Magic
-    const tasks = await Task.find({ projectID, ...filters })
+    const issues = await Issue.find({ projectID, ...filters })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       // -createdAt means descending order (newest first)
       .sort(`${orderToOperator}${sort}`);
 
-    // count how many tasks are in the project
-    const count = await Task.find({ projectID, ...filters }).countDocuments();
+    // count how many issues are in the project
+    const count = await Issue.find({ projectID, ...filters }).countDocuments();
 
-    res
-      .status(200)
-      .json({ tasks, totalTasks: count, totalPages: Math.ceil(count / limit), currentPage: page });
+    res.status(200).json({
+      issues,
+      totalIssues: count,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
   } catch (err) {
     next(err);
   }
 };
 
-// @desc Count tasks
-// @route GET /api/task/:projectID/count
+// @desc Count issues
+// @route GET /api/issue/:projectID/count
 // @access private
-export const countTasks = async (req: Request, res: Response, next: NextFunction) => {
+export const countIssues = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { user } = <any>req;
 
@@ -80,30 +83,30 @@ export const countTasks = async (req: Request, res: Response, next: NextFunction
   ]);
 
   if (!project) {
-    return next(new ErrorResponse("There was an error fetching tasks", 400));
+    return next(new ErrorResponse("There was an error fetching issues", 400));
   }
 
   try {
-    const totalTasks = await Task.countDocuments({ projectID });
-    const openTasks = await Task.countDocuments({ projectID, status: "open" });
-    const inProgressTasks = await Task.countDocuments({ projectID, status: "inprogress" });
-    const closedTasks = await Task.countDocuments({ projectID, status: "closed" });
+    const totalIssues = await Issue.countDocuments({ projectID });
+    const openIssues = await Issue.countDocuments({ projectID, status: "open" });
+    const inProgressIssues = await Issue.countDocuments({ projectID, status: "inprogress" });
+    const closedIssues = await Issue.countDocuments({ projectID, status: "closed" });
 
     res.status(200).json({
-      totalTasks,
-      openTasks,
-      inProgressTasks,
-      closedTasks,
+      totalIssues,
+      openIssues,
+      inProgressIssues,
+      closedIssues,
     });
   } catch (err) {
     next(err);
   }
 };
 
-// @desc Create new task
-// @route POST /api/task/:projectID
+// @desc Create new issue
+// @route POST /api/issue/:projectID
 // @access private
-export const createTask = async (req: Request, res: Response, next: NextFunction) => {
+export const createIssue = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
   const { projectID } = req.params;
   const { user } = <any>req;
@@ -119,36 +122,36 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
     { members: user._id },
   ]);
   if (!project) {
-    return next(new ErrorResponse("There was an error creating the task", 400));
+    return next(new ErrorResponse("There was an error creating the issue", 400));
   }
 
   try {
-    // If assignee is not provided, set it to the reporter (the user who created the task)
-    const taskAsignee = assignee ? assignee : user._id;
+    // If assignee is not provided, set it to the reporter (the user who created the issue)
+    const issueAsignee = assignee ? assignee : user._id;
 
-    const task = await Task.create({
+    const issue = await Issue.create({
       title,
       desc,
       severity,
       status,
       content,
-      assignee: taskAsignee,
+      assignee: issueAsignee,
       reporter: user._id,
       projectID,
     });
 
-    res.status(200).json(task);
+    res.status(200).json(issue);
   } catch (err) {
     next(err);
   }
 };
 
-/// @desc Update task
-/// @route PATCH /api/task/:taskID
+/// @desc Update issue
+/// @route PATCH /api/issue/:issueID
 /// @access private
-export const updateTask = async (req: Request, res: Response, next: NextFunction) => {
+export const updateIssue = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
-  const { projectID, taskID } = req.params;
+  const { projectID, issueID } = req.params;
   const { user } = <any>req;
 
   //Checks if provided project id can be casted ot ObjectId
@@ -156,9 +159,9 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
-  //Checks if provided task id can be casted ot ObjectId
-  if (!isValidObjectId(taskID)) {
-    return next(new ErrorResponse("Invalid task ID", 400));
+  //Checks if provided issue id can be casted ot ObjectId
+  if (!isValidObjectId(issueID)) {
+    return next(new ErrorResponse("Invalid issue ID", 400));
   }
 
   //Checks if provided project id exists in database and the user is part of the project
@@ -168,12 +171,12 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
   ]);
 
   if (!project) {
-    return next(new ErrorResponse("There was an error updating the task", 400));
+    return next(new ErrorResponse("There was an error updating the issue", 400));
   }
 
   try {
-    const task = await Task.findOneAndUpdate(
-      { _id: taskID, projectID },
+    const issue = await Issue.findOneAndUpdate(
+      { _id: issueID, projectID },
       {
         title,
         desc,
@@ -185,31 +188,31 @@ export const updateTask = async (req: Request, res: Response, next: NextFunction
       { new: true, runValidators: true }
     );
 
-    if (!task) {
-      return next(new ErrorResponse("There was an error updating the task", 404));
+    if (!issue) {
+      return next(new ErrorResponse("There was an error updating the issue", 404));
     }
 
-    res.status(200).json(task);
+    res.status(200).json(issue);
   } catch (err) {
     next(err);
   }
 };
 
-// @desc Delete task
-// @route DELETE /api/task/:taskID
+// @desc Delete issue
+// @route DELETE /api/issue/:issueID
 // @access private
-export const deleteTask = async (req: Request, res: Response, next: NextFunction) => {
-  const { projectID, taskID } = req.params;
+export const deleteIssue = async (req: Request, res: Response, next: NextFunction) => {
+  const { projectID, issueID } = req.params;
   const { user } = <any>req;
 
-  //Checks if provided task id can be casted to ObjectId
+  //Checks if provided issue id can be casted to ObjectId
   if (!isValidObjectId(projectID)) {
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
-  //Checks if provided task id can be casted to ObjectId
-  if (!isValidObjectId(taskID)) {
-    return next(new ErrorResponse("Invalid task ID", 400));
+  //Checks if provided issue id can be casted to ObjectId
+  if (!isValidObjectId(issueID)) {
+    return next(new ErrorResponse("Invalid issue ID", 400));
   }
 
   //Checks if provided project id exists in database and the user is part of the project
@@ -219,18 +222,18 @@ export const deleteTask = async (req: Request, res: Response, next: NextFunction
   ]);
 
   if (!project) {
-    return next(new ErrorResponse("There was an error deleting the task", 400));
+    return next(new ErrorResponse("There was an error deleting the issue", 400));
   }
 
   try {
-    const task = await Task.findOneAndDelete({ _id: taskID, projectID });
+    const issue = await Issue.findOneAndDelete({ _id: issueID, projectID });
 
-    //Checks if provided task id exists in database
-    if (!task) {
-      return next(new ErrorResponse("Task does not exist", 404));
+    //Checks if provided issue id exists in database
+    if (!issue) {
+      return next(new ErrorResponse("Issue does not exist", 404));
     }
 
-    res.status(200).json(task + " deleted");
+    res.status(200).json(issue + " deleted");
   } catch (err) {
     next(err);
   }

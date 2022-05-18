@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import taskService from "./taskService";
+import issueService from "./issueService";
 
 const initialState = {
-  tasks: <any[]>[],
-  taskStats: {
-    totalTasks: 0,
-    openTasks: 0,
-    inProgressTasks: 0,
-    closedTasks: 0,
+  issues: <any[]>[],
+  issueStats: {
+    totalIssues: 0,
+    openIssues: 0,
+    inProgressIssues: 0,
+    closedIssues: 0,
   },
   isError: false,
   isLoading: false,
@@ -15,9 +15,9 @@ const initialState = {
   message: "",
 };
 
-export const getTasks = createAsyncThunk("task/getTasks", async (id: string, thunkAPI) => {
+export const getIssues = createAsyncThunk("issue/getIssues", async (id: string, thunkAPI) => {
   try {
-    return await taskService.getTasks(id);
+    return await issueService.getIssues(id);
   } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -26,9 +26,9 @@ export const getTasks = createAsyncThunk("task/getTasks", async (id: string, thu
     return thunkAPI.rejectWithValue(message);
   }
 });
-export const countTasks = createAsyncThunk("task/countTasks", async (id: string, thunkAPI) => {
+export const countIssues = createAsyncThunk("issue/countIssues", async (id: string, thunkAPI) => {
   try {
-    return await taskService.countTasks(id);
+    return await issueService.countIssues(id);
   } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -38,10 +38,10 @@ export const countTasks = createAsyncThunk("task/countTasks", async (id: string,
   }
 });
 
-export const createTask = createAsyncThunk(
-  "task/create",
+export const createIssue = createAsyncThunk(
+  "issue/create",
   async (
-    taskData: {
+    issueData: {
       projectID: string;
       title: string;
       desc?: string;
@@ -54,7 +54,7 @@ export const createTask = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      return await taskService.createTasks(taskData);
+      return await issueService.createIssues(issueData);
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
@@ -65,11 +65,11 @@ export const createTask = createAsyncThunk(
   }
 );
 
-export const updateTask = createAsyncThunk(
-  "task/update",
+export const updateIssue = createAsyncThunk(
+  "issue/update",
   async (
-    taskData: {
-      taskID: string;
+    issueData: {
+      issueID: string;
       title?: string;
       desc?: string;
       severity?: "low" | "medium" | "high";
@@ -80,7 +80,7 @@ export const updateTask = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      return await taskService.updateTask(taskData);
+      return await issueService.updateIssue(issueData);
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
@@ -91,9 +91,9 @@ export const updateTask = createAsyncThunk(
   }
 );
 
-export const deleteTask = createAsyncThunk("task/delete", async (id: string, thunkAPI) => {
+export const deleteIssue = createAsyncThunk("issue/delete", async (id: string, thunkAPI) => {
   try {
-    return await taskService.deleteTask(id);
+    return await issueService.deleteIssue(id);
   } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -103,89 +103,89 @@ export const deleteTask = createAsyncThunk("task/delete", async (id: string, thu
   }
 });
 
-export const taskSlice = createSlice({
-  name: "task",
+export const issueSlice = createSlice({
+  name: "issue",
   initialState,
   reducers: { reset: (state) => initialState },
   extraReducers: (builder) => {
     builder
-      .addCase(getTasks.pending, (state, action) => {
+      .addCase(getIssues.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
         state.message = "";
       })
-      .addCase(getTasks.fulfilled, (state, action) => {
+      .addCase(getIssues.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.message = "";
-        state.tasks = action.payload;
+        state.issues = action.payload;
       })
-      .addCase(getTasks.rejected, (state, action) => {
+      .addCase(getIssues.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload as string;
       })
-      .addCase(countTasks.pending, (state, action) => {
+      .addCase(countIssues.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
         state.message = "";
       })
-      .addCase(countTasks.fulfilled, (state, action) => {
+      .addCase(countIssues.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.message = "";
-        state.taskStats = action.payload;
+        state.issueStats = action.payload;
       })
-      .addCase(countTasks.rejected, (state, action) => {
+      .addCase(countIssues.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload as string;
       })
-      .addCase(createTask.pending, (state: typeof initialState) => {
+      .addCase(createIssue.pending, (state: typeof initialState) => {
         state.isLoading = true;
       })
-      .addCase(createTask.fulfilled, (state: typeof initialState, action) => {
+      .addCase(createIssue.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.tasks.push(action.payload as never);
+        state.issues.push(action.payload as never);
       })
-      .addCase(createTask.rejected, (state: typeof initialState, action) => {
+      .addCase(createIssue.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(updateTask.pending, (state: typeof initialState) => {
+      .addCase(updateIssue.pending, (state: typeof initialState) => {
         state.isLoading = true;
         state.message = "";
       })
-      .addCase(updateTask.fulfilled, (state: typeof initialState, action) => {
+      .addCase(updateIssue.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.message = "";
-        state.tasks = state.tasks.map((task) =>
-          task._id === action.payload._id ? action.payload : task
+        state.issues = state.issues.map((issue) =>
+          issue._id === action.payload._id ? action.payload : issue
         );
       })
-      .addCase(updateTask.rejected, (state: typeof initialState, action) => {
+      .addCase(updateIssue.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(deleteTask.pending, (state: typeof initialState) => {
+      .addCase(deleteIssue.pending, (state: typeof initialState) => {
         state.isLoading = true;
       })
-      .addCase(deleteTask.fulfilled, (state: typeof initialState, action) => {
+      .addCase(deleteIssue.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.tasks = state.tasks.filter((task) => task._id !== action.payload);
+        state.issues = state.issues.filter((issue) => issue._id !== action.payload);
       })
-      .addCase(deleteTask.rejected, (state: typeof initialState, action) => {
+      .addCase(deleteIssue.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
@@ -193,5 +193,5 @@ export const taskSlice = createSlice({
   },
 });
 
-export const { reset } = taskSlice.actions;
-export default taskSlice.reducer;
+export const { reset } = issueSlice.actions;
+export default issueSlice.reducer;

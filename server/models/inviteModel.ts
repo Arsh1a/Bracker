@@ -24,6 +24,6 @@ const InviteSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Task = mongoose.model("Invite", InviteSchema);
+const Invite = mongoose.model("Invite", InviteSchema);
 
-export default Task;
+export default Invite;

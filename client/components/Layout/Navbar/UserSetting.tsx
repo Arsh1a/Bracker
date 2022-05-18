@@ -20,6 +20,10 @@ const Wrapper = styled.div`
   }
 `;
 
+const Logout = styled.li`
+  color: ${(props) => props.theme.colors.danger};
+`;
+
 interface Props {
   handleLogout: () => void;
 }
@@ -64,7 +68,7 @@ const UserSetting = ({ handleLogout }: Props) => {
       {isOpen && (
         <DropDown ref={dropDownRef}>
           <li onClick={handleDashboard}>Dashboard</li>
-          <li onClick={handleLogout}>Logout</li>
+          <Logout onClick={handleLogout}>Logout</Logout>
         </DropDown>
       )}
     </>

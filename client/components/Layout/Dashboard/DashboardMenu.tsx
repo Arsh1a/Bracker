@@ -15,11 +15,11 @@ const Menu = styled.ul`
   flex-direction: column;
   color: ${(props) => props.theme.colors.dark};
   gap: 10px;
-  border: 1px solid ${(props) => props.theme.colors.light};
   position: sticky;
   height: 100vh;
   top: 0;
   min-width: 200px;
+  background-color: white;
 `;
 
 const Logo = styled.div`
@@ -56,13 +56,13 @@ const MenuLink = styled.li<StyledProps>`
     content: "";
     display: none;
     ${(props) => props.isActive && `display: block;`}
-    width: 3px;
+    width: 4px;
     position: absolute;
     top: 11px;
-    right: 0;
+    right: -1px;
     bottom: 11px;
     height: 25px;
-    background-color: black;
+    background-color: ${(props) => props.theme.colors.primary};
   }
 
   .total-invites {
