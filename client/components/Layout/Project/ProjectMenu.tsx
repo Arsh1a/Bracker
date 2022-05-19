@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import { BsListTask, BsHouse, BsGear } from "react-icons/bs";
+import { BsListTask, BsHouse, BsGear, BsPlusCircle } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -95,6 +95,8 @@ const ProjectMenu = ({}: Props) => {
       setActive("my-issues");
     } else if (router.pathname === `/p/[slug]/settings`) {
       setActive("settings");
+    } else if (router.pathname === `/p/[slug]/create-issue`) {
+      setActive("create-issue");
     }
   }, [router.pathname]);
 
@@ -131,6 +133,18 @@ const ProjectMenu = ({}: Props) => {
       </Link>
       <Link
         href={{
+          pathname: "/p/[slug]/create-issue",
+          query: { slug: router.query.slug },
+        }}
+        passHref
+      >
+        <MenuLink isActive={active === "create-issue"}>
+          <BsPlusCircle />
+          Create Issue
+        </MenuLink>
+      </Link>
+      <Link
+        href={{
           pathname: "/p/[slug]/settings",
           query: { slug: router.query.slug },
         }}
@@ -138,7 +152,7 @@ const ProjectMenu = ({}: Props) => {
       >
         <MenuLink isActive={active === "settings"}>
           <BsGear />
-          Project Settings
+          Settings
         </MenuLink>
       </Link>
     </Menu>

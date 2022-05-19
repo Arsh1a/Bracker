@@ -4,7 +4,7 @@ import Modal from "../../Common/Modal";
 import Input from "../../Common/Input";
 import Loading from "../../Common/Loading";
 import Button from "../../Common/Button";
-import MemberSearch from "./MemberSearch";
+import MemberSearch from "../../Common/MemberSearch";
 import { searchUsers } from "../../../lib/requestApi";
 import { useSelector, useDispatch } from "react-redux";
 import { createProject, inviteToProject } from "../../../features/slices/project/projectSlice";
@@ -111,7 +111,7 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
     }
   };
 
-  const handleMemberSearch = (ids: any) => {
+  const handleMemberSearch = (ids: string[]) => {
     setProjectData({ ...projectData, ids });
   };
 

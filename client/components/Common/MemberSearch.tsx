@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { GrClose } from "react-icons/gr";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../features/store";
+import { RootState } from "../../features/store";
 
 const Wrapper = styled.div<WrapperProps>`
   display: flex;

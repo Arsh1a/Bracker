@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
 import { countIssues, getIssues } from "../../../features/slices/issue/issueSlice";
 import IssuesTable from "../../../components/Project/IssuesTable";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const Wrapper = styled.div`
   display: flex;
@@ -50,6 +51,27 @@ const ProjectInfoText = styled.div`
   div {
     display: flex;
     flex-direction: column;
+  }
+`;
+
+const IssuesHeader = styled.div`
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: ${(props) => props.theme.colors.primary};
+    color: white;
+    padding: 10px;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 `;
 
@@ -107,6 +129,12 @@ const Project = ({ data }: Props) => {
             </div>
           </ProjectInfoText>
         </ProjectInfo>
+        <IssuesHeader>
+          <h2>Issues</h2>
+          <span>
+            <AiOutlinePlus />
+          </span>
+        </IssuesHeader>
         <IssuesTable projectID={_id} />
       </Wrapper>
     </Container>

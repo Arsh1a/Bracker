@@ -41,3 +41,12 @@ export const searchUsers = async (username: string) => {
     .then((response) => Promise.resolve(response))
     .catch((error) => Promise.reject(error));
 };
+
+export const getProjectMembers = async (projectID: string) => {
+  return axios
+    .get(process.env.NEXT_PUBLIC_API_URL + "/project/" + projectID + "/users", {
+      withCredentials: true,
+    })
+    .then((response) => Promise.resolve(response))
+    .catch((error) => Promise.reject(error));
+};

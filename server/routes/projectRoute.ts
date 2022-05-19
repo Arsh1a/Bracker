@@ -8,6 +8,7 @@ import {
   updateProjectInfo,
   deleteProject,
   inviteToProject,
+  getProjectMembers,
 } from "../controllers/projectController";
 
 import authMiddleware from "../middlewares/authMiddleware";
@@ -18,6 +19,9 @@ router
   .get(authMiddleware, projectSession)
   .patch(authMiddleware, updateProjectInfo)
   .delete(authMiddleware, deleteProject);
-router.route("/:projectID/users").patch(authMiddleware, inviteToProject);
+router
+  .route("/:projectID/users")
+  .get(authMiddleware, getProjectMembers)
+  .patch(authMiddleware, inviteToProject);
 
 export default router;

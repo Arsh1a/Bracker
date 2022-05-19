@@ -21,7 +21,6 @@ const IssueSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: [true, "Please add a content"],
     },
     reporter: {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,7 +29,7 @@ const IssueSchema = new mongoose.Schema(
     },
     assignee: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, "There is no assignee"],
+      required: [true, "There is no assignees"],
       ref: "User",
     },
     projectID: {

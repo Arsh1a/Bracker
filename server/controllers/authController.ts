@@ -19,10 +19,14 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     });
 
     if (user) {
-      res.cookie("user", `{"username":"${user.username}", "email":"${user.email}"}`, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-      });
+      res.cookie(
+        "user",
+        `{"_id": "${user._id}", "username":"${user.username}", "email":"${user.email}"}`,
+        {
+          httpOnly: false,
+          secure: process.env.NODE_ENV === "production",
+        }
+      );
       res
         .cookie("access_token", user.getSignedToken(), {
           httpOnly: true,
@@ -64,10 +68,14 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
 
     if (user) {
-      res.cookie("user", `{"username":"${user.username}", "email":"${user.email}"}`, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-      });
+      res.cookie(
+        "user",
+        `{"_id": "${user._id}", "username":"${user.username}", "email":"${user.email}"}`,
+        {
+          httpOnly: false,
+          secure: process.env.NODE_ENV === "production",
+        }
+      );
       res
         .cookie("access_token", user.getSignedToken(), {
           httpOnly: true,
@@ -115,11 +123,11 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
 export const searchUsers = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
 
+  const { username } = req.query;
+
   if (!user) {
     return next(new ErrorResponse("Not authorized", 403));
   }
-
-  const { username } = req.query;
 
   if (!username) {
     return next(new ErrorResponse("Please provide a username", 400));

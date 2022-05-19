@@ -13,7 +13,6 @@ const StyledTable = styled.table`
   box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
   background-color: white;
   padding: 20px;
-
   th {
     text-align: left;
     cursor: pointer;
@@ -25,7 +24,6 @@ const StyledTable = styled.table`
     svg {
       position: absolute;
       top: 3px;
-      left: -15px;
     }
   }
 `;
@@ -80,12 +78,12 @@ const Table = ({
                     handleSort(column.id);
                   }}
                 >
+                  {column.render("Header")}
                   {sort !== column.id ? null : order === "desc" ? (
                     <MdKeyboardArrowDown />
                   ) : (
                     <MdKeyboardArrowUp />
                   )}
-                  {column.render("Header")}
                 </th>
               ))}
             </tr>

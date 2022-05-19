@@ -52,6 +52,48 @@ export const projectSession = async (req: Request, res: Response, next: NextFunc
     next(err);
   }
 };
+
+/// @desc Get all members of a project
+/// @route GET /api/project/:projectID/users
+/// @access private
+export const getProjectMembers = async (req: Request, res: Response, next: NextFunction) => {
+  const { projectID } = req.params;
+  const { user } = <any>req;
+
+  //Checks if provided project id can be casted ot ObjectId
+  if (!isValidObjectId(projectID)) {
+    return next(new ErrorResponse("Invalid project ID", 400));
+  }
+
+  //Checks if provided project id exists in database and the user is part of the project
+  const project = await Project.findById(projectID).or([
+    { owner: user._id },
+    { members: user._id },
+  ]);
+
+  if (!project) {
+    return next(new ErrorResponse("There was an error fetching the project", 400));
+  }
+
+  const projectMembersIds = project.members;
+
+  let projectMembers = [];
+
+  for (let i = 0; i < projectMembersIds.length; i++) {
+    projectMembersIds[i] = projectMembersIds[i].toString();
+
+    const member = await User.findById(projectMembersIds[i]);
+
+    projectMembers.push({ _id: member._id, username: member.username });
+  }
+
+  try {
+    res.status(200).json(projectMembers);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // @desc Create new project
 // @route POST /api/project/
 // @access private
