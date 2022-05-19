@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const IssueSchema = new mongoose.Schema(
+const TicketSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -41,6 +41,6 @@ const IssueSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Issue = mongoose.model("Issue", IssueSchema);
+const Ticket = mongoose.model("Ticket", TicketSchema);
 
-export default Issue;
+export default Ticket;

@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import issueService from "./issueService";
+import ticketService from "./ticketService";
 
 const initialState = {
-  issues: <any[]>[],
-  issueStats: {
-    totalIssues: 0,
-    openIssues: 0,
-    inProgressIssues: 0,
-    closedIssues: 0,
+  tickets: <any[]>[],
+  ticketStats: {
+    totalTickets: 0,
+    openTickets: 0,
+    inProgressTickets: 0,
+    closedTickets: 0,
   },
   isError: false,
   isLoading: false,
@@ -15,9 +15,9 @@ const initialState = {
   message: "",
 };
 
-export const getIssues = createAsyncThunk("issue/getIssues", async (id: string, thunkAPI) => {
+export const getTickets = createAsyncThunk("ticket/getTickets", async (id: string, thunkAPI) => {
   try {
-    return await issueService.getIssues(id);
+    return await ticketService.getTickets(id);
   } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -26,22 +26,25 @@ export const getIssues = createAsyncThunk("issue/getIssues", async (id: string, 
     return thunkAPI.rejectWithValue(message);
   }
 });
-export const countIssues = createAsyncThunk("issue/countIssues", async (id: string, thunkAPI) => {
-  try {
-    return await issueService.countIssues(id);
-  } catch (error: any) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
-    return thunkAPI.rejectWithValue(message);
+export const countTickets = createAsyncThunk(
+  "ticket/countTickets",
+  async (id: string, thunkAPI) => {
+    try {
+      return await ticketService.countTickets(id);
+    } catch (error: any) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
   }
-});
+);
 
-export const createIssue = createAsyncThunk(
-  "issue/create",
+export const createTicket = createAsyncThunk(
+  "ticket/create",
   async (
-    issueData: {
+    ticketData: {
       projectID: string;
       title: string;
       desc?: string;
@@ -54,7 +57,7 @@ export const createIssue = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      return await issueService.createIssues(issueData);
+      return await ticketService.createTickets(ticketData);
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
@@ -65,11 +68,11 @@ export const createIssue = createAsyncThunk(
   }
 );
 
-export const updateIssue = createAsyncThunk(
-  "issue/update",
+export const updateTicket = createAsyncThunk(
+  "ticket/update",
   async (
-    issueData: {
-      issueID: string;
+    ticketData: {
+      ticketID: string;
       title?: string;
       desc?: string;
       severity?: "low" | "medium" | "high";
@@ -80,7 +83,7 @@ export const updateIssue = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      return await issueService.updateIssue(issueData);
+      return await ticketService.updateTicket(ticketData);
     } catch (error: any) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
@@ -91,9 +94,9 @@ export const updateIssue = createAsyncThunk(
   }
 );
 
-export const deleteIssue = createAsyncThunk("issue/delete", async (id: string, thunkAPI) => {
+export const deleteTicket = createAsyncThunk("ticket/delete", async (id: string, thunkAPI) => {
   try {
-    return await issueService.deleteIssue(id);
+    return await ticketService.deleteTicket(id);
   } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -103,89 +106,89 @@ export const deleteIssue = createAsyncThunk("issue/delete", async (id: string, t
   }
 });
 
-export const issueSlice = createSlice({
-  name: "issue",
+export const ticketSlice = createSlice({
+  name: "ticket",
   initialState,
   reducers: { reset: (state) => initialState },
   extraReducers: (builder) => {
     builder
-      .addCase(getIssues.pending, (state, action) => {
+      .addCase(getTickets.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
         state.message = "";
       })
-      .addCase(getIssues.fulfilled, (state, action) => {
+      .addCase(getTickets.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.message = "";
-        state.issues = action.payload;
+        state.tickets = action.payload;
       })
-      .addCase(getIssues.rejected, (state, action) => {
+      .addCase(getTickets.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload as string;
       })
-      .addCase(countIssues.pending, (state, action) => {
+      .addCase(countTickets.pending, (state, action) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
         state.message = "";
       })
-      .addCase(countIssues.fulfilled, (state, action) => {
+      .addCase(countTickets.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.message = "";
-        state.issueStats = action.payload;
+        state.ticketStats = action.payload;
       })
-      .addCase(countIssues.rejected, (state, action) => {
+      .addCase(countTickets.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload as string;
       })
-      .addCase(createIssue.pending, (state: typeof initialState) => {
+      .addCase(createTicket.pending, (state: typeof initialState) => {
         state.isLoading = true;
       })
-      .addCase(createIssue.fulfilled, (state: typeof initialState, action) => {
+      .addCase(createTicket.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.issues.push(action.payload as never);
+        state.tickets.push(action.payload as never);
       })
-      .addCase(createIssue.rejected, (state: typeof initialState, action) => {
+      .addCase(createTicket.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(updateIssue.pending, (state: typeof initialState) => {
+      .addCase(updateTicket.pending, (state: typeof initialState) => {
         state.isLoading = true;
         state.message = "";
       })
-      .addCase(updateIssue.fulfilled, (state: typeof initialState, action) => {
+      .addCase(updateTicket.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.message = "";
-        state.issues = state.issues.map((issue) =>
-          issue._id === action.payload._id ? action.payload : issue
+        state.tickets = state.tickets.map((ticket) =>
+          ticket._id === action.payload._id ? action.payload : ticket
         );
       })
-      .addCase(updateIssue.rejected, (state: typeof initialState, action) => {
+      .addCase(updateTicket.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
       })
-      .addCase(deleteIssue.pending, (state: typeof initialState) => {
+      .addCase(deleteTicket.pending, (state: typeof initialState) => {
         state.isLoading = true;
       })
-      .addCase(deleteIssue.fulfilled, (state: typeof initialState, action) => {
+      .addCase(deleteTicket.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.issues = state.issues.filter((issue) => issue._id !== action.payload);
+        state.tickets = state.tickets.filter((ticket) => ticket._id !== action.payload);
       })
-      .addCase(deleteIssue.rejected, (state: typeof initialState, action) => {
+      .addCase(deleteTicket.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;
@@ -193,5 +196,5 @@ export const issueSlice = createSlice({
   },
 });
 
-export const { reset } = issueSlice.actions;
-export default issueSlice.reducer;
+export const { reset } = ticketSlice.actions;
+export default ticketSlice.reducer;

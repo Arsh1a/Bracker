@@ -1,19 +1,19 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/issue/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ticket/`;
 
-const getIssues = async (projectID: string) => {
+const getTickets = async (projectID: string) => {
   const response = await axios.get(API_URL + projectID, { withCredentials: true });
   return response.data;
 };
 
-const countIssues = async (projectID: string) => {
+const countTickets = async (projectID: string) => {
   const response = await axios.get(API_URL + projectID + "/count", { withCredentials: true });
   return response.data;
 };
 
-const createIssues = async (issueData: {
+const createTickets = async (ticketData: {
   projectID: string;
   title: string;
   desc?: string;
@@ -23,14 +23,14 @@ const createIssues = async (issueData: {
   reporter: string;
   assignee?: string;
 }) => {
-  const response = await axios.post(API_URL + issueData.projectID, issueData, {
+  const response = await axios.post(API_URL + ticketData.projectID, ticketData, {
     withCredentials: true,
   });
   return response.data;
 };
 
-const updateIssue = async (issueData: {
-  issueID: string;
+const updateTicket = async (ticketData: {
+  ticketID: string;
   title?: string;
   desc?: string;
   severity?: "low" | "medium" | "high";
@@ -38,23 +38,23 @@ const updateIssue = async (issueData: {
   content?: string;
   assignee?: string;
 }) => {
-  const response = await axios.patch(API_URL + issueData.issueID, issueData, {
+  const response = await axios.patch(API_URL + ticketData.ticketID, ticketData, {
     withCredentials: true,
   });
   return response.data;
 };
 
-const deleteIssue = async (issueID: string) => {
-  const response = await axios.delete(API_URL + issueID, { withCredentials: true });
+const deleteTicket = async (ticketID: string) => {
+  const response = await axios.delete(API_URL + ticketID, { withCredentials: true });
   return response.data;
 };
 
-const issueService = {
-  getIssues,
-  countIssues,
-  createIssues,
-  updateIssue,
-  deleteIssue,
+const ticketService = {
+  getTickets,
+  countTickets,
+  createTickets,
+  updateTicket,
+  deleteTicket,
 };
 
-export default issueService;
+export default ticketService;

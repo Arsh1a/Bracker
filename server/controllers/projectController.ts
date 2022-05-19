@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Project from "../models/projectModel";
-import Issue from "../models/issueModel";
+import Ticket from "../models/ticketModel";
 import User from "../models/userModel";
 import Invite from "../models/inviteModel";
 import ErrorResponse from "../utils/errorResponse";
@@ -177,8 +177,8 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
 
     await project.remove();
 
-    //Delete project issues
-    await Issue.deleteMany({ id: projectID });
+    //Delete project tickets
+    await Ticket.deleteMany({ id: projectID });
 
     res.status(200).json(projectID);
   } catch (err) {

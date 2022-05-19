@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import Issue from "../models/issueModel";
+import Ticket from "../models/ticketModel";
 import Project from "../models/projectModel";
 import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 import User from "../models/userModel";
 
-// @desc Get issues
-// @route GET /api/issue/:projectID
+// @desc Get tickets
+// @route GET /api/ticket/:projectID
 // @access private
-export const getIssues = async (req: Request, res: Response, next: NextFunction) => {
+export const getTickets = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { user } = <any>req;
   // const { title, desc, severity, status, reporter, assignee } = req.query;
@@ -39,23 +39,23 @@ export const getIssues = async (req: Request, res: Response, next: NextFunction)
     { members: user._id },
   ]);
   if (!project) {
-    return next(new ErrorResponse("There was an error fetching issues", 400));
+    return next(new ErrorResponse("There was an error fetching tickets", 400));
   }
 
   try {
     //Magic
-    const issues = await Issue.find({ projectID, ...filters })
+    const tickets = await Ticket.find({ projectID, ...filters })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       // -createdAt means descending order (newest first)
       .sort(`${orderToOperator}${sort}`);
 
-    // count how many issues are in the project
-    const count = await Issue.find({ projectID, ...filters }).countDocuments();
+    // count how many tickets are in the project
+    const count = await Ticket.find({ projectID, ...filters }).countDocuments();
 
     res.status(200).json({
-      issues,
-      totalIssues: count,
+      tickets,
+      totalTickets: count,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
@@ -64,10 +64,10 @@ export const getIssues = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-// @desc Count issues
-// @route GET /api/issue/:projectID/count
+// @desc Count tickets
+// @route GET /api/ticket/:projectID/count
 // @access private
-export const countIssues = async (req: Request, res: Response, next: NextFunction) => {
+export const countTickets = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { user } = <any>req;
 
@@ -83,30 +83,30 @@ export const countIssues = async (req: Request, res: Response, next: NextFunctio
   ]);
 
   if (!project) {
-    return next(new ErrorResponse("There was an error fetching issues", 400));
+    return next(new ErrorResponse("There was an error fetching tickets", 400));
   }
 
   try {
-    const totalIssues = await Issue.countDocuments({ projectID });
-    const openIssues = await Issue.countDocuments({ projectID, status: "open" });
-    const inProgressIssues = await Issue.countDocuments({ projectID, status: "inprogress" });
-    const closedIssues = await Issue.countDocuments({ projectID, status: "closed" });
+    const totalTickets = await Ticket.countDocuments({ projectID });
+    const openTickets = await Ticket.countDocuments({ projectID, status: "open" });
+    const inProgressTickets = await Ticket.countDocuments({ projectID, status: "inprogress" });
+    const closedTickets = await Ticket.countDocuments({ projectID, status: "closed" });
 
     res.status(200).json({
-      totalIssues,
-      openIssues,
-      inProgressIssues,
-      closedIssues,
+      totalTickets,
+      openTickets,
+      inProgressTickets,
+      closedTickets,
     });
   } catch (err) {
     next(err);
   }
 };
 
-// @desc Create new issue
-// @route POST /api/issue/:projectID
+// @desc Create new ticket
+// @route POST /api/ticket/:projectID
 // @access private
-export const createIssue = async (req: Request, res: Response, next: NextFunction) => {
+export const createTicket = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
   const { projectID } = req.params;
   const { user } = <any>req;
@@ -122,36 +122,36 @@ export const createIssue = async (req: Request, res: Response, next: NextFunctio
     { members: user._id },
   ]);
   if (!project) {
-    return next(new ErrorResponse("There was an error creating the issue", 400));
+    return next(new ErrorResponse("There was an error creating the ticket", 400));
   }
 
   try {
-    // If assignee is not provided, set it to the reporter (the user who created the issue)
-    const issueAsignee = assignee ? assignee : user._id;
+    // If assignee is not provided, set it to the reporter (the user who created the ticket)
+    const ticketAsignee = assignee ? assignee : user._id;
 
-    const issue = await Issue.create({
+    const ticket = await Ticket.create({
       title,
       desc,
       severity,
       status,
       content,
-      assignee: issueAsignee,
+      assignee: ticketAsignee,
       reporter: user._id,
       projectID,
     });
 
-    res.status(200).json(issue);
+    res.status(200).json(ticket);
   } catch (err) {
     next(err);
   }
 };
 
-/// @desc Update issue
-/// @route PATCH /api/issue/:issueID
+/// @desc Update ticket
+/// @route PATCH /api/ticket/:ticketID
 /// @access private
-export const updateIssue = async (req: Request, res: Response, next: NextFunction) => {
+export const updateTicket = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
-  const { projectID, issueID } = req.params;
+  const { projectID, ticketID } = req.params;
   const { user } = <any>req;
 
   //Checks if provided project id can be casted ot ObjectId
@@ -159,9 +159,9 @@ export const updateIssue = async (req: Request, res: Response, next: NextFunctio
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
-  //Checks if provided issue id can be casted ot ObjectId
-  if (!isValidObjectId(issueID)) {
-    return next(new ErrorResponse("Invalid issue ID", 400));
+  //Checks if provided ticket id can be casted ot ObjectId
+  if (!isValidObjectId(ticketID)) {
+    return next(new ErrorResponse("Invalid ticket ID", 400));
   }
 
   //Checks if provided project id exists in database and the user is part of the project
@@ -171,12 +171,12 @@ export const updateIssue = async (req: Request, res: Response, next: NextFunctio
   ]);
 
   if (!project) {
-    return next(new ErrorResponse("There was an error updating the issue", 400));
+    return next(new ErrorResponse("There was an error updating the ticket", 400));
   }
 
   try {
-    const issue = await Issue.findOneAndUpdate(
-      { _id: issueID, projectID },
+    const ticket = await Ticket.findOneAndUpdate(
+      { _id: ticketID, projectID },
       {
         title,
         desc,
@@ -188,31 +188,31 @@ export const updateIssue = async (req: Request, res: Response, next: NextFunctio
       { new: true, runValidators: true }
     );
 
-    if (!issue) {
-      return next(new ErrorResponse("There was an error updating the issue", 404));
+    if (!ticket) {
+      return next(new ErrorResponse("There was an error updating the ticket", 404));
     }
 
-    res.status(200).json(issue);
+    res.status(200).json(ticket);
   } catch (err) {
     next(err);
   }
 };
 
-// @desc Delete issue
-// @route DELETE /api/issue/:issueID
+// @desc Delete ticket
+// @route DELETE /api/ticket/:ticketID
 // @access private
-export const deleteIssue = async (req: Request, res: Response, next: NextFunction) => {
-  const { projectID, issueID } = req.params;
+export const deleteTicket = async (req: Request, res: Response, next: NextFunction) => {
+  const { projectID, ticketID } = req.params;
   const { user } = <any>req;
 
-  //Checks if provided issue id can be casted to ObjectId
+  //Checks if provided ticket id can be casted to ObjectId
   if (!isValidObjectId(projectID)) {
     return next(new ErrorResponse("Invalid project ID", 400));
   }
 
-  //Checks if provided issue id can be casted to ObjectId
-  if (!isValidObjectId(issueID)) {
-    return next(new ErrorResponse("Invalid issue ID", 400));
+  //Checks if provided ticket id can be casted to ObjectId
+  if (!isValidObjectId(ticketID)) {
+    return next(new ErrorResponse("Invalid ticket ID", 400));
   }
 
   //Checks if provided project id exists in database and the user is part of the project
@@ -222,18 +222,18 @@ export const deleteIssue = async (req: Request, res: Response, next: NextFunctio
   ]);
 
   if (!project) {
-    return next(new ErrorResponse("There was an error deleting the issue", 400));
+    return next(new ErrorResponse("There was an error deleting the ticket", 400));
   }
 
   try {
-    const issue = await Issue.findOneAndDelete({ _id: issueID, projectID });
+    const ticket = await Ticket.findOneAndDelete({ _id: ticketID, projectID });
 
-    //Checks if provided issue id exists in database
-    if (!issue) {
-      return next(new ErrorResponse("Issue does not exist", 404));
+    //Checks if provided ticket id exists in database
+    if (!ticket) {
+      return next(new ErrorResponse("Ticket does not exist", 404));
     }
 
-    res.status(200).json(issue + " deleted");
+    res.status(200).json(ticket + " deleted");
   } catch (err) {
     next(err);
   }

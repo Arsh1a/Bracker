@@ -7,10 +7,10 @@ const Wrapper = styled.div``;
 
 interface Props {}
 
-const MyIssues = ({}: Props) => {
+const MyTickets = ({}: Props) => {
   return <Wrapper></Wrapper>;
 };
-export default MyIssues;
+export default MyTickets;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getProjectSession(context);

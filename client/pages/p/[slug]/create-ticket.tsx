@@ -10,8 +10,8 @@ import Input from "../../../components/Common/Input";
 import Loading from "../../../components/Common/Loading";
 import Select from "../../../components/Common/Select";
 import Tiptap from "../../../components/Common/Tiptap";
-import ProjectMembersSelect from "../../../components/Project/CreateIssue/ProjectMembersSelect";
-import { createIssue } from "../../../features/slices/issue/issueSlice";
+import ProjectMembersSelect from "../../../components/Project/CreateTicket/ProjectMembersSelect";
+import { createTicket } from "../../../features/slices/ticket/ticketSlice";
 import { RootState } from "../../../features/store";
 import { getProjectMembers, getProjectSession } from "../../../lib/requestApi";
 
@@ -33,7 +33,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const IssueInput = styled(Input)`
+const TicketInput = styled(Input)`
   margin-top: 10px;
 `;
 
@@ -44,7 +44,7 @@ interface Props {
   };
 }
 
-const MyIssues = ({ data }: Props) => {
+const MyTickets = ({ data }: Props) => {
   const { _id, title, desc, members } = data.project;
 
   const [projectMembers, setProjectMembers] = useState<string[]>([]);
@@ -60,7 +60,7 @@ const MyIssues = ({ data }: Props) => {
   const [content, setContent] = useState<string>("");
 
   const { user } = useSelector((state: RootState) => state.auth);
-  const { isError, isLoading, message } = useSelector((state: RootState) => state.issue);
+  const { isError, isLoading, message } = useSelector((state: RootState) => state.ticket);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -76,7 +76,7 @@ const MyIssues = ({ data }: Props) => {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     await dispatch(
-      createIssue({
+      createTicket({
         projectID: _id,
         title: form.title,
         desc: form.desc,
@@ -104,33 +104,33 @@ const MyIssues = ({ data }: Props) => {
 
   return (
     <Container flexDirection="column">
-      <h1>Create Issue</h1>
+      <h1>Create Ticket</h1>
       <Wrapper>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="issue-title">Title</label>
-            <IssueInput
+            <label htmlFor="ticket-title">Title</label>
+            <TicketInput
               required
               type="text"
-              id="issue-title"
+              id="ticket-title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
             />
           </div>
           <div>
-            <label htmlFor="issue-desc">Description</label>
-            <IssueInput
-              id="issue-desc"
+            <label htmlFor="ticket-desc">Description</label>
+            <TicketInput
+              id="ticket-desc"
               value={form.desc}
               onChange={(e) => setForm({ ...form, desc: e.target.value })}
             />
           </div>
           <div>
-            <label htmlFor="issue-severity">Severity</label>
+            <label htmlFor="ticket-severity">Severity</label>
             <div className="select">
               <Select
                 required
-                id="issue-severity"
+                id="ticket-severity"
                 value={form.severity}
                 onChange={(e) =>
                   setForm({ ...form, severity: e.target.value as "low" | "medium" | "high" })
@@ -143,10 +143,10 @@ const MyIssues = ({ data }: Props) => {
             </div>
           </div>
           <div>
-            <label htmlFor="issue-assignee">Assignee</label>
+            <label htmlFor="ticket-assignee">Assignee</label>
             <div className="select">
               <ProjectMembersSelect
-                id="issue-assigne"
+                id="ticket-assigne"
                 data={projectMembers}
                 selectValue={form.assignee}
                 hanldeOnChange={handleProjectMemberSelect}
@@ -161,7 +161,7 @@ const MyIssues = ({ data }: Props) => {
             type="submit"
             height="40px"
           >
-            {!isLoading ? "Create Issue" : <Loading color="dark" />}
+            {!isLoading ? "Create Ticket" : <Loading color="dark" />}
           </Button>
           {isError && <ErrorMessage>{message}</ErrorMessage>}
         </form>
@@ -169,7 +169,7 @@ const MyIssues = ({ data }: Props) => {
     </Container>
   );
 };
-export default MyIssues;
+export default MyTickets;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getProjectSession(context);

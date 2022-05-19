@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import { BsListTask, BsHouse, BsGear, BsPlusCircle } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { GrTicket, GrLock, GrDocumentUser, GrAddCircle, GrHomeRounded } from "react-icons/gr";
+import { FiSettings } from "react-icons/fi";
 import { getInvites } from "../../../features/slices/invite/inviteSlice";
 
 const Menu = styled.ul`
@@ -18,7 +19,7 @@ const Menu = styled.ul`
   position: sticky;
   height: 100vh;
   top: 0;
-  min-width: 200px;
+  min-width: 220px;
 `;
 
 const Logo = styled.div`
@@ -48,7 +49,7 @@ const MenuLink = styled.li<StyledProps>`
     opacity: 0.6;
   }
   svg {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
   &:after {
@@ -91,12 +92,16 @@ const ProjectMenu = ({}: Props) => {
   useEffect(() => {
     if (router.pathname === `/p/[slug]`) {
       setActive("home");
-    } else if (router.pathname === `/p/[slug]/my-issues`) {
-      setActive("my-issues");
+    } else if (router.pathname === `/p/[slug]/my-tickets`) {
+      setActive("my-tickets");
     } else if (router.pathname === `/p/[slug]/settings`) {
       setActive("settings");
-    } else if (router.pathname === `/p/[slug]/create-issue`) {
-      setActive("create-issue");
+    } else if (router.pathname === `/p/[slug]/create-ticket`) {
+      setActive("create-ticket");
+    } else if (router.pathname === `/p/[slug]/open-tickets`) {
+      setActive("open-tickets");
+    } else if (router.pathname === `/p/[slug]/closed-tickets`) {
+      setActive("closed-tickets");
     }
   }, [router.pathname]);
 
@@ -115,32 +120,56 @@ const ProjectMenu = ({}: Props) => {
         passHref
       >
         <MenuLink isActive={active === "home"}>
-          <BsHouse />
+          <GrHomeRounded />
           Home
         </MenuLink>
       </Link>
       <Link
         href={{
-          pathname: "/p/[slug]/my-issues",
+          pathname: "/p/[slug]/create-ticket",
           query: { slug: router.query.slug },
         }}
         passHref
       >
-        <MenuLink isActive={active === "my-issues"}>
-          <BsListTask />
-          My issues
+        <MenuLink isActive={active === "create-ticket"}>
+          <GrAddCircle />
+          Create Ticket
         </MenuLink>
       </Link>
       <Link
         href={{
-          pathname: "/p/[slug]/create-issue",
+          pathname: "/p/[slug]/my-tickets",
           query: { slug: router.query.slug },
         }}
         passHref
       >
-        <MenuLink isActive={active === "create-issue"}>
-          <BsPlusCircle />
-          Create Issue
+        <MenuLink isActive={active === "my-tickets"}>
+          <GrDocumentUser />
+          My tickets
+        </MenuLink>
+      </Link>
+      <Link
+        href={{
+          pathname: "/p/[slug]/open-tickets",
+          query: { slug: router.query.slug },
+        }}
+        passHref
+      >
+        <MenuLink isActive={active === "open-tickets"}>
+          <GrTicket />
+          Open Tickets
+        </MenuLink>
+      </Link>
+      <Link
+        href={{
+          pathname: "/p/[slug]/closed-tickets",
+          query: { slug: router.query.slug },
+        }}
+        passHref
+      >
+        <MenuLink isActive={active === "closed-tickets"}>
+          <GrLock />
+          Closed Tickets
         </MenuLink>
       </Link>
       <Link
@@ -151,7 +180,7 @@ const ProjectMenu = ({}: Props) => {
         passHref
       >
         <MenuLink isActive={active === "settings"}>
-          <BsGear />
+          <FiSettings />
           Settings
         </MenuLink>
       </Link>

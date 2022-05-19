@@ -6,9 +6,8 @@ import Container from "../../../components/Common/Container";
 import { getProjectSession } from "../../../lib/requestApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
-import { countIssues, getIssues } from "../../../features/slices/issue/issueSlice";
-import IssuesTable from "../../../components/Project/IssuesTable";
-import { AiOutlinePlus } from "react-icons/ai";
+import { countTickets } from "../../../features/slices/ticket/ticketSlice";
+import TicketsTable from "../../../components/Project/TicketsTable";
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,25 +53,10 @@ const ProjectInfoText = styled.div`
   }
 `;
 
-const IssuesHeader = styled.div`
+const TicketsHeader = styled.div`
   margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 20px;
-  span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: ${(props) => props.theme.colors.primary};
-    color: white;
-    padding: 10px;
-    border-radius: 100%;
-    cursor: pointer;
-    transition: 0.3s;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
 `;
 
 interface Props {
@@ -85,12 +69,12 @@ const Project = ({ data }: Props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(countIssues(_id));
+    dispatch(countTickets(_id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { issueStats, isLoading, isError, message } = useSelector(
-    (state: RootState) => state.issue
+  const { ticketStats, isLoading, isError, message } = useSelector(
+    (state: RootState) => state.ticket
   );
   return (
     <Container>
@@ -110,32 +94,29 @@ const Project = ({ data }: Props) => {
           <ProjectInfoText>
             <BsListUl />
             <div>
-              <h1>{issueStats.totalIssues}</h1>
-              <p>Total issues</p>
+              <h1>{ticketStats.totalTickets}</h1>
+              <p>Total tickets</p>
             </div>
           </ProjectInfoText>
           <ProjectInfoText>
             <BsCheck2Circle />
             <div>
-              <h1>{issueStats.openIssues}</h1>
-              <p>Open issues</p>
+              <h1>{ticketStats.openTickets}</h1>
+              <p>Open tickets</p>
             </div>
           </ProjectInfoText>
           <ProjectInfoText>
             <BsXCircle />
             <div>
-              <h1>{issueStats.closedIssues}</h1>
-              <p>Closed issues</p>
+              <h1>{ticketStats.closedTickets}</h1>
+              <p>Closed tickets</p>
             </div>
           </ProjectInfoText>
         </ProjectInfo>
-        <IssuesHeader>
-          <h2>Issues</h2>
-          <span>
-            <AiOutlinePlus />
-          </span>
-        </IssuesHeader>
-        <IssuesTable projectID={_id} />
+        <TicketsHeader>
+          <h2>Tickets</h2>
+        </TicketsHeader>
+        <TicketsTable projectID={_id} />
       </Wrapper>
     </Container>
   );

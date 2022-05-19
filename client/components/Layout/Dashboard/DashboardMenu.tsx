@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import { BsGear, BsColumnsGap, BsJournals, BsMailbox } from "react-icons/bs";
+import { GrApps, GrBriefcase, GrMailOption, GrUserSettings } from "react-icons/gr";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ const Menu = styled.ul`
   position: sticky;
   height: 100vh;
   top: 0;
-  min-width: 200px;
+  min-width: 220px;
   background-color: white;
 `;
 
@@ -118,26 +118,26 @@ const DashboardMenu = ({}: Props) => {
       </Link>
       <Link href={`/dashboard`} passHref>
         <MenuLink isActive={active === "dashboard"}>
-          <BsColumnsGap />
+          <GrApps />
           Dashboard
         </MenuLink>
       </Link>
 
       <Link href={`/dashboard/projects`} passHref>
         <MenuLink isActive={active === "projects"}>
-          <BsJournals />
+          <GrBriefcase />
           Projects
         </MenuLink>
       </Link>
       <Link href={`/dashboard/invites`} passHref>
         <MenuLink isActive={active === "invites"}>
-          <BsMailbox />
+          <GrMailOption />
           Invites {invitesCount > 0 && <span className="total-invites">{invitesCount}</span>}
         </MenuLink>
       </Link>
       <Link href={`/dashboard/settings`} passHref>
         <MenuLink isActive={active === "settings"}>
-          <BsGear />
+          <GrUserSettings />
           Settings
         </MenuLink>
       </Link>

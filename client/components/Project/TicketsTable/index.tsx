@@ -12,10 +12,10 @@ interface Props {
 
 type Cols = { title: string; status: string; severity: string; reporter: string; assignee: string };
 
-const IssuesTable = ({ projectID }: Props) => {
-  const [issues, setIssues] = useState<any[]>([]);
+const TicketsTable = ({ projectID }: Props) => {
+  const [tickets, setTickets] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalIssues, setTotalIssues] = useState(0);
+  const [totalTickets, setTotalTickets] = useState(0);
   const [filters, setFilters] = useState<{
     page: number;
     limit: number;
@@ -55,15 +55,15 @@ const IssuesTable = ({ projectID }: Props) => {
   useEffect(() => {
     axios
       .get(
-        API_URL + `/issue/${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}`,
+        API_URL + `/ticket/${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}`,
         {
           withCredentials: true,
         }
       )
       .then((res) => {
-        setIssues(res.data.issues);
+        setTickets(res.data.tickets);
         setTotalPages(res.data.totalPages);
-        setTotalIssues(res.data.totalIssues);
+        setTotalTickets(res.data.totalTickets);
       });
   }, [API_URL, filters, limit, order, page, projectID, sort]);
 
@@ -96,10 +96,10 @@ const IssuesTable = ({ projectID }: Props) => {
   };
   return (
     <Wrapper>
-      {issues && (
+      {tickets && (
         <Table
           handlePageSelect={handlePageSelect}
-          data={issues}
+          data={tickets}
           totalPages={totalPages}
           currentPage={page}
           handlePrevious={handlePrevious}
@@ -113,4 +113,4 @@ const IssuesTable = ({ projectID }: Props) => {
     </Wrapper>
   );
 };
-export default IssuesTable;
+export default TicketsTable;
