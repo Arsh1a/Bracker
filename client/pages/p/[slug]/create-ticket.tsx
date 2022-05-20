@@ -27,16 +27,14 @@ const Wrapper = styled.div`
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    .select {
-      margin-top: 10px;
-    }
   }
 `;
 
-const TicketInput = styled(Input)`
-  margin-top: 10px;
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
-
 interface Props {
   data: {
     project: any;
@@ -107,25 +105,25 @@ const MyTickets = ({ data }: Props) => {
       <h1>Create Ticket</h1>
       <Wrapper>
         <form onSubmit={handleSubmit}>
-          <div>
+          <InputWrapper>
             <label htmlFor="ticket-title">Title</label>
-            <TicketInput
+            <Input
               required
               type="text"
               id="ticket-title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
             />
-          </div>
-          <div>
+          </InputWrapper>
+          <InputWrapper>
             <label htmlFor="ticket-desc">Description</label>
-            <TicketInput
+            <Input
               id="ticket-desc"
               value={form.desc}
               onChange={(e) => setForm({ ...form, desc: e.target.value })}
             />
-          </div>
-          <div>
+          </InputWrapper>
+          <InputWrapper>
             <label htmlFor="ticket-severity">Severity</label>
             <div className="select">
               <Select
@@ -141,8 +139,8 @@ const MyTickets = ({ data }: Props) => {
                 <option value="high">High</option>
               </Select>
             </div>
-          </div>
-          <div>
+          </InputWrapper>
+          <InputWrapper>
             <label htmlFor="ticket-assignee">Assignee</label>
             <div className="select">
               <ProjectMembersSelect
@@ -153,8 +151,11 @@ const MyTickets = ({ data }: Props) => {
                 user={user}
               />
             </div>
-          </div>
-          <Tiptap handleTipTap={getContentFromTipTap} />
+          </InputWrapper>
+          <InputWrapper>
+            <label>Ticket details</label>
+            <Tiptap handleTipTap={getContentFromTipTap} />
+          </InputWrapper>
           <Button
             disabled={isLoading}
             color={!isLoading ? "primary" : "light"}

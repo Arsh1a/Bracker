@@ -81,29 +81,12 @@ interface StyledProps {
 interface Props {}
 
 const ProjectMenu = ({}: Props) => {
-  const [active, setActive] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getInvites());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (router.pathname === `/p/[slug]`) {
-      setActive("home");
-    } else if (router.pathname === `/p/[slug]/my-tickets`) {
-      setActive("my-tickets");
-    } else if (router.pathname === `/p/[slug]/settings`) {
-      setActive("settings");
-    } else if (router.pathname === `/p/[slug]/create-ticket`) {
-      setActive("create-ticket");
-    } else if (router.pathname === `/p/[slug]/open-tickets`) {
-      setActive("open-tickets");
-    } else if (router.pathname === `/p/[slug]/closed-tickets`) {
-      setActive("closed-tickets");
-    }
-  }, [router.pathname]);
 
   return (
     <Menu>
@@ -119,7 +102,7 @@ const ProjectMenu = ({}: Props) => {
         }}
         passHref
       >
-        <MenuLink isActive={active === "home"}>
+        <MenuLink isActive={router.pathname === `/p/[slug]`}>
           <GrHomeRounded />
           Home
         </MenuLink>
@@ -131,7 +114,7 @@ const ProjectMenu = ({}: Props) => {
         }}
         passHref
       >
-        <MenuLink isActive={active === "create-ticket"}>
+        <MenuLink isActive={router.pathname === `/p/[slug]/create-ticket`}>
           <GrAddCircle />
           Create Ticket
         </MenuLink>
@@ -143,7 +126,7 @@ const ProjectMenu = ({}: Props) => {
         }}
         passHref
       >
-        <MenuLink isActive={active === "my-tickets"}>
+        <MenuLink isActive={router.pathname === `/p/[slug]/my-tickets`}>
           <GrDocumentUser />
           My tickets
         </MenuLink>
@@ -155,7 +138,7 @@ const ProjectMenu = ({}: Props) => {
         }}
         passHref
       >
-        <MenuLink isActive={active === "open-tickets"}>
+        <MenuLink isActive={router.pathname === `/p/[slug]/open-tickets`}>
           <GrTicket />
           Open Tickets
         </MenuLink>
@@ -167,7 +150,7 @@ const ProjectMenu = ({}: Props) => {
         }}
         passHref
       >
-        <MenuLink isActive={active === "closed-tickets"}>
+        <MenuLink isActive={router.pathname === `/p/[slug]/closed-tickets`}>
           <GrLock />
           Closed Tickets
         </MenuLink>
@@ -179,7 +162,7 @@ const ProjectMenu = ({}: Props) => {
         }}
         passHref
       >
-        <MenuLink isActive={active === "settings"}>
+        <MenuLink isActive={router.pathname === `/p/[slug]/settings`}>
           <FiSettings />
           Settings
         </MenuLink>

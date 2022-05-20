@@ -21,7 +21,8 @@ import TextStyle from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
-import { useEffect } from "react";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import lowlight from "lowlight";
 
 const Wrapper = styled.div`
   padding: 20px;
@@ -36,6 +37,82 @@ const StyledEditor = styled(EditorContent)`
   .ProseMirror {
     outline: none;
     min-height: 200px;
+
+    blockquote {
+      border-left: 3px solid ${(props) => props.theme.colors.light};
+      padding-left: 0.8rem;
+      margin-block-start: 0.5em;
+      margin-block-end: 0.5em;
+      margin-inline-start: 20px;
+      margin-inline-end: 20px;
+    }
+
+    pre {
+      background: #0d0d0d;
+      border-radius: 0.5rem;
+      color: #fff;
+      font-family: "JetBrainsMono", monospace;
+      padding: 0.75rem 1rem;
+
+      code {
+        background: none;
+        color: inherit;
+        font-size: 0.8rem;
+        padding: 0;
+      }
+
+      .hljs-comment,
+      .hljs-quote {
+        color: #616161;
+      }
+
+      .hljs-variable,
+      .hljs-template-variable,
+      .hljs-attribute,
+      .hljs-tag,
+      .hljs-name,
+      .hljs-regexp,
+      .hljs-link,
+      .hljs-name,
+      .hljs-selector-id,
+      .hljs-selector-class {
+        color: #f98181;
+      }
+
+      .hljs-number,
+      .hljs-meta,
+      .hljs-built_in,
+      .hljs-builtin-name,
+      .hljs-literal,
+      .hljs-type,
+      .hljs-params {
+        color: #fbbc88;
+      }
+
+      .hljs-string,
+      .hljs-symbol,
+      .hljs-bullet {
+        color: #b9f18d;
+      }
+
+      .hljs-title,
+      .hljs-section {
+        color: #faf594;
+      }
+
+      .hljs-keyword,
+      .hljs-selector-tag {
+        color: #70cff8;
+      }
+
+      .hljs-emphasis {
+        font-style: italic;
+      }
+
+      .hljs-strong {
+        font-weight: 700;
+      }
+    }
   }
 `;
 
@@ -87,6 +164,9 @@ const Tiptap = ({ handleTipTap }: Props) => {
       Underline,
       TextAlign.configure({
         types: ["heading", "paragraph"],
+      }),
+      CodeBlockLowlight.configure({
+        lowlight,
       }),
     ],
     onUpdate: ({ editor }) => {

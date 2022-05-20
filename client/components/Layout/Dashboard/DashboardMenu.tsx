@@ -81,7 +81,6 @@ interface StyledProps {
 interface Props {}
 
 const DashboardMenu = ({}: Props) => {
-  const [active, setActive] = useState("");
   const [invitesCount, setInvitesCount] = useState(0);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -97,18 +96,6 @@ const DashboardMenu = ({}: Props) => {
     setInvitesCount(invites.length);
   }, [invites, user]);
 
-  useEffect(() => {
-    if (router.pathname === "/dashboard") {
-      setActive("dashboard");
-    } else if (router.pathname === "/dashboard/projects") {
-      setActive("projects");
-    } else if (router.pathname === "/dashboard/invites") {
-      setActive("invites");
-    } else if (router.pathname === "/dashboard/settings") {
-      setActive("settings");
-    }
-  }, [router.pathname]);
-
   return (
     <Menu>
       <Link href="/" passHref>
@@ -117,26 +104,26 @@ const DashboardMenu = ({}: Props) => {
         </Logo>
       </Link>
       <Link href={`/dashboard`} passHref>
-        <MenuLink isActive={active === "dashboard"}>
+        <MenuLink isActive={router.pathname === "/dashboard"}>
           <GrApps />
           Dashboard
         </MenuLink>
       </Link>
 
       <Link href={`/dashboard/projects`} passHref>
-        <MenuLink isActive={active === "projects"}>
+        <MenuLink isActive={router.pathname === "/dashboard/projects"}>
           <GrBriefcase />
           Projects
         </MenuLink>
       </Link>
       <Link href={`/dashboard/invites`} passHref>
-        <MenuLink isActive={active === "invites"}>
+        <MenuLink isActive={router.pathname === "/dashboard/invites"}>
           <GrMailOption />
           Invites {invitesCount > 0 && <span className="total-invites">{invitesCount}</span>}
         </MenuLink>
       </Link>
       <Link href={`/dashboard/settings`} passHref>
-        <MenuLink isActive={active === "settings"}>
+        <MenuLink isActive={router.pathname === "/dashboard/settings"}>
           <GrUserSettings />
           Settings
         </MenuLink>
