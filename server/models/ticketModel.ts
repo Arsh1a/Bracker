@@ -11,12 +11,12 @@ const TicketSchema = new mongoose.Schema(
     },
     severity: {
       type: String,
-      enum: ["low", "medium", "high"],
+      enum: ["Low", "Medium", "High"],
       required: [true, "Please add a severity"],
     },
     status: {
       type: String,
-      enum: ["open", "closed", "inprogress"],
+      enum: ["Open", "Closed", "Inprogress"],
       required: [true, "Please add a status"],
     },
     content: {

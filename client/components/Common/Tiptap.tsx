@@ -173,7 +173,6 @@ const Tiptap = ({ handleTipTap }: Props) => {
       const content = editor.getHTML();
       handleTipTap(content);
     },
-    content: "Explain what is the ticket",
   });
 
   if (!editor) {

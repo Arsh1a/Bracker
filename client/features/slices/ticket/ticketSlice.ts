@@ -48,8 +48,8 @@ export const createTicket = createAsyncThunk(
       projectID: string;
       title: string;
       desc?: string;
-      severity: "low" | "medium" | "high";
-      status: "open" | "closed" | "inprogress";
+      severity: "Low" | "Medium" | "High";
+      status: "Open" | "Closed" | "Inprogress";
       content: string;
       reporter: string;
       assignee?: string;

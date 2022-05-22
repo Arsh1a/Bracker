@@ -6,6 +6,25 @@ import { Column } from "react-table";
 
 const Wrapper = styled.div``;
 
+const StyledTable = styled(Table)`
+  .status {
+    color: white;
+    padding: 4px 15px;
+    text-align: center;
+    border-radius: 20px;
+    display: inline;
+  }
+  [data-value="Open"] {
+    background-color: ${(props) => props.theme.colors.primary};
+  }
+  [data-value="Closed"] {
+    background-color: ${(props) => props.theme.colors.danger};
+  }
+  [data-value="Inprogress"] {
+    background-color: ${(props) => props.theme.colors.secondary};
+  }
+`;
+
 interface Props {
   projectID: string;
 }
@@ -97,7 +116,7 @@ const TicketsTable = ({ projectID }: Props) => {
   return (
     <Wrapper>
       {tickets && (
-        <Table
+        <StyledTable
           handlePageSelect={handlePageSelect}
           data={tickets}
           totalPages={totalPages}

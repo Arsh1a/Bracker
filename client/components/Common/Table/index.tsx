@@ -13,22 +13,42 @@ const StyledTable = styled.table`
   box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
   background-color: white;
   padding: 20px;
+  border-collapse: collapse;
   th {
     text-align: left;
     cursor: pointer;
     position: relative;
     transition: 0.3s;
+    color: ${(props) => props.theme.colors.gray};
     &:hover {
       opacity: 0.6;
     }
     svg {
       position: absolute;
-      top: 3px;
+      bottom: 16px;
     }
+  }
+  th,
+  td {
+    padding: 15px;
+  }
+  tr {
+    border-bottom: 1px solid ${(props) => props.theme.colors.light};
+  }
+  tbody tr:last-child {
+    border-bottom: none;
+  }
+  //Border radius over table
+  tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+  }
+
+  tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
   }
 `;
 
-interface Props {
+interface Props extends React.ComponentPropsWithRef<"table"> {
   data: any[];
   columns: any;
   totalPages: number;
@@ -52,6 +72,7 @@ const Table = ({
   handleSort,
   order,
   sort,
+  ...rest
 }: Props) => {
   const options: TableOptions<any> = {
     data,
@@ -67,7 +88,7 @@ const Table = ({
 
   return (
     <>
-      <StyledTable {...getTableProps()}>
+      <StyledTable {...getTableProps()} {...rest}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -95,7 +116,14 @@ const Table = ({
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
-                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                  console.log(cell);
+                  return (
+                    <td {...cell.getCellProps()}>
+                      <div className={cell.column.id} data-value={cell.value}>
+                        {cell.render("Cell")}
+                      </div>
+                    </td>
+                  );
                 })}
               </tr>
             );
