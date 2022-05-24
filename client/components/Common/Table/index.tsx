@@ -59,6 +59,7 @@ interface Props extends React.ComponentPropsWithRef<"table"> {
   handleSort: (id: string) => void;
   sort: string;
   order: "desc" | "asc";
+  handleDataClick?: (data: any) => void;
 }
 
 const Table = ({
@@ -72,6 +73,7 @@ const Table = ({
   handleSort,
   order,
   sort,
+  handleDataClick,
   ...rest
 }: Props) => {
   const options: TableOptions<any> = {
@@ -113,10 +115,13 @@ const Table = ({
         <tbody {...getTableBodyProps()}>
           {rows.map((row) => {
             prepareRow(row);
+            console.log(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr
+                onClick={handleDataClick && (() => handleDataClick(row.original))}
+                {...row.getRowProps()}
+              >
                 {row.cells.map((cell) => {
-                  console.log(cell);
                   return (
                     <td {...cell.getCellProps()}>
                       <div className={cell.column.id} data-value={cell.value}>

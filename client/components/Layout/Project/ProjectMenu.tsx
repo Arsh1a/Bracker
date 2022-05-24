@@ -128,7 +128,7 @@ const ProjectMenu = ({}: Props) => {
       >
         <MenuLink isActive={router.pathname === `/p/[slug]/my-tickets`}>
           <GrDocumentUser />
-          My tickets
+          My Tickets
         </MenuLink>
       </Link>
       <Link

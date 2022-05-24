@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Table from "../../Common/Table";
 import axios from "axios";
 import { Column } from "react-table";
+import EditModal from "./EditModal";
+import { TicketType } from "../../../types/TicketType";
 
 const Wrapper = styled.div``;
 
@@ -23,13 +25,20 @@ const StyledTable = styled(Table)`
   [data-value="Inprogress"] {
     background-color: ${(props) => props.theme.colors.secondary};
   }
+  tr {
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 `;
 
 interface Props {
   projectID: string;
 }
 
-type Cols = { title: string; status: string; severity: string; reporter: string; assignee: string };
+interface Cols extends TicketType {}
 
 const TicketsTable = ({ projectID }: Props) => {
   const [tickets, setTickets] = useState<any[]>([]);
@@ -41,9 +50,13 @@ const TicketsTable = ({ projectID }: Props) => {
     sort: string;
     order: "desc" | "asc";
   }>({ page: 1, limit: 5, sort: "createdAt", order: "desc" });
+
+  const [modalData, setModalData] = useState<TicketType>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { page, limit, sort, order } = filters;
 
-  const columns: Column<Cols>[] = React.useMemo(
+  const columns: Column<TicketType>[] = React.useMemo(
     () => [
       {
         Header: "Title",
@@ -64,6 +77,10 @@ const TicketsTable = ({ projectID }: Props) => {
       {
         Header: "Assignee",
         accessor: "assignee",
+      },
+      {
+        Header: "Created At",
+        accessor: "createdAt",
       },
     ],
     []
@@ -113,23 +130,37 @@ const TicketsTable = ({ projectID }: Props) => {
       setFilters({ ...filters, sort: id, order: "desc" });
     }
   };
+
+  const handleDataClick = (modalData: TicketType) => {
+    setModalData(modalData);
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    console.log(modalData);
+  }, [modalData]);
+
   return (
-    <Wrapper>
-      {tickets && (
-        <StyledTable
-          handlePageSelect={handlePageSelect}
-          data={tickets}
-          totalPages={totalPages}
-          currentPage={page}
-          handlePrevious={handlePrevious}
-          handleNext={handleNext}
-          handleSort={handleSort}
-          columns={columns}
-          sort={sort}
-          order={order}
-        />
-      )}
-    </Wrapper>
+    <>
+      <Wrapper>
+        {tickets && (
+          <StyledTable
+            handlePageSelect={handlePageSelect}
+            data={tickets}
+            totalPages={totalPages}
+            currentPage={page}
+            handlePrevious={handlePrevious}
+            handleNext={handleNext}
+            handleSort={handleSort}
+            columns={columns}
+            sort={sort}
+            order={order}
+            handleDataClick={handleDataClick}
+          />
+        )}
+      </Wrapper>
+      {isModalOpen && <EditModal data={modalData!} closeModal={() => setIsModalOpen(false)} />}
+    </>
   );
 };
 export default TicketsTable;
