@@ -42,7 +42,14 @@ export const handleInvite = createAsyncThunk(
 export const inviteSlice = createSlice({
   name: "invite",
   initialState,
-  reducers: { reset: (state) => initialState },
+  reducers: {
+    reset: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getInvites.pending, (state, action) => {

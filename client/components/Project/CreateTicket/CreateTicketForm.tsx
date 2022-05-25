@@ -8,7 +8,7 @@ import Input from "../../../components/Common/Input";
 import Loading from "../../../components/Common/Loading";
 import Select from "../../../components/Common/Select";
 import Tiptap from "../../../components/Common/Tiptap";
-import ProjectMembersSelect from "../../../components/Project/CreateTicket/ProjectMembersSelect";
+import ProjectMembersSelect from "../../Common/ProjectMembersSelect";
 import { createTicket } from "../../../features/slices/ticket/ticketSlice";
 import { RootState } from "../../../features/store";
 import { getProjectMembers } from "../../../lib/requestApi";
@@ -28,11 +28,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
+const InputWrapper = styled.div``;
 
 interface Props {
   projectData: any;
@@ -54,6 +50,10 @@ const CreateTicketForm = ({ projectData }: Props) => {
   const [content, setContent] = useState<string>("");
 
   const { user } = useSelector((state: RootState) => state.auth);
+
+  const { isError, isSuccess, isLoading, message } = useSelector(
+    (state: RootState) => state.ticket
+  );
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -81,13 +81,14 @@ const CreateTicketForm = ({ projectData }: Props) => {
         reporter: user._id,
       })
     );
-
-    if (isError) {
-      return;
-    }
-
-    router.push(`/p/${_id}`);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push(`/p/${_id}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   const handleProjectMemberSelect = (data: string) => {
     setForm({ ...form, assignee: data });
@@ -101,35 +102,33 @@ const CreateTicketForm = ({ projectData }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { isError, isLoading, message } = useSelector((state: RootState) => state.ticket);
-
   return (
     <Wrapper>
       <form onSubmit={handleSubmit}>
         <InputWrapper>
-          <label htmlFor="ticket-title">Title</label>
           <Input
             required
             type="text"
-            id="ticket-title"
+            label="Title"
+            id="title"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
         </InputWrapper>
         <InputWrapper>
-          <label htmlFor="ticket-desc">Description</label>
           <Input
-            id="ticket-desc"
+            label="Description"
+            id="desc"
             value={form.desc}
             onChange={(e) => setForm({ ...form, desc: e.target.value })}
           />
         </InputWrapper>
         <InputWrapper>
-          <label htmlFor="ticket-severity">Severity</label>
           <div className="select">
             <Select
               required
-              id="ticket-severity"
+              label="Severity"
+              id="severity"
               value={form.severity}
               onChange={(e) =>
                 setForm({ ...form, severity: e.target.value as "Low" | "Medium" | "High" })
@@ -142,10 +141,10 @@ const CreateTicketForm = ({ projectData }: Props) => {
           </div>
         </InputWrapper>
         <InputWrapper>
-          <label htmlFor="ticket-assignee">Assignee</label>
           <div className="select">
             <ProjectMembersSelect
-              id="ticket-assigne"
+              label="Assignee"
+              id="assignee"
               data={projectMembers}
               selectValue={form.assignee}
               hanldeOnChange={handleProjectMemberSelect}
@@ -154,8 +153,7 @@ const CreateTicketForm = ({ projectData }: Props) => {
           </div>
         </InputWrapper>
         <InputWrapper>
-          <label>Ticket details</label>
-          <Tiptap handleTipTap={getContentFromTipTap} />
+          <Tiptap label={"Ticket details"} handleTipTap={getContentFromTipTap} />
         </InputWrapper>
         <Button
           disabled={isLoading}

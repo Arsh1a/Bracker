@@ -81,7 +81,14 @@ export const inviteToProject = createAsyncThunk(
 export const projectSlice = createSlice({
   name: "project",
   initialState,
-  reducers: { reset: (state) => initialState },
+  reducers: {
+    reset: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getProjects.pending, (state, action) => {

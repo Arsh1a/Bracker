@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { TicketType } from "../../../types/TicketType";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ticket/`;
 
@@ -29,23 +30,15 @@ const createTickets = async (ticketData: {
   return response.data;
 };
 
-const updateTicket = async (ticketData: {
-  ticketID: string;
-  title?: string;
-  desc?: string;
-  severity?: "low" | "medium" | "high";
-  status?: "open" | "closed" | "inprogress";
-  content?: string;
-  assignee?: string;
-}) => {
-  const response = await axios.patch(API_URL + ticketData.ticketID, ticketData, {
+const updateTicket = async (ticketData: TicketType) => {
+  const response = await axios.patch(API_URL + ticketData._id, ticketData, {
     withCredentials: true,
   });
   return response.data;
 };
 
-const deleteTicket = async (ticketID: string) => {
-  const response = await axios.delete(API_URL + ticketID, { withCredentials: true });
+const deleteTicket = async (_id: string) => {
+  const response = await axios.delete(API_URL + _id, { withCredentials: true });
   return response.data;
 };
 

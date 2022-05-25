@@ -64,20 +64,22 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
           <>
             <h3>Let&apos;s build a Project</h3>
             <form onSubmit={handleFirstStep}>
-              <label htmlFor="project-title">Project name</label>
               <ModalInput
                 placeholder="Company Co."
                 required
-                id="project-title"
+                label="Project Title"
+                id="title"
                 value={projectData.title}
                 onChange={(e) => setProjectData({ ...projectData, title: e.target.value })}
               />
-              <label htmlFor="project-desc">
-                Description <span>(Optional)</span>
-              </label>
               <ModalInput
                 placeholder="We orginize everything here."
-                id="project-desc"
+                label={
+                  <>
+                    Description <span>(Optional)</span>
+                  </>
+                }
+                id="desc"
                 value={projectData.desc}
                 onChange={(e) => setProjectData({ ...projectData, desc: e.target.value })}
               />
@@ -92,10 +94,16 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
           <>
             <h3>Invite your team</h3>
             <form onSubmit={handleSubmit}>
-              <label htmlFor="member-name">
-                Memeber&apos;s username <span>(Optional)</span>
-              </label>
-              <MemberSearch passDataToParent={handleMemberSearch} handleData={searchUsers} />
+              <MemberSearch
+                label={
+                  <>
+                    Memeber&apos;s username <span>(Optional)</span>
+                  </>
+                }
+                id="member-search"
+                passDataToParent={handleMemberSearch}
+                handleData={searchUsers}
+              />
               <SecondStepButton
                 disabled={isLoading}
                 height="45px"

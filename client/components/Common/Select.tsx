@@ -32,8 +32,17 @@ const InnerWrapper = styled.select<StyledProps>`
   appearance: none;
 `;
 
+const Label = styled.label`
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+`;
+
 interface Props extends React.ComponentPropsWithoutRef<"select"> {
   borderRadius?: string;
+  label?: string;
+  id?: string;
   children: React.ReactNode;
 }
 
@@ -41,12 +50,17 @@ interface StyledProps {
   borderRadius?: string;
 }
 
-const Select = ({ children, borderRadius, ...rest }: Props) => {
+const Select = ({ children, borderRadius, label, id, ...rest }: Props) => {
   return (
-    <Wrapper borderRadius={borderRadius}>
-      <InnerWrapper {...rest}>{children}</InnerWrapper>
-      <MdKeyboardArrowDown />
-    </Wrapper>
+    <>
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <Wrapper borderRadius={borderRadius}>
+        <InnerWrapper id={id} {...rest}>
+          {children}
+        </InnerWrapper>
+        <MdKeyboardArrowDown />
+      </Wrapper>
+    </>
   );
 };
 export default Select;

@@ -14,7 +14,16 @@ const Wrapper = styled.input<StyledProps>`
   }
 `;
 
+const Label = styled.label`
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+`;
+
 interface Props extends React.ComponentPropsWithoutRef<"input"> {
+  label?: React.ReactNode;
+  id?: string;
   borderRadius?: string;
 }
 
@@ -22,7 +31,12 @@ interface StyledProps {
   borderRadius?: string;
 }
 
-const Input = ({ borderRadius, ...rest }: Props) => {
-  return <Wrapper borderRadius={borderRadius} {...rest}></Wrapper>;
+const Input = ({ borderRadius, label, id, ...rest }: Props) => {
+  return (
+    <>
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <Wrapper borderRadius={borderRadius} id={id} {...rest}></Wrapper>
+    </>
+  );
 };
 export default Input;

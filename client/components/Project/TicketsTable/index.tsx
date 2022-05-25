@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Table from "../../Common/Table";
 import axios from "axios";
 import { Column } from "react-table";
-import EditModal from "./EditModal";
+import EditModal from "./EditTicketModal";
 import { TicketType } from "../../../types/TicketType";
 
 const Wrapper = styled.div``;
@@ -54,6 +54,8 @@ const TicketsTable = ({ projectID }: Props) => {
   const [modalData, setModalData] = useState<TicketType>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isRefreshed, setIsRefreshed] = useState(false);
+
   const { page, limit, sort, order } = filters;
 
   const columns: Column<TicketType>[] = React.useMemo(
@@ -100,8 +102,9 @@ const TicketsTable = ({ projectID }: Props) => {
         setTickets(res.data.tickets);
         setTotalPages(res.data.totalPages);
         setTotalTickets(res.data.totalTickets);
+        setIsRefreshed(false);
       });
-  }, [API_URL, filters, limit, order, page, projectID, sort]);
+  }, [API_URL, filters, limit, order, page, projectID, sort, isRefreshed]);
 
   const handleNext = () => {
     if (page >= totalPages) {
@@ -159,7 +162,14 @@ const TicketsTable = ({ projectID }: Props) => {
           />
         )}
       </Wrapper>
-      {isModalOpen && <EditModal data={modalData!} closeModal={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <EditModal
+          projectID={projectID}
+          data={modalData!}
+          closeModal={() => setIsModalOpen(false)}
+          handleDataChange={setIsRefreshed}
+        />
+      )}
     </>
   );
 };

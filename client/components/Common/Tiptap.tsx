@@ -151,11 +151,20 @@ const CommandsWrapper = styled.div`
   }
 `;
 
+const Label = styled.label`
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+`;
+
 interface Props {
   handleTipTap: (content: string) => void;
+  label?: React.ReactNode;
+  content?: string;
 }
 
-const Tiptap = ({ handleTipTap }: Props) => {
+const Tiptap = ({ handleTipTap, label, content }: Props) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -173,6 +182,7 @@ const Tiptap = ({ handleTipTap }: Props) => {
       const content = editor.getHTML();
       handleTipTap(content);
     },
+    content,
   });
 
   if (!editor) {
@@ -180,139 +190,142 @@ const Tiptap = ({ handleTipTap }: Props) => {
   }
 
   return (
-    <Wrapper>
-      <CommandsWrapper>
-        <input
-          type="color"
-          onInput={(e) =>
-            editor
-              .chain()
-              .focus()
-              .setColor((e.target as HTMLInputElement).value)
-              .run()
-          }
-          value={editor.getAttributes("textStyle").color}
-        />
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "is-active" : ""}
-        >
-          <BsTypeBold />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive("italic") ? "is-active" : ""}
-        >
-          <BsTypeItalic />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={editor.isActive("strike") ? "is-active" : ""}
-        >
-          <BsTypeStrikethrough />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={editor.isActive("underline") ? "is-active" : ""}
-        >
-          <BsTypeUnderline />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          className={editor.isActive({ textAlign: "left" }) ? "is-active" : ""}
-        >
-          <BsJustifyLeft />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          className={editor.isActive({ textAlign: "center" }) ? "is-active" : ""}
-        >
-          <BsTextCenter />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          className={editor.isActive({ textAlign: "right" }) ? "is-active" : ""}
-        >
-          <BsJustifyRight />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-          className={editor.isActive({ textAlign: "justify" }) ? "is-active" : ""}
-        >
-          <BsJustify />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setParagraph().run()}
-          className={editor.isActive("paragraph") ? "is-active" : ""}
-        >
-          <BsParagraph />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
-        >
-          h1
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={editor.isActive("heading", { level: 2 }) ? "is-active" : ""}
-        >
-          h2
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
-        >
-          h3
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-          className={editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
-        >
-          h4
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-          className={editor.isActive("heading", { level: 5 }) ? "is-active" : ""}
-        >
-          h5
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-          className={editor.isActive("heading", { level: 6 }) ? "is-active" : ""}
-        >
-          h6
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "is-active" : ""}
-        >
-          <BsListUl />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "is-active" : ""}
-        >
-          <BsListOl />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive("codeBlock") ? "is-active" : ""}
-        >
-          <BiCodeBlock />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive("blockquote") ? "is-active" : ""}
-        >
-          <GrBlockQuote />
-        </button>
-        <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
-          <VscHorizontalRule />
-        </button>
-      </CommandsWrapper>
-      <StyledEditor editor={editor} />
-    </Wrapper>
+    <>
+      {label && <Label>{label}</Label>}
+      <Wrapper>
+        <CommandsWrapper>
+          <input
+            type="color"
+            onInput={(e) =>
+              editor
+                .chain()
+                .focus()
+                .setColor((e.target as HTMLInputElement).value)
+                .run()
+            }
+            value={editor.getAttributes("textStyle").color}
+          />
+          <button
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={editor.isActive("bold") ? "is-active" : ""}
+          >
+            <BsTypeBold />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={editor.isActive("italic") ? "is-active" : ""}
+          >
+            <BsTypeItalic />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            className={editor.isActive("strike") ? "is-active" : ""}
+          >
+            <BsTypeStrikethrough />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className={editor.isActive("underline") ? "is-active" : ""}
+          >
+            <BsTypeUnderline />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().setTextAlign("left").run()}
+            className={editor.isActive({ textAlign: "left" }) ? "is-active" : ""}
+          >
+            <BsJustifyLeft />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().setTextAlign("center").run()}
+            className={editor.isActive({ textAlign: "center" }) ? "is-active" : ""}
+          >
+            <BsTextCenter />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().setTextAlign("right").run()}
+            className={editor.isActive({ textAlign: "right" }) ? "is-active" : ""}
+          >
+            <BsJustifyRight />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+            className={editor.isActive({ textAlign: "justify" }) ? "is-active" : ""}
+          >
+            <BsJustify />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().setParagraph().run()}
+            className={editor.isActive("paragraph") ? "is-active" : ""}
+          >
+            <BsParagraph />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            className={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
+          >
+            h1
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            className={editor.isActive("heading", { level: 2 }) ? "is-active" : ""}
+          >
+            h2
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+            className={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
+          >
+            h3
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+            className={editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
+          >
+            h4
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
+            className={editor.isActive("heading", { level: 5 }) ? "is-active" : ""}
+          >
+            h5
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
+            className={editor.isActive("heading", { level: 6 }) ? "is-active" : ""}
+          >
+            h6
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={editor.isActive("bulletList") ? "is-active" : ""}
+          >
+            <BsListUl />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={editor.isActive("orderedList") ? "is-active" : ""}
+          >
+            <BsListOl />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            className={editor.isActive("codeBlock") ? "is-active" : ""}
+          >
+            <BiCodeBlock />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            className={editor.isActive("blockquote") ? "is-active" : ""}
+          >
+            <GrBlockQuote />
+          </button>
+          <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
+            <VscHorizontalRule />
+          </button>
+        </CommandsWrapper>
+        <StyledEditor editor={editor} />
+      </Wrapper>
+    </>
   );
 };
 

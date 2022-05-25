@@ -1,20 +1,27 @@
 import React from "react";
 import styled from "styled-components";
-import Select from "../../Common/Select";
+import Select from "./Select";
 
 const Wrapper = styled.div``;
 
 interface Props {
   id?: string;
+  label?: string;
   data: any[];
   selectValue: string;
   hanldeOnChange: (e: any) => void;
   user: any;
 }
 
-const ProjectMembersSelect = ({ id, data, selectValue, hanldeOnChange, user }: Props) => {
+const ProjectMembersSelect = ({ id, label, data, selectValue, hanldeOnChange, user }: Props) => {
   return (
-    <Select required id={id} value={selectValue} onChange={(e) => hanldeOnChange(e.target.value)}>
+    <Select
+      label={label}
+      required
+      id={id}
+      value={selectValue}
+      onChange={(e) => hanldeOnChange(e.target.value)}
+    >
       {data &&
         data.map((member: { _id: string; username: string }) => {
           return (

@@ -151,32 +151,17 @@ export const createTicket = async (req: Request, res: Response, next: NextFuncti
 /// @access private
 export const updateTicket = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
-  const { projectID, ticketID } = req.params;
+  const { ticketID } = req.params;
   const { user } = <any>req;
-
-  //Checks if provided project id can be casted ot ObjectId
-  if (!isValidObjectId(projectID)) {
-    return next(new ErrorResponse("Invalid project ID", 400));
-  }
 
   //Checks if provided ticket id can be casted ot ObjectId
   if (!isValidObjectId(ticketID)) {
     return next(new ErrorResponse("Invalid ticket ID", 400));
   }
 
-  //Checks if provided project id exists in database and the user is part of the project
-  const project = await Project.findById(projectID).or([
-    { owner: user._id },
-    { members: user._id },
-  ]);
-
-  if (!project) {
-    return next(new ErrorResponse("There was an error updating the ticket", 400));
-  }
-
   try {
     const ticket = await Ticket.findOneAndUpdate(
-      { _id: ticketID, projectID },
+      { _id: ticketID },
       {
         title,
         desc,

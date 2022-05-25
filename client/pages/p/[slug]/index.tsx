@@ -6,7 +6,7 @@ import Container from "../../../components/Common/Container";
 import { getProjectSession } from "../../../lib/requestApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
-import { countTickets } from "../../../features/slices/ticket/ticketSlice";
+import { countTickets, reset } from "../../../features/slices/ticket/ticketSlice";
 import TicketsTable from "../../../components/Project/TicketsTable";
 
 const Wrapper = styled.div`
@@ -67,11 +67,18 @@ const Project = ({ data }: Props) => {
   const { _id, title, desc, members } = data.project;
 
   const dispatch = useDispatch();
+  const { isSuccess } = useSelector((state: RootState) => state.ticket);
 
   useEffect(() => {
     dispatch(countTickets(_id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    dispatch(reset());
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   const { ticketStats, isLoading, isError, message } = useSelector(
     (state: RootState) => state.ticket

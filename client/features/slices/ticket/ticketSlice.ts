@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { TicketType } from "../../../types/TicketType";
 import ticketService from "./ticketService";
 
 const initialState = {
@@ -70,18 +71,7 @@ export const createTicket = createAsyncThunk(
 
 export const updateTicket = createAsyncThunk(
   "ticket/update",
-  async (
-    ticketData: {
-      ticketID: string;
-      title?: string;
-      desc?: string;
-      severity?: "low" | "medium" | "high";
-      status?: "open" | "closed" | "inprogress";
-      content?: string;
-      assignee?: string;
-    },
-    thunkAPI
-  ) => {
+  async (ticketData: TicketType, thunkAPI) => {
     try {
       return await ticketService.updateTicket(ticketData);
     } catch (error: any) {
@@ -109,7 +99,14 @@ export const deleteTicket = createAsyncThunk("ticket/delete", async (id: string,
 export const ticketSlice = createSlice({
   name: "ticket",
   initialState,
-  reducers: { reset: (state) => initialState },
+  reducers: {
+    reset: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getTickets.pending, (state, action) => {

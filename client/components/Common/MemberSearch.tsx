@@ -76,10 +76,19 @@ const SuggestionDropDownItem = styled.li<SuggestionDropDownItemProps>`
   }
 `;
 
+const Label = styled.label`
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+`;
+
 interface Props extends React.ComponentPropsWithoutRef<"input"> {
   handleData: (username: string) => any;
   passDataToParent: (data: any) => any;
   borderRadius?: string;
+  label?: React.ReactNode;
+  id?: string;
 }
 
 interface WrapperProps {
@@ -91,7 +100,14 @@ interface SuggestionDropDownItemProps {
   userAlreadyAdded: boolean;
 }
 
-const MemberSearch = ({ handleData, passDataToParent, borderRadius, ...rest }: Props) => {
+const MemberSearch = ({
+  handleData,
+  passDataToParent,
+  borderRadius,
+  label,
+  id,
+  ...rest
+}: Props) => {
   const [tags, setTags] = useState<{ _id: string; username: string }[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [suggestedTags, setSuggestedTags] = useState([]);
@@ -134,7 +150,8 @@ const MemberSearch = ({ handleData, passDataToParent, borderRadius, ...rest }: P
 
   return (
     <>
-      <Wrapper borderRadius={borderRadius} suggestedTagsExist={suggestedTags.length > 0}>
+      {label && <Label htmlFor={id}>{label}</Label>}
+      <Wrapper id={id} borderRadius={borderRadius} suggestedTagsExist={suggestedTags.length > 0}>
         {tags.map((tag) => (
           <Tag key={tag._id}>
             {tag.username} <GrClose onClick={() => handleDeleteItem(tag._id)} />
