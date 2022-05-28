@@ -5,6 +5,10 @@ import axios from "axios";
 import { Column } from "react-table";
 import EditModal from "./EditTicketModal";
 import { TicketType } from "../../../types/TicketType";
+import { getTicketsForTable } from "../../../lib/requestApi";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../features/store";
+import { getTickets } from "../../../features/slices/ticket/ticketSlice";
 
 const Wrapper = styled.div``;
 
@@ -38,12 +42,7 @@ interface Props {
   projectID: string;
 }
 
-interface Cols extends TicketType {}
-
 const TicketsTable = ({ projectID }: Props) => {
-  const [tickets, setTickets] = useState<any[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalTickets, setTotalTickets] = useState(0);
   const [filters, setFilters] = useState<{
     page: number;
     limit: number;
@@ -57,6 +56,13 @@ const TicketsTable = ({ projectID }: Props) => {
   const [isRefreshed, setIsRefreshed] = useState(false);
 
   const { page, limit, sort, order } = filters;
+
+  const { isError, isLoading, isSuccess, message, ticketsData } = useSelector(
+    (state: RootState) => state.ticket
+  );
+
+  const { tickets, totalPages, currentPage, totalTickets } = ticketsData;
+  const dispatch = useDispatch();
 
   const columns: Column<TicketType>[] = React.useMemo(
     () => [
@@ -88,29 +94,17 @@ const TicketsTable = ({ projectID }: Props) => {
     []
   );
 
-  const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`;
-
   useEffect(() => {
-    axios
-      .get(
-        API_URL + `/ticket/${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}`,
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        setTickets(res.data.tickets);
-        setTotalPages(res.data.totalPages);
-        setTotalTickets(res.data.totalTickets);
-        setIsRefreshed(false);
-      });
-  }, [API_URL, filters, limit, order, page, projectID, sort, isRefreshed]);
+    dispatch(getTickets({ projectID, ...filters }));
+    setIsRefreshed(false);
+  }, [filters, projectID, isRefreshed, dispatch]);
+
+  useEffect(() => {});
 
   const handleNext = () => {
     if (page >= totalPages) {
       return;
     }
-
     setFilters({ ...filters, page: page + 1 });
   };
 
@@ -139,9 +133,24 @@ const TicketsTable = ({ projectID }: Props) => {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    console.log(modalData);
-  }, [modalData]);
+  const renderShowMemberColumn = (cellData: any) => {
+    return <>{cellData.username}</>;
+  };
+
+  const renderTime = (cellData: any) => {
+    var d = new Date(cellData);
+    return (
+      <>
+        {d.toLocaleString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          day: "numeric",
+          month: "numeric",
+          year: "numeric",
+        })}
+      </>
+    );
+  };
 
   return (
     <>
@@ -159,6 +168,18 @@ const TicketsTable = ({ projectID }: Props) => {
             sort={sort}
             order={order}
             handleDataClick={handleDataClick}
+            isLoading={isLoading}
+            customCell={[
+              { id: "assignee", content: renderShowMemberColumn },
+              {
+                id: "reporter",
+                content: renderShowMemberColumn,
+              },
+              {
+                id: "createdAt",
+                content: renderTime,
+              },
+            ]}
           />
         )}
       </Wrapper>

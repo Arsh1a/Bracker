@@ -3,18 +3,15 @@ export interface TicketType {
   desc: string;
   status: string;
   severity: string;
-  reporter: string;
-  assignee: string;
+  reporter: {
+    _id: string;
+    username: string;
+  };
+  assignee: {
+    _id: string;
+    username: string;
+  };
   createdAt: string;
   _id: string;
-  content: string;
-}
-
-export interface TicketEditableType {
-  title: string;
-  desc: string;
-  status: string;
-  severity: string;
-  assignee: string;
   content: string;
 }

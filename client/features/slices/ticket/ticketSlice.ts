@@ -3,7 +3,12 @@ import { TicketType } from "../../../types/TicketType";
 import ticketService from "./ticketService";
 
 const initialState = {
-  tickets: <any[]>[],
+  ticketsData: {
+    tickets: <any[]>[],
+    currentPage: 1,
+    totalPages: 1,
+    totalTickets: 0,
+  },
   ticketStats: {
     totalTickets: 0,
     openTickets: 0,
@@ -16,17 +21,35 @@ const initialState = {
   message: "",
 };
 
-export const getTickets = createAsyncThunk("ticket/getTickets", async (id: string, thunkAPI) => {
-  try {
-    return await ticketService.getTickets(id);
-  } catch (error: any) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
-    return thunkAPI.rejectWithValue(message);
+export const getTickets = createAsyncThunk(
+  "ticket/getTickets",
+  async (
+    filters: {
+      projectID: string;
+      page: number;
+      limit: number;
+      sort: string;
+      order: string;
+    },
+    thunkAPI
+  ) => {
+    try {
+      return await ticketService.getTickets(
+        filters.projectID,
+        filters.page,
+        filters.limit,
+        filters.sort,
+        filters.order
+      );
+    } catch (error: any) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
   }
-});
+);
 export const countTickets = createAsyncThunk(
   "ticket/countTickets",
   async (id: string, thunkAPI) => {
@@ -120,7 +143,8 @@ export const ticketSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.message = "";
-        state.tickets = action.payload;
+        state.ticketsData = action.payload;
+        console.log(action.payload);
       })
       .addCase(getTickets.rejected, (state, action) => {
         state.isLoading = false;
@@ -153,7 +177,7 @@ export const ticketSlice = createSlice({
       .addCase(createTicket.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.tickets.push(action.payload as never);
+        state.ticketsData.tickets.push(action.payload as never);
       })
       .addCase(createTicket.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;
@@ -168,7 +192,7 @@ export const ticketSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.message = "";
-        state.tickets = state.tickets.map((ticket) =>
+        state.ticketsData.tickets = state.ticketsData.tickets.map((ticket) =>
           ticket._id === action.payload._id ? action.payload : ticket
         );
       })
@@ -183,7 +207,9 @@ export const ticketSlice = createSlice({
       .addCase(deleteTicket.fulfilled, (state: typeof initialState, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.tickets = state.tickets.filter((ticket) => ticket._id !== action.payload);
+        state.ticketsData.tickets = state.ticketsData.tickets.filter(
+          (ticket) => ticket._id !== action.payload
+        );
       })
       .addCase(deleteTicket.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;

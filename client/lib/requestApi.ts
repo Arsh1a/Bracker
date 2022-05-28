@@ -42,11 +42,39 @@ export const searchUsers = async (username: string) => {
     .catch((error) => Promise.reject(error));
 };
 
+export const getUserInfoById = async (userId: string) => {
+  return axios
+    .get(process.env.NEXT_PUBLIC_API_URL + "/auth/user/" + userId, {
+      withCredentials: true,
+    })
+    .then((response) => Promise.resolve(response))
+    .catch((error) => Promise.reject(error));
+};
+
 export const getProjectMembers = async (projectID: string) => {
   return axios
     .get(process.env.NEXT_PUBLIC_API_URL + "/project/" + projectID + "/users", {
       withCredentials: true,
     })
+    .then((response) => Promise.resolve(response))
+    .catch((error) => Promise.reject(error));
+};
+
+export const getTicketsForTable = async (
+  projectID: string,
+  page: number,
+  limit: number,
+  sort: string,
+  order: string
+) => {
+  return axios
+    .get(
+      process.env.NEXT_PUBLIC_API_URL +
+        `/ticket/${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}`,
+      {
+        withCredentials: true,
+      }
+    )
     .then((response) => Promise.resolve(response))
     .catch((error) => Promise.reject(error));
 };

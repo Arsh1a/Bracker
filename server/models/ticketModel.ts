@@ -23,12 +23,18 @@ const TicketSchema = new mongoose.Schema(
       type: String,
     },
     reporter: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: {
+        _id: mongoose.Schema.Types.ObjectId,
+        username: String,
+      },
       required: [true, "There is no owner"],
       ref: "User",
     },
     assignee: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: {
+        _id: mongoose.Schema.Types.ObjectId,
+        username: String,
+      },
       required: [true, "There is no assignees"],
       ref: "User",
     },

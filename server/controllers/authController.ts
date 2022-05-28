@@ -136,12 +136,35 @@ export const searchUsers = async (req: Request, res: Response, next: NextFunctio
   const regex = `^${username.toString()}`;
 
   try {
-    const users = await User.find({
+    const foundUser = await User.find({
       username: { $regex: regex },
     })
       .select("username")
       .limit(10);
-    res.status(200).json(users);
+    res.status(200).json(foundUser);
+  } catch (err) {
+    next(err);
+  }
+};
+
+///@desc Get user info by id
+///@route GET /api/auth/user/:userID
+///@access private
+export const getUserInfoById = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+  const { userID } = req.params;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  if (!isValidObjectId(userID)) {
+    return next(new ErrorResponse("Invalid id", 400));
+  }
+
+  try {
+    const foundUser = await User.findById(userID);
+    res.status(200).json(foundUser);
   } catch (err) {
     next(err);
   }

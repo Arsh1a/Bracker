@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "../../Common/Modal";
-import { TicketEditableType, TicketType } from "../../../types/TicketType";
+import { TicketType } from "../../../types/TicketType";
 import Input from "../../Common/Input";
 import Select from "../../Common/Select";
 import ProjectMembersSelect from "../../Common/ProjectMembersSelect";
@@ -23,10 +23,8 @@ const InputWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-const StyledModal = styled(Modal)`
-  h3 {
-    margin-bottom: 30px;
-  }
+const ModalHeader = styled.h3`
+  margin-bottom: 20px;
 `;
 
 interface Props {
@@ -51,11 +49,11 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
     getProjectMembers(projectID).then((res) => {
       setProjectMembers(res.data);
     });
-    setFormData({ ...formData, assignee: user._id });
+    setFormData({ ...formData });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleProjectMemberSelect = (data: string) => {
+  const handleProjectMemberSelect = (data: any) => {
     setFormData({ ...formData, assignee: data });
   };
 
@@ -67,8 +65,6 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
     setFormData({ ...formData, content });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]);
-
-  console.log(data);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -85,8 +81,8 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
   }, [isSuccess]);
 
   return (
-    <StyledModal closeModal={closeModal}>
-      <h3>Edit ticket</h3>
+    <Modal closeModal={closeModal}>
+      <ModalHeader>Edit ticket</ModalHeader>
       <Form onSubmit={handleSubmit}>
         <InputWrapper>
           <Input
@@ -96,7 +92,6 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           />
         </InputWrapper>
-
         <InputWrapper>
           <Input
             label="Description"
@@ -135,7 +130,7 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
               label="Assignee"
               id="assignee"
               data={projectMembers}
-              selectValue={formData.assignee}
+              selectValue={formData.assignee._id}
               hanldeOnChange={handleProjectMemberSelect}
               user={user}
             />
@@ -158,7 +153,7 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
         </Button>
         {isError && <ErrorMessage>{message}</ErrorMessage>}
       </Form>
-    </StyledModal>
+    </Modal>
   );
 };
 export default EditTicketModal;

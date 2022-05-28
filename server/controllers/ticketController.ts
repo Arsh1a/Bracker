@@ -88,9 +88,9 @@ export const countTickets = async (req: Request, res: Response, next: NextFuncti
 
   try {
     const totalTickets = await Ticket.countDocuments({ projectID });
-    const openTickets = await Ticket.countDocuments({ projectID, status: "open" });
-    const inProgressTickets = await Ticket.countDocuments({ projectID, status: "inprogress" });
-    const closedTickets = await Ticket.countDocuments({ projectID, status: "closed" });
+    const openTickets = await Ticket.countDocuments({ projectID, status: "Open" });
+    const inProgressTickets = await Ticket.countDocuments({ projectID, status: "Inprogress" });
+    const closedTickets = await Ticket.countDocuments({ projectID, status: "Closed" });
 
     res.status(200).json({
       totalTickets,
@@ -127,7 +127,13 @@ export const createTicket = async (req: Request, res: Response, next: NextFuncti
 
   try {
     // If assignee is not provided, set it to the reporter (the user who created the ticket)
-    const ticketAsignee = assignee ? assignee : user._id;
+    const ticketAssignee = assignee ? assignee : user._id;
+
+    // Get assigned user information
+    const assignedUser = await User.findById(ticketAssignee);
+
+    // Get reporter user information
+    const reporterUser = await User.findById(user._id);
 
     const ticket = await Ticket.create({
       title,
@@ -135,8 +141,14 @@ export const createTicket = async (req: Request, res: Response, next: NextFuncti
       severity,
       status,
       content,
-      assignee: ticketAsignee,
-      reporter: user._id,
+      assignee: {
+        _id: assignedUser._id,
+        username: assignedUser.username,
+      },
+      reporter: {
+        _id: reporterUser._id,
+        username: reporterUser.username,
+      },
       projectID,
     });
 
@@ -159,6 +171,9 @@ export const updateTicket = async (req: Request, res: Response, next: NextFuncti
     return next(new ErrorResponse("Invalid ticket ID", 400));
   }
 
+  //Get assigned user information
+  const assignedUser = await User.findById(assignee);
+
   try {
     const ticket = await Ticket.findOneAndUpdate(
       { _id: ticketID },
@@ -168,7 +183,10 @@ export const updateTicket = async (req: Request, res: Response, next: NextFuncti
         severity,
         status,
         content,
-        assignee,
+        assignee: {
+          _id: assignedUser._id,
+          username: assignedUser.username,
+        },
       },
       { new: true, runValidators: true }
     );

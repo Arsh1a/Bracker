@@ -4,8 +4,11 @@ import styled from "styled-components";
 import { useTable, usePagination, TableOptions, Column } from "react-table";
 import Pagination from "./Pagination";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
+import Loading from "../Loading";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  position: relative;
+`;
 
 const StyledTable = styled.table`
   width: 100%;
@@ -48,6 +51,22 @@ const StyledTable = styled.table`
   }
 `;
 
+const LoadingOverlay = styled.div`
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  background-color: #ffffffb7;
+  position: absolute;
+  border-radius: 10px;
+  & > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 interface Props extends React.ComponentPropsWithRef<"table"> {
   data: any[];
   columns: any;
@@ -60,6 +79,8 @@ interface Props extends React.ComponentPropsWithRef<"table"> {
   sort: string;
   order: "desc" | "asc";
   handleDataClick?: (data: any) => void;
+  customCell?: { id: string; content: (cellData: any) => React.ReactNode }[];
+  isLoading: boolean;
 }
 
 const Table = ({
@@ -74,6 +95,8 @@ const Table = ({
   order,
   sort,
   handleDataClick,
+  customCell,
+  isLoading,
   ...rest
 }: Props) => {
   const options: TableOptions<any> = {
@@ -90,51 +113,67 @@ const Table = ({
 
   return (
     <>
-      <StyledTable {...getTableProps()} {...rest}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps()}
-                  onClick={() => {
-                    handleSort(column.id);
-                  }}
-                >
-                  {column.render("Header")}
-                  {sort !== column.id ? null : order === "desc" ? (
-                    <MdKeyboardArrowDown />
-                  ) : (
-                    <MdKeyboardArrowUp />
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            console.log(row);
-            return (
-              <tr
-                onClick={handleDataClick && (() => handleDataClick(row.original))}
-                {...row.getRowProps()}
-              >
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>
-                      <div className={cell.column.id} data-value={cell.value}>
-                        {cell.render("Cell")}
-                      </div>
-                    </td>
-                  );
-                })}
+      <Wrapper>
+        {isLoading && (
+          <LoadingOverlay>
+            <div>
+              <Loading color="dark" />
+            </div>
+          </LoadingOverlay>
+        )}
+        <StyledTable {...getTableProps()} {...rest}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps()}
+                    onClick={() => {
+                      handleSort(column.id);
+                    }}
+                  >
+                    {column.render("Header")}
+                    {sort !== column.id ? null : order === "desc" ? (
+                      <MdKeyboardArrowDown />
+                    ) : (
+                      <MdKeyboardArrowUp />
+                    )}
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </StyledTable>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr
+                  onClick={handleDataClick && (() => handleDataClick(row.original))}
+                  {...row.getRowProps()}
+                >
+                  {row.cells.map((cell) => {
+                    // If we want to have a custom cell
+                    if (customCell) {
+                      for (let i = 0; i < customCell.length; i++) {
+                        if (customCell[i].id === cell.column.id) {
+                          return <td key={i}>{customCell[i].content(cell.value)}</td>;
+                        }
+                      }
+                    }
+                    return (
+                      <td {...cell.getCellProps()}>
+                        <div className={cell.column.id} data-value={cell.value}>
+                          {cell.render("Cell")}
+                        </div>
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </StyledTable>
+      </Wrapper>
       {data.length > 0 && (
         <Pagination
           handleNext={handleNext}

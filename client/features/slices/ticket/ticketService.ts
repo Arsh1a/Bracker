@@ -4,8 +4,17 @@ import { TicketType } from "../../../types/TicketType";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/ticket/`;
 
-const getTickets = async (projectID: string) => {
-  const response = await axios.get(API_URL + projectID, { withCredentials: true });
+const getTickets = async (
+  projectID: string,
+  page: number,
+  limit: number,
+  sort: string,
+  order: string
+) => {
+  const response = await axios.get(
+    API_URL + `${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}`,
+    { withCredentials: true }
+  );
   return response.data;
 };
 

@@ -194,7 +194,8 @@ const Tiptap = ({ handleTipTap, label, content }: Props) => {
       {label && <Label>{label}</Label>}
       <Wrapper>
         <CommandsWrapper>
-          <input
+          {/* There are some errors for color selecting */}
+          {/* <input
             type="color"
             onInput={(e) =>
               editor
@@ -204,7 +205,7 @@ const Tiptap = ({ handleTipTap, label, content }: Props) => {
                 .run()
             }
             value={editor.getAttributes("textStyle").color}
-          />
+          /> */}
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={editor.isActive("bold") ? "is-active" : ""}
