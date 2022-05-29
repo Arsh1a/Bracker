@@ -5,7 +5,7 @@ import { getSession } from "../../lib/requestApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { getInvites } from "../../features/slices/invite/inviteSlice";
-import DashboardPagesLayout from "../../components/Dashboard/DashboardPagesLayout";
+import DashboardPagesLayout from "../../components/Common/DashboardPagesLayout";
 import InvitesList from "../../components/Dashboard/Invites/InvitesList";
 import ErrorMessage from "../../components/Common/ErrorMessage";
 
@@ -23,6 +23,8 @@ const Invites = ({}: Props) => {
     dispatch(getInvites());
   }, [dispatch]);
 
+  console.log(invites);
+
   return (
     <DashboardPagesLayout headerContent={<h1>Invites</h1>}>
       {isError && (
@@ -30,7 +32,11 @@ const Invites = ({}: Props) => {
           <ErrorMessage>{message}</ErrorMessage>
         </ErrorMessageWrapper>
       )}
-      <InvitesList data={invites!} />
+      {invites.length > 0 ? (
+        <InvitesList data={invites} />
+      ) : (
+        <h3>Seems like no one wants you in their project. 😔</h3>
+      )}
     </DashboardPagesLayout>
   );
 };

@@ -9,10 +9,15 @@ const getTickets = async (
   page: number,
   limit: number,
   sort: string,
-  order: string
+  order: string,
+  status: "Open" | "Closed" | "Inprogress" | "All",
+  severity: "Low" | "Medium" | "High" | "All"
 ) => {
   const response = await axios.get(
-    API_URL + `${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}`,
+    API_URL +
+      `${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}` +
+      (status !== "All" ? `&status=${status}` : "") +
+      (severity !== "All" ? `&severity=${severity}` : ""),
     { withCredentials: true }
   );
   return response.data;

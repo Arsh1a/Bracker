@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import inviteService from "./inviteService";
-
-const resp = axios.get("https://jsonplaceholder.typicode.com/posts");
 
 const initialState = {
   invites: <any[]>[],

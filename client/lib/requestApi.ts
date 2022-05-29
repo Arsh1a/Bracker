@@ -65,12 +65,13 @@ export const getTicketsForTable = async (
   page: number,
   limit: number,
   sort: string,
-  order: string
+  order: string,
+  status: "Open" | "Closed" | "Inprogress"
 ) => {
   return axios
     .get(
       process.env.NEXT_PUBLIC_API_URL +
-        `/ticket/${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}`,
+        `/ticket/${projectID}?page=${page}&limit=${limit}&sort=${sort}&order=${order}&status=${status}`,
       {
         withCredentials: true,
       }

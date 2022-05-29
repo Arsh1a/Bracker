@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Container from "../Common/Container";
+import Container from "./Container";
 
 const Wrapper = styled.div`
   display: flex;

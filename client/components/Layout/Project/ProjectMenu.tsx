@@ -3,10 +3,8 @@ import Image from "next/image";
 import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { GrTicket, GrLock, GrDocumentUser, GrAddCircle, GrHomeRounded } from "react-icons/gr";
 import { FiSettings } from "react-icons/fi";
-import { getInvites } from "../../../features/slices/invite/inviteSlice";
 
 const Menu = styled.ul`
   list-style: none;
@@ -82,11 +80,6 @@ interface Props {}
 
 const ProjectMenu = ({}: Props) => {
   const router = useRouter();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getInvites());
-  }, [dispatch]);
 
   return (
     <Menu>
@@ -109,6 +102,18 @@ const ProjectMenu = ({}: Props) => {
       </Link>
       <Link
         href={{
+          pathname: "/p/[slug]/tickets",
+          query: { slug: router.query.slug },
+        }}
+        passHref
+      >
+        <MenuLink isActive={router.pathname === `/p/[slug]/tickets`}>
+          <GrDocumentUser />
+          Tickets
+        </MenuLink>
+      </Link>
+      <Link
+        href={{
           pathname: "/p/[slug]/create-ticket",
           query: { slug: router.query.slug },
         }}
@@ -117,42 +122,6 @@ const ProjectMenu = ({}: Props) => {
         <MenuLink isActive={router.pathname === `/p/[slug]/create-ticket`}>
           <GrAddCircle />
           Create Ticket
-        </MenuLink>
-      </Link>
-      <Link
-        href={{
-          pathname: "/p/[slug]/my-tickets",
-          query: { slug: router.query.slug },
-        }}
-        passHref
-      >
-        <MenuLink isActive={router.pathname === `/p/[slug]/my-tickets`}>
-          <GrDocumentUser />
-          My Tickets
-        </MenuLink>
-      </Link>
-      <Link
-        href={{
-          pathname: "/p/[slug]/open-tickets",
-          query: { slug: router.query.slug },
-        }}
-        passHref
-      >
-        <MenuLink isActive={router.pathname === `/p/[slug]/open-tickets`}>
-          <GrTicket />
-          Open Tickets
-        </MenuLink>
-      </Link>
-      <Link
-        href={{
-          pathname: "/p/[slug]/closed-tickets",
-          query: { slug: router.query.slug },
-        }}
-        passHref
-      >
-        <MenuLink isActive={router.pathname === `/p/[slug]/closed-tickets`}>
-          <GrLock />
-          Closed Tickets
         </MenuLink>
       </Link>
       <Link

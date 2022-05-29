@@ -7,7 +7,7 @@ import { getSession } from "../../lib/requestApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { getProjects } from "../../features/slices/project/projectSlice";
-import DashboardPagesLayout from "../../components/Dashboard/DashboardPagesLayout";
+import DashboardPagesLayout from "../../components/Common/DashboardPagesLayout";
 import ErrorMessage from "../../components/Common/ErrorMessage";
 
 const Header = styled.div`

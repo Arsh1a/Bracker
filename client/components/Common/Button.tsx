@@ -23,6 +23,7 @@ const Wrapper = styled.button<StyledProps>`
     background-color: ${(props) => props.theme.colors.light};
     color: ${(props) => props.theme.colors.dark};
     opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 

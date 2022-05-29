@@ -9,12 +9,11 @@ import Loading from "../../../components/Common/Loading";
 import Select from "../../../components/Common/Select";
 import Tiptap from "../../../components/Common/Tiptap";
 import ProjectMembersSelect from "../../Common/ProjectMembersSelect";
-import { createTicket } from "../../../features/slices/ticket/ticketSlice";
+import { createTicket, reset } from "../../../features/slices/ticket/ticketSlice";
 import { RootState } from "../../../features/store";
 import { getProjectMembers } from "../../../lib/requestApi";
 
 const Wrapper = styled.div`
-  margin-top: 20px;
   display: flex;
   background-color: white;
   box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
@@ -35,7 +34,7 @@ interface Props {
 }
 
 const CreateTicketForm = ({ projectData }: Props) => {
-  const { _id, title, desc, members } = projectData;
+  const { _id } = projectData;
 
   const [projectMembers, setProjectMembers] = useState<string[]>([]);
   const [form, setForm] = useState<{
@@ -45,6 +44,8 @@ const CreateTicketForm = ({ projectData }: Props) => {
     assignee: string;
     content: string;
   }>({ title: "", desc: "", severity: "Low", assignee: "", content: "" });
+
+  console.log(form);
 
   // Have to use separate state for content because cant spread form if setForm directly used in TipTap (weird)
   const [content, setContent] = useState<string>("");
@@ -87,6 +88,7 @@ const CreateTicketForm = ({ projectData }: Props) => {
     if (isSuccess) {
       router.push(`/p/${_id}`);
     }
+    dispatch(reset());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
@@ -107,7 +109,6 @@ const CreateTicketForm = ({ projectData }: Props) => {
       <form onSubmit={handleSubmit}>
         <InputWrapper>
           <Input
-            required
             type="text"
             label="Title"
             id="title"
@@ -117,6 +118,7 @@ const CreateTicketForm = ({ projectData }: Props) => {
         </InputWrapper>
         <InputWrapper>
           <Input
+            type="text"
             label="Description"
             id="desc"
             value={form.desc}

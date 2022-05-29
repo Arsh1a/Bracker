@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Table from "../../Common/Table";
-import axios from "axios";
 import { Column } from "react-table";
 import EditModal from "./EditTicketModal";
 import { TicketType } from "../../../types/TicketType";
-import { getTicketsForTable } from "../../../lib/requestApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
-import { getTickets } from "../../../features/slices/ticket/ticketSlice";
+import { getTickets, reset } from "../../../features/slices/ticket/ticketSlice";
+import Button from "../../Common/Button";
+import TopFilters from "./TopFilters";
 
 const Wrapper = styled.div``;
 
 const StyledTable = styled(Table)`
+  [role="cell"] {
+    width: 200px;
+  }
   .status {
     color: white;
     padding: 4px 15px;
@@ -27,7 +30,7 @@ const StyledTable = styled(Table)`
     background-color: ${(props) => props.theme.colors.danger};
   }
   [data-value="Inprogress"] {
-    background-color: ${(props) => props.theme.colors.secondary};
+    background-color: ${(props) => props.theme.colors.info};
   }
   tr {
     cursor: pointer;
@@ -48,7 +51,9 @@ const TicketsTable = ({ projectID }: Props) => {
     limit: number;
     sort: string;
     order: "desc" | "asc";
-  }>({ page: 1, limit: 5, sort: "createdAt", order: "desc" });
+    status: "Open" | "Closed" | "Inprogress" | "All";
+    severity: "Low" | "Medium" | "High" | "All";
+  }>({ page: 1, limit: 10, sort: "createdAt", order: "desc", status: "All", severity: "All" });
 
   const [modalData, setModalData] = useState<TicketType>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -99,7 +104,10 @@ const TicketsTable = ({ projectID }: Props) => {
     setIsRefreshed(false);
   }, [filters, projectID, isRefreshed, dispatch]);
 
-  useEffect(() => {});
+  useEffect(() => {
+    dispatch(reset());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   const handleNext = () => {
     if (page >= totalPages) {
@@ -137,7 +145,7 @@ const TicketsTable = ({ projectID }: Props) => {
     return <>{cellData.username}</>;
   };
 
-  const renderTime = (cellData: any) => {
+  const renderTimeColumn = (cellData: any) => {
     var d = new Date(cellData);
     return (
       <>
@@ -152,9 +160,18 @@ const TicketsTable = ({ projectID }: Props) => {
     );
   };
 
+  const renderTitleColumn = (cellData: any) => {
+    if (cellData.length > 16) {
+      return <>{cellData.substring(0, 16)}...</>;
+    }
+
+    return <>{cellData}</>;
+  };
+
   return (
     <>
       <Wrapper>
+        <TopFilters filters={filters} setFilters={setFilters} />
         {tickets && (
           <StyledTable
             handlePageSelect={handlePageSelect}
@@ -170,6 +187,7 @@ const TicketsTable = ({ projectID }: Props) => {
             handleDataClick={handleDataClick}
             isLoading={isLoading}
             customCell={[
+              { id: "title", content: renderTitleColumn },
               { id: "assignee", content: renderShowMemberColumn },
               {
                 id: "reporter",
@@ -177,7 +195,7 @@ const TicketsTable = ({ projectID }: Props) => {
               },
               {
                 id: "createdAt",
-                content: renderTime,
+                content: renderTimeColumn,
               },
             ]}
           />

@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import React from "react";
 import styled from "styled-components";
+import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
 import { getProjectSession } from "../../../lib/requestApi";
 
 const Wrapper = styled.div``;
@@ -8,7 +9,7 @@ const Wrapper = styled.div``;
 interface Props {}
 
 const Settings = ({}: Props) => {
-  return <Wrapper></Wrapper>;
+  return <DashboardPagesLayout headerContent={<h1>Settings</h1>}>Settings</DashboardPagesLayout>;
 };
 export default Settings;
 

@@ -156,7 +156,9 @@ const Table = ({
                     if (customCell) {
                       for (let i = 0; i < customCell.length; i++) {
                         if (customCell[i].id === cell.column.id) {
-                          return <td key={i}>{customCell[i].content(cell.value)}</td>;
+                          return (
+                            <td {...cell.getCellProps()}>{customCell[i].content(cell.value)}</td>
+                          );
                         }
                       }
                     }

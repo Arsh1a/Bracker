@@ -30,6 +30,8 @@ export const getTickets = createAsyncThunk(
       limit: number;
       sort: string;
       order: string;
+      status: "Open" | "Closed" | "Inprogress" | "All";
+      severity: "Low" | "Medium" | "High" | "All";
     },
     thunkAPI
   ) => {
@@ -39,7 +41,9 @@ export const getTickets = createAsyncThunk(
         filters.page,
         filters.limit,
         filters.sort,
-        filters.order
+        filters.order,
+        filters.status,
+        filters.severity
       );
     } catch (error: any) {
       const message =
@@ -144,7 +148,6 @@ export const ticketSlice = createSlice({
         state.isSuccess = true;
         state.message = "";
         state.ticketsData = action.payload;
-        console.log(action.payload);
       })
       .addCase(getTickets.rejected, (state, action) => {
         state.isLoading = false;

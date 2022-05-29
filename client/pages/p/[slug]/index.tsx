@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
 import { countTickets, reset } from "../../../features/slices/ticket/ticketSlice";
 import TicketsTable from "../../../components/Project/TicketsTable";
+import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,7 +26,6 @@ const ProjectInfo = styled.div`
   background-color: ${(props) => props.theme.colors.primary};
   color: white;
   box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
-  margin: 40px 0;
   padding: 40px;
   border-radius: 10px;
   gap: 40px;
@@ -53,12 +53,6 @@ const ProjectInfoText = styled.div`
   }
 `;
 
-const TicketsHeader = styled.div`
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-`;
-
 interface Props {
   data: any;
 }
@@ -76,7 +70,6 @@ const Project = ({ data }: Props) => {
 
   useEffect(() => {
     dispatch(reset());
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
 
@@ -84,12 +77,15 @@ const Project = ({ data }: Props) => {
     (state: RootState) => state.ticket
   );
   return (
-    <Container>
-      <Wrapper>
+    <DashboardPagesLayout
+      headerContent={
         <ProjectSubject>
           <h1>{title}</h1>
           <p>{desc}</p>
         </ProjectSubject>
+      }
+    >
+      <Wrapper>
         <ProjectInfo>
           <ProjectInfoText>
             <BsPerson />
@@ -120,12 +116,8 @@ const Project = ({ data }: Props) => {
             </div>
           </ProjectInfoText>
         </ProjectInfo>
-        <TicketsHeader>
-          <h2>Tickets</h2>
-        </TicketsHeader>
-        <TicketsTable projectID={_id} />
       </Wrapper>
-    </Container>
+    </DashboardPagesLayout>
   );
 };
 export default Project;
