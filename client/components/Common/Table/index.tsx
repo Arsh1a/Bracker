@@ -17,6 +17,7 @@ const StyledTable = styled.table`
   background-color: white;
   padding: 20px;
   border-collapse: collapse;
+  min-height: 300px;
   th {
     text-align: left;
     cursor: pointer;
@@ -33,7 +34,7 @@ const StyledTable = styled.table`
   }
   th,
   td {
-    padding: 15px;
+    padding: 15px 25px;
   }
   tr {
     border-bottom: 1px solid ${(props) => props.theme.colors.light};
@@ -114,7 +115,7 @@ const Table = ({
   return (
     <>
       <Wrapper>
-        {isLoading && (
+        {(isLoading || data.length === 0) && (
           <LoadingOverlay>
             <div>
               <Loading color="dark" />

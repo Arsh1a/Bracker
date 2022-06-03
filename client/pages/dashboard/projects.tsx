@@ -9,6 +9,7 @@ import { RootState } from "../../features/store";
 import { getProjects } from "../../features/slices/project/projectSlice";
 import DashboardPagesLayout from "../../components/Common/DashboardPagesLayout";
 import ErrorMessage from "../../components/Common/ErrorMessage";
+import { useAppDispatch } from "../../lib/hooks";
 
 const Header = styled.div`
   display: flex;
@@ -38,7 +39,7 @@ interface Props {}
 const Projects = ({}: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { projects, isLoading, isError, message } = useSelector(
     (state: RootState) => state.project
   );

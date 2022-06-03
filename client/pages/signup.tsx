@@ -5,11 +5,12 @@ import Button from "../components/Common/Button";
 import Input from "../components/Common/Input";
 import { useSelector, useDispatch } from "react-redux";
 import { register, reset } from "../features/slices/auth/authSlice";
-import { RootState } from "../features/store";
+import { RootState, AppDispatch } from "../features/store";
 import { useRouter } from "next/router";
 import Loading from "../components/Common/Loading";
 import Container from "../components/Common/Container";
 import ErrorMessage from "../components/Common/ErrorMessage";
+import { useAppDispatch } from "../lib/hooks";
 
 const AuthContainer = styled(Container)`
   margin: auto auto;
@@ -57,7 +58,7 @@ const Signup = ({}: Props) => {
   });
   const [errorMessage, setErrorMessage] = useState("");
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(

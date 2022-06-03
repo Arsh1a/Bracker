@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Loading from "../components/Common/Loading";
 import Container from "../components/Common/Container";
 import ErrorMessage from "../components/Common/ErrorMessage";
+import { useAppDispatch } from "../lib/hooks";
 
 const AuthContainer = styled(Container)`
   margin: auto auto;
@@ -54,7 +55,7 @@ const Login = ({}: Props) => {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(

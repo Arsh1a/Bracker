@@ -9,6 +9,7 @@ import { RootState } from "../../../features/store";
 import { countTickets, reset } from "../../../features/slices/ticket/ticketSlice";
 import TicketsTable from "../../../components/Project/TicketsTable";
 import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const Wrapper = styled.div`
   display: flex;
@@ -60,7 +61,7 @@ interface Props {
 const Project = ({ data }: Props) => {
   const { _id, title, desc, members } = data.project;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isSuccess } = useSelector((state: RootState) => state.ticket);
 
   useEffect(() => {

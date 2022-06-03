@@ -13,6 +13,7 @@ import Button from "../../Common/Button";
 import { reset, updateTicket } from "../../../features/slices/ticket/ticketSlice";
 import ErrorMessage from "../../Common/ErrorMessage";
 import Loading from "../../Common/Loading";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const Form = styled.form`
   display: flex;
@@ -43,7 +44,7 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
   const { isLoading, isError, message, isSuccess } = useSelector(
     (state: RootState) => state.ticket
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     getProjectMembers(projectID).then((res) => {

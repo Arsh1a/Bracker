@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { RootState } from "../../../features/store";
 import { logout, reset } from "../../../features/slices/auth/authSlice";
 import UserStuff from "../Navbar/UserStuff";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const Wrapper = styled.nav`
   border-top: none;
@@ -24,7 +25,7 @@ const UserStuffWrapper = styled.div`
 interface Props {}
 
 const DashboardNavbar = ({}: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
   //The reason we use useState here instead of directly using user from selector

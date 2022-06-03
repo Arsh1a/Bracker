@@ -12,6 +12,7 @@ import ProjectMembersSelect from "../../Common/ProjectMembersSelect";
 import { createTicket, reset } from "../../../features/slices/ticket/ticketSlice";
 import { RootState } from "../../../features/store";
 import { getProjectMembers } from "../../../lib/requestApi";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const Wrapper = styled.div`
   display: flex;
@@ -56,7 +57,7 @@ const CreateTicketForm = ({ projectData }: Props) => {
     (state: RootState) => state.ticket
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const getContentFromTipTap = (content: string) => {

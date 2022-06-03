@@ -22,12 +22,10 @@ const Menu = styled.ul`
 
 const Logo = styled.div`
   cursor: pointer;
-  width: 110px;
-  height: 50px;
   position: relative;
   transition: 0.3s;
-  margin: 15px 32px;
-  margin-bottom: 0;
+  text-align: center;
+  margin-top: 15px;
   &:hover {
     opacity: 0.6;
   }
@@ -85,7 +83,7 @@ const ProjectMenu = ({}: Props) => {
     <Menu>
       <Link href="/" passHref>
         <Logo>
-          <Image src="/images/logo.svg" layout="fill" objectFit="contain" alt="Logo" />
+          <Image src="/images/logo.svg" height="50px" width="150px" alt="Logo" />
         </Logo>
       </Link>
       <Link

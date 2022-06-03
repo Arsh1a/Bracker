@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { useRouter } from "next/router";
 import { GrGithub } from "react-icons/gr";
+import { useAppDispatch } from "../../lib/hooks";
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,7 +38,7 @@ const SocialsBox = styled.div`
   background-color: white;
   padding: 30px;
   border-radius: 12px;
-  flex: 1;
+  flex: 1.5;
   p {
     margin-top: 3px;
     margin-bottom: 20px;
@@ -60,7 +61,7 @@ interface Props {
 }
 
 const Profile = ({ data }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { projects, isLoading, isError, message } = useSelector(
     (state: RootState) => state.project
   );

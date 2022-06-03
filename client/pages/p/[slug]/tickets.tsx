@@ -1,10 +1,13 @@
 import { GetServerSideProps } from "next";
-import React from "react";
+import React, { Suspense } from "react";
 import styled from "styled-components";
 import Container from "../../../components/Common/Container";
+import dynamic from "next/dynamic";
 import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
-import TicketsTable from "../../../components/Project/TicketsTable";
 import { getProjectSession } from "../../../lib/requestApi";
+const TicketsTable = dynamic(() => import("../../../components/Project/TicketsTable"), {
+  suspense: true,
+});
 
 const Wrapper = styled.div`
   width: 100%;
@@ -19,7 +22,9 @@ const TicketsPage = ({ data }: Props) => {
   return (
     <DashboardPagesLayout headerContent={<h1>Tickets</h1>}>
       <Wrapper>
-        <TicketsTable projectID={_id} />
+        <Suspense fallback={<p>Place Loading Skeleton Here</p>}>
+          <TicketsTable projectID={_id} />
+        </Suspense>
       </Wrapper>
     </DashboardPagesLayout>
   );

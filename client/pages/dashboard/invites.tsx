@@ -8,6 +8,7 @@ import { getInvites } from "../../features/slices/invite/inviteSlice";
 import DashboardPagesLayout from "../../components/Common/DashboardPagesLayout";
 import InvitesList from "../../components/Dashboard/Invites/InvitesList";
 import ErrorMessage from "../../components/Common/ErrorMessage";
+import { useAppDispatch } from "../../lib/hooks";
 
 const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
@@ -16,7 +17,7 @@ const ErrorMessageWrapper = styled.div`
 interface Props {}
 
 const Invites = ({}: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { invites, isError, message } = useSelector((state: RootState) => state.invite);
 
   useEffect(() => {

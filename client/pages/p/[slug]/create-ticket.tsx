@@ -1,8 +1,13 @@
 import { GetServerSideProps } from "next";
-import React from "react";
-import Container from "../../../components/Common/Container";
+import dynamic from "next/dynamic";
+import React, { Suspense } from "react";
 import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
-import CreateTicketForm from "../../../components/Project/CreateTicket/CreateTicketForm";
+const CreateTicketForm = dynamic(
+  () => import("../../../components/Project/CreateTicket/CreateTicketForm"),
+  {
+    suspense: true,
+  }
+);
 import { getProjectSession } from "../../../lib/requestApi";
 
 interface Props {
@@ -15,7 +20,9 @@ interface Props {
 const MyTickets = ({ data }: Props) => {
   return (
     <DashboardPagesLayout headerContent={<h1>Create Ticket</h1>}>
-      <CreateTicketForm projectData={data.project} />
+      <Suspense fallback={<p>Place Loading Skeleton Here</p>}>
+        <CreateTicketForm projectData={data.project} />
+      </Suspense>
     </DashboardPagesLayout>
   );
 };

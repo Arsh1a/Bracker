@@ -9,6 +9,7 @@ import { searchUsers } from "../../../lib/requestApi";
 import { useSelector, useDispatch } from "react-redux";
 import { createProject, inviteToProject } from "../../../features/slices/project/projectSlice";
 import { RootState } from "../../../features/store";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const ModalInnerWrapper = styled.div`
   position: relative;
@@ -54,7 +55,7 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
     ids: [],
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { projects, isLoading } = useSelector((state: RootState) => state.project);
 
   const renderStep = () => {

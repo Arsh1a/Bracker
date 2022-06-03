@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../features/store";
 import { getInvites } from "../../../features/slices/invite/inviteSlice";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const Menu = styled.ul`
   list-style: none;
@@ -24,12 +25,10 @@ const Menu = styled.ul`
 
 const Logo = styled.div`
   cursor: pointer;
-  width: 110px;
-  height: 50px;
   position: relative;
   transition: 0.3s;
-  margin: 15px 32px;
-  margin-bottom: 0;
+  text-align: center;
+  margin-top: 15px;
   &:hover {
     opacity: 0.6;
   }
@@ -83,7 +82,7 @@ interface Props {}
 const DashboardMenu = ({}: Props) => {
   const [invitesCount, setInvitesCount] = useState(0);
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { invites } = useSelector((state: RootState) => state.invite);
@@ -100,7 +99,7 @@ const DashboardMenu = ({}: Props) => {
     <Menu>
       <Link href="/" passHref>
         <Logo>
-          <Image src="/images/logo.svg" layout="fill" objectFit="contain" alt="Logo" />
+          <Image src="/images/logo.svg" height="50px" width="150px" alt="Logo" />
         </Logo>
       </Link>
       <Link href={`/dashboard`} passHref>

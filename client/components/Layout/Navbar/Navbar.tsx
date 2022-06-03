@@ -8,6 +8,7 @@ import { RootState } from "../../../features/store";
 import { logout, reset } from "../../../features/slices/auth/authSlice";
 import UserStuff from "./UserStuff";
 import Image from "next/image";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const Wrapper = styled.nav`
   border-top: none;
@@ -34,7 +35,7 @@ const Logo = styled.div`
 interface Props {}
 
 const Navbar = ({}: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
   //The reason we use useState here instead of directly using user from selector

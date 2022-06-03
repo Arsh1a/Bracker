@@ -9,6 +9,7 @@ import { RootState } from "../../../features/store";
 import { getTickets, reset } from "../../../features/slices/ticket/ticketSlice";
 import Button from "../../Common/Button";
 import TopFilters from "./TopFilters";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const Wrapper = styled.div``;
 
@@ -67,7 +68,7 @@ const TicketsTable = ({ projectID }: Props) => {
   );
 
   const { tickets, totalPages, currentPage, totalTickets } = ticketsData;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const columns: Column<TicketType>[] = React.useMemo(
     () => [
@@ -172,34 +173,32 @@ const TicketsTable = ({ projectID }: Props) => {
     <>
       <Wrapper>
         <TopFilters filters={filters} setFilters={setFilters} />
-        {tickets && (
-          <StyledTable
-            handlePageSelect={handlePageSelect}
-            data={tickets}
-            totalPages={totalPages}
-            currentPage={page}
-            handlePrevious={handlePrevious}
-            handleNext={handleNext}
-            handleSort={handleSort}
-            columns={columns}
-            sort={sort}
-            order={order}
-            handleDataClick={handleDataClick}
-            isLoading={isLoading}
-            customCell={[
-              { id: "title", content: renderTitleColumn },
-              { id: "assignee", content: renderShowMemberColumn },
-              {
-                id: "reporter",
-                content: renderShowMemberColumn,
-              },
-              {
-                id: "createdAt",
-                content: renderTimeColumn,
-              },
-            ]}
-          />
-        )}
+        <StyledTable
+          handlePageSelect={handlePageSelect}
+          data={tickets}
+          totalPages={totalPages}
+          currentPage={page}
+          handlePrevious={handlePrevious}
+          handleNext={handleNext}
+          handleSort={handleSort}
+          columns={columns}
+          sort={sort}
+          order={order}
+          handleDataClick={handleDataClick}
+          isLoading={isLoading}
+          customCell={[
+            { id: "title", content: renderTitleColumn },
+            { id: "assignee", content: renderShowMemberColumn },
+            {
+              id: "reporter",
+              content: renderShowMemberColumn,
+            },
+            {
+              id: "createdAt",
+              content: renderTimeColumn,
+            },
+          ]}
+        />
       </Wrapper>
       {isModalOpen && (
         <EditModal

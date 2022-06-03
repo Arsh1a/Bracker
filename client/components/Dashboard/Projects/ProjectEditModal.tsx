@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { updateProject } from "../../../features/slices/project/projectSlice";
 import { RootState } from "../../../features/store";
+import { useAppDispatch } from "../../../lib/hooks";
 import Button from "../../Common/Button";
 import Input from "../../Common/Input";
 import Loading from "../../Common/Loading";
@@ -46,7 +47,7 @@ const ProjectEditModal = ({ closeModal, id, title, desc }: Props) => {
     desc,
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { projects, isLoading } = useSelector((state: RootState) => state.project);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {

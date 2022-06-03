@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Button from "../../Common/Button";
 import { useDispatch } from "react-redux";
 import { handleInvite } from "../../../features/slices/invite/inviteSlice";
+import { useAppDispatch } from "../../../lib/hooks";
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,7 +31,7 @@ interface Props {
 }
 
 const InviteCard = ({ projectName, invitedByUsername, id }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleAccept = () => {
     dispatch(handleInvite({ id, accepted: true }));
