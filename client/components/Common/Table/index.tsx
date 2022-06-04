@@ -17,7 +17,6 @@ const StyledTable = styled.table`
   background-color: white;
   padding: 20px;
   border-collapse: collapse;
-  min-height: 300px;
   th {
     text-align: left;
     cursor: pointer;
@@ -38,6 +37,8 @@ const StyledTable = styled.table`
   }
   tr {
     border-bottom: 1px solid ${(props) => props.theme.colors.light};
+    //This fixes the bug that some borders are bolder than others
+    border-width: 0.01px;
   }
   tbody tr:last-child {
     border-bottom: none;
@@ -122,7 +123,11 @@ const Table = ({
             </div>
           </LoadingOverlay>
         )}
-        <StyledTable {...getTableProps()} {...rest}>
+        <StyledTable
+          style={{ minHeight: data.length === 0 ? "300px" : "unset" }}
+          {...getTableProps()}
+          {...rest}
+        >
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>

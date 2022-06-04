@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
-import ProjectsList from "../../components/Dashboard/Projects/ProjectsList";
+import React, { Suspense, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+const ProjectsList = dynamic(() => import("../../components/Dashboard/Projects/ProjectsList"), {
+  suspense: true,
+});
 import styled from "styled-components";
 import { AiOutlinePlus } from "react-icons/ai";
 import { GetServerSideProps } from "next";
 import { getSession } from "../../lib/requestApi";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { getProjects } from "../../features/slices/project/projectSlice";
 import DashboardPagesLayout from "../../components/Common/DashboardPagesLayout";
@@ -46,7 +49,7 @@ const Projects = ({}: Props) => {
 
   useEffect(() => {
     dispatch(getProjects());
-  }, [dispatch]);
+  }, []);
 
   return (
     <DashboardPagesLayout

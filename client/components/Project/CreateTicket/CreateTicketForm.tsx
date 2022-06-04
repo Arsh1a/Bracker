@@ -46,8 +46,6 @@ const CreateTicketForm = ({ projectData }: Props) => {
     content: string;
   }>({ title: "", desc: "", severity: "Low", assignee: "", content: "" });
 
-  console.log(form);
-
   // Have to use separate state for content because cant spread form if setForm directly used in TipTap (weird)
   const [content, setContent] = useState<string>("");
 

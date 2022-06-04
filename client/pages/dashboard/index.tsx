@@ -14,6 +14,7 @@ import { useAppDispatch } from "../../lib/hooks";
 
 const Wrapper = styled.div`
   display: flex;
+  align-items: flex-start;
   gap: 20px;
 `;
 
@@ -23,6 +24,9 @@ const WelcomeBox = styled.div`
   padding: 30px;
   border-radius: 12px;
   flex: 3;
+  h2 {
+    margin-bottom: 10px;
+  }
   p {
     margin-top: 3px;
     margin-bottom: 15px;
@@ -50,6 +54,7 @@ const SocialsBox = styled.div`
     font-size: 2rem;
     cursor: pointer;
     transition: 0.3s;
+    margin-top: 20px;
     &:hover {
       opacity: 0.6;
     }
@@ -79,8 +84,7 @@ const Profile = ({ data }: Props) => {
       <Wrapper>
         {projects.length > 0 ? (
           <WelcomeBox>
-            <h2>Welcome back! </h2>
-            <p>There are projects that needs your help.</p>
+            <h2>Welcome back!</h2>
             <Button onClick={() => router.push("/dashboard/projects")} color="primary">
               Go to Projects
             </Button>

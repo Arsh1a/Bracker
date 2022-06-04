@@ -4,6 +4,9 @@ import ErrorResponse from "../utils/errorResponse";
 import Project from "../models/projectModel";
 import Invite from "../models/inviteModel";
 import { isValidObjectId } from "mongoose";
+import Image from "../models/imageModel";
+import path from "path";
+import fs from "fs";
 
 // @desc Register new user
 // @route POST /auth/register
@@ -237,6 +240,76 @@ export const handleInvite = async (req: Request, res: Response, next: NextFuncti
     } else {
       return next(new ErrorResponse("Invalid request", 400));
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+/// @desc upload profile picture
+/// @route POST /api/auth/user/picture
+/// @access private
+export const uploadPicture = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+  const { file } = req;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  if (!file) {
+    return next(new ErrorResponse("No file uploaded", 400));
+  }
+
+  try {
+    //Check if user already has a picture, if yes then update the picture instead of making new one.
+    const foundImage = await Image.findOne({ user: user._id });
+
+    if (foundImage) {
+      foundImage.img = {
+        data: fs.readFileSync(
+          path.join(__dirname, "..", "uploads", "profile-pictures", file.filename)
+        ),
+        contentType: file.mimetype,
+      };
+      await foundImage.save();
+    } else {
+      const newImage = await Image.create({
+        user: user._id,
+        name: file.filename,
+        img: {
+          data: fs.readFileSync(
+            path.join(__dirname, "..", "uploads", "profile-pictures", file.filename)
+          ),
+          contentType: file.mimetype,
+        },
+      });
+    }
+
+    res.status(200).json({ success: true, message: "Picture uploaded" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/// @desc get profile picture
+/// @route GET /api/auth/user/picture/:userID
+/// @access private
+export const getPicture = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+  const { userID } = req.params;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  try {
+    const image = await Image.findOne({ user: userID });
+
+    if (!image) {
+      return next(new ErrorResponse("No image found", 404));
+    }
+
+    res.status(200).json(image.img);
   } catch (err) {
     next(err);
   }

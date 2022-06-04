@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
 import { useRouter } from "next/router";
 import DropDown from "../../Common/DropDown";
+import ProfilePicture from "../../Common/ProfilePicture";
 
 const Wrapper = styled.div`
   display: flex;
@@ -62,7 +63,7 @@ const UserSetting = ({ handleLogout }: Props) => {
   return (
     <>
       <Wrapper ref={wrapperRef} onClick={() => setIsOpen(!isOpen)}>
-        <Image src="/images/user.png" alt="Landscape picture" width={30} height={30} />
+        <ProfilePicture userID={user?._id} />
         {user && <span>{user.username}</span>}
       </Wrapper>
       {isOpen && (
