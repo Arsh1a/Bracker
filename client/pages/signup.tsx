@@ -11,20 +11,17 @@ import Loading from "../components/Common/Loading";
 import Container from "../components/Common/Container";
 import ErrorMessage from "../components/Common/ErrorMessage";
 import { useAppDispatch } from "../lib/hooks";
+import ContentWrapper from "../components/Common/ContentWrapper";
 
 const AuthContainer = styled(Container)`
   margin: auto auto;
 `;
 
-const InnerWrapper = styled.div`
+const StyledContentWrapper = styled(ContentWrapper)`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  background-color: #fff;
   gap: 20px;
-  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
-  border-radius: 10px;
-  padding: 20px;
   text-align: center;
   width: 100%;
   max-width: 350px;
@@ -40,6 +37,7 @@ const InnerWrapper = styled.div`
     }
   }
 `;
+
 const Form = styled.form`
   display: flex;
   justify-content: center;
@@ -84,7 +82,7 @@ const Signup = ({}: Props) => {
 
   return (
     <AuthContainer center={true}>
-      <InnerWrapper>
+      <StyledContentWrapper>
         <h1>Sign up</h1>
         <Form onSubmit={handleSubmit}>
           <Input
@@ -114,22 +112,15 @@ const Signup = ({}: Props) => {
             value={userData.password}
             onChange={(e) => setUserData({ ...userData, password: e.target.value })}
           />
-          <Button
-            height="40px"
-            disabled={isLoading}
-            fullWidth
-            borderRadius="6px"
-            color="primary"
-            type="submit"
-          >
-            {isLoading ? <Loading color="dark" /> : "Login"}
+          <Button isLoading={isLoading} fullWidth color="primary" type="submit">
+            Sign Up
           </Button>
         </Form>
         <Link href="/login" passHref>
           <span>Already have an account? Log In</span>
         </Link>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      </InnerWrapper>
+      </StyledContentWrapper>
     </AuthContainer>
   );
 };

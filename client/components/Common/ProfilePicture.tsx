@@ -1,9 +1,14 @@
 import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { RootState } from "../../features/store";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
 
 const StyledImage = styled(Image)`
   border-radius: 100%;
@@ -18,7 +23,11 @@ interface Props {
 const ProfilePicture = ({ userID, width, height }: Props) => {
   const [image, setImage] = useState<any>();
 
+  const { isSuccess } = useSelector((state: RootState) => state.auth);
+
   useEffect(() => {
+    //Reset image cause if we dont, it will keep on showing the old image
+    setImage(null);
     axios
       .get(`http://localhost:5000/api/auth/picture/${userID}`, {
         withCredentials: true,
@@ -26,12 +35,8 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
       .then((res) => {
         setImage(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [userID]);
-
-  console.log(image);
+      .catch((err) => {});
+  }, [isSuccess]);
 
   return (
     <Wrapper>
@@ -43,13 +48,15 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
           alt="Profile Picture"
           height={height ? height : 40}
           width={width ? width : 40}
+          layout="fixed"
         />
       ) : (
-        <Image
+        <StyledImage
           src="/images/user.png"
           alt="Default user picture"
           height={height ? height : 40}
           width={width ? width : 40}
+          layout="fixed"
         />
       )}
     </Wrapper>

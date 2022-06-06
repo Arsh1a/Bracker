@@ -76,8 +76,8 @@ const ProjectEditModal = ({ closeModal, id, title, desc }: Props) => {
             value={projectInfo.desc}
             onChange={(e) => setProjectInfo({ ...projectInfo, desc: e.target.value })}
           />
-          <Button color="primary" disabled={isLoading} type="submit">
-            {isLoading ? <Loading color="dark" /> : "Save"}
+          <Button color="primary" isLoading={isLoading} type="submit">
+            Save
           </Button>
         </form>
       </ModalInnerWrapper>

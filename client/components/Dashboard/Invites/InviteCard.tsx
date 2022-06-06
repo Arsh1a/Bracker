@@ -4,15 +4,12 @@ import Button from "../../Common/Button";
 import { useDispatch } from "react-redux";
 import { handleInvite } from "../../../features/slices/invite/inviteSlice";
 import { useAppDispatch } from "../../../lib/hooks";
+import ContentWrapper from "../../Common/ContentWrapper";
 
-const Wrapper = styled.div`
+const Wrapper = styled(ContentWrapper)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
   justify-content: space-between;
   b {
     font-size: 1.1rem;

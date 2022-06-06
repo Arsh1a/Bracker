@@ -46,6 +46,37 @@ export const login = createAsyncThunk(
   }
 );
 
+//Update user info
+export const updateUserInfo = createAsyncThunk(
+  "auth/updateUserInfo",
+  async (userData: { username: string; email: string }, thunkAPI) => {
+    try {
+      return await authService.updateUserInfo(userData);
+    } catch (error: any) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const uploadPicture = createAsyncThunk(
+  "auth/uploadPicture",
+  async (picture: File, thunkAPI) => {
+    try {
+      return await authService.uploadPicture(picture);
+    } catch (error: any) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 //Logout user
 export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
@@ -96,6 +127,31 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload as string;
         state.user = null;
+      })
+      .addCase(updateUserInfo.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUserInfo.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+      })
+      .addCase(updateUserInfo.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload as string;
+      })
+      .addCase(uploadPicture.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(uploadPicture.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(uploadPicture.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload as string;
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;

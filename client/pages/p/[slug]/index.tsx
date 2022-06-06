@@ -10,6 +10,7 @@ import { countTickets, reset } from "../../../features/slices/ticket/ticketSlice
 import TicketsTable from "../../../components/Project/TicketsTable";
 import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
 import { useAppDispatch } from "../../../lib/hooks";
+import ContentWrapper from "../../../components/Common/ContentWrapper";
 
 const Wrapper = styled.div`
   display: flex;
@@ -23,12 +24,9 @@ const ProjectSubject = styled.div`
   gap: 5px;
 `;
 
-const ProjectInfo = styled.div`
+const ProjectInfo = styled(ContentWrapper)`
   background-color: ${(props) => props.theme.colors.primary};
   color: white;
-  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
-  padding: 40px;
-  border-radius: 10px;
   gap: 40px;
   justify-content: space-between;
   flex-wrap: wrap;

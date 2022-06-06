@@ -1,18 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import ContentWrapper from "../../Common/ContentWrapper";
 
-const Wrapper = styled.div`
+const Wrapper = styled(ContentWrapper)`
   display: flex;
   flex-grow: 1;
   width: 400px;
   position: relative;
   flex-direction: row;
   flex-wrap: wrap;
-  background-color: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
   justify-content: space-between;
   cursor: pointer;
   svg {

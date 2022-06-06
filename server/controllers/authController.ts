@@ -36,7 +36,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
-        .json({ username: user.username, email: user.email });
+        .json({ username: user.username, email: user.email, _id: user._id });
     }
   } catch (err) {
     next(err);
@@ -85,7 +85,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
-        .json({ username: user.username, email: user.email });
+        .json({ username: user.username, email: user.email, _id: user._id });
     }
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
@@ -273,7 +273,7 @@ export const uploadPicture = async (req: Request, res: Response, next: NextFunct
       };
       await foundImage.save();
     } else {
-      const newImage = await Image.create({
+      await Image.create({
         user: user._id,
         name: file.filename,
         img: {
@@ -310,6 +310,73 @@ export const getPicture = async (req: Request, res: Response, next: NextFunction
     }
 
     res.status(200).json(image.img);
+  } catch (err) {
+    next(err);
+  }
+};
+
+/// @desc Update user info
+/// @route PATCH /api/auth/user/
+/// @access private
+export const updateUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+  const { username, email } = req.body;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  try {
+    const foundUser = await User.findByIdAndUpdate(user._id, { username, email }, { new: true });
+
+    if (!foundUser) {
+      return next(new ErrorResponse("User not found", 404));
+    }
+
+    res.cookie(
+      "user",
+      `{"_id": "${user._id}", "username":"${user.username}", "email":"${user.email}"}`,
+      {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+      }
+    );
+
+    res
+      .status(200)
+      .json({ _id: foundUser._id, username: foundUser.username, email: foundUser.email });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/// @desc Change password
+/// @route PATCH /api/auth/user/password
+/// @access private
+export const changePassword = async (req: Request, res: Response, next: NextFunction) => {
+  const { user } = <any>req;
+  const { currentPassword, password } = req.body;
+
+  if (!user) {
+    return next(new ErrorResponse("Not authorized", 403));
+  }
+
+  try {
+    const foundUser = await User.findById(user._id);
+
+    if (!foundUser) {
+      return next(new ErrorResponse("User not found", 404));
+    }
+
+    if (currentPassword === foundUser.password) {
+      foundUser.password = password;
+    } else {
+      return next(new ErrorResponse("Current password is incorrect", 400));
+    }
+
+    await foundUser.save();
+
+    res.status(200).json({ success: true, message: "Password changed" });
   } catch (err) {
     next(err);
   }

@@ -11,6 +11,7 @@ import { RootState } from "../../features/store";
 import { useRouter } from "next/router";
 import { GrGithub } from "react-icons/gr";
 import { useAppDispatch } from "../../lib/hooks";
+import ContentWrapper from "../../components/Common/ContentWrapper";
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,11 +19,7 @@ const Wrapper = styled.div`
   gap: 20px;
 `;
 
-const WelcomeBox = styled.div`
-  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
-  background-color: white;
-  padding: 30px;
-  border-radius: 12px;
+const WelcomeBox = styled(ContentWrapper)`
   flex: 3;
   h2 {
     margin-bottom: 10px;
@@ -37,11 +34,7 @@ const WelcomeBox = styled.div`
   }
 `;
 
-const SocialsBox = styled.div`
-  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
-  background-color: white;
-  padding: 30px;
-  border-radius: 12px;
+const SocialsBox = styled(ContentWrapper)`
   flex: 1.5;
   p {
     margin-top: 3px;

@@ -10,6 +10,7 @@ import { getTickets, reset } from "../../../features/slices/ticket/ticketSlice";
 import Button from "../../Common/Button";
 import TopFilters from "./TopFilters";
 import { useAppDispatch } from "../../../lib/hooks";
+import ProfilePicture from "../../Common/ProfilePicture";
 
 const Wrapper = styled.div``;
 
@@ -40,6 +41,13 @@ const StyledTable = styled(Table)`
       opacity: 0.7;
     }
   }
+`;
+
+const MemberColumnWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
 `;
 
 interface Props {
@@ -143,7 +151,12 @@ const TicketsTable = ({ projectID }: Props) => {
   };
 
   const renderShowMemberColumn = (cellData: any) => {
-    return <>{cellData.username}</>;
+    return (
+      <MemberColumnWrapper>
+        <ProfilePicture userID={cellData._id} height={30} width={30} />
+        {cellData.username}
+      </MemberColumnWrapper>
+    );
   };
 
   const renderTimeColumn = (cellData: any) => {

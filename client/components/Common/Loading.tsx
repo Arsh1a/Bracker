@@ -4,41 +4,32 @@ import styled from "styled-components";
 /*Thanks to https://codepen.io/nzbin/pen/GGrXbp */
 
 const Wrapper = styled.div<StyledProps>`
-  position: relative;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  background-color: ${(props) => props.theme.colors[props.color]};
-  color: ${(props) => props.theme.colors[props.color]};
-  animation: dotElastic 1s infinite linear;
-  align-self: center;
-
-  &::before,
-  &::after {
-    content: "";
-    display: inline-block;
-    position: absolute;
-    top: 0;
-  }
-
-  &::before {
-    left: -15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  & > div:first-child {
     width: 10px;
     height: 10px;
-    border-radius: 5px;
     background-color: ${(props) => props.theme.colors[props.color]};
-    color: ${(props) => props.theme.colors[props.color]};
-    animation: dotElasticBefore 1s infinite linear;
+    border-radius: 10px;
+    animation: dotElasticBefore 1.2s infinite linear;
   }
 
-  &::after {
-    left: 15px;
+  & > div:nth-child(2) {
     width: 10px;
     height: 10px;
-    border-radius: 5px;
     background-color: ${(props) => props.theme.colors[props.color]};
-    color: ${(props) => props.theme.colors[props.color]};
-    animation: dotElasticAfter 1s infinite linear;
+    border-radius: 10px;
+    animation: dotElastic 1.2s infinite linear;
+  }
+
+  & > div:nth-child(3) {
+    width: 10px;
+    height: 10px;
+    background-color: ${(props) => props.theme.colors[props.color]};
+    border-radius: 10px;
+    animation: dotElasticAfter 1.2s infinite linear;
   }
 
   @keyframes dotElasticBefore {
@@ -105,6 +96,12 @@ interface StyledProps {
 }
 
 const Loading = ({ color }: Props) => {
-  return <Wrapper color={color}></Wrapper>;
+  return (
+    <Wrapper color={color}>
+      <div></div>
+      <div></div>
+      <div></div>
+    </Wrapper>
+  );
 };
 export default Loading;

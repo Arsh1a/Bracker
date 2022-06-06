@@ -144,13 +144,8 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
             label="Ticket details"
           />
         </InputWrapper>
-        <Button
-          disabled={isLoading}
-          color={!isLoading ? "primary" : "light"}
-          type="submit"
-          height="40px"
-        >
-          {!isLoading ? "Edit" : <Loading color="dark" />}
+        <Button isLoading={isLoading} color="primary" type="submit">
+          Edit
         </Button>
         {isError && <ErrorMessage>{message}</ErrorMessage>}
       </Form>

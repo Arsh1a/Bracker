@@ -13,13 +13,10 @@ import { createTicket, reset } from "../../../features/slices/ticket/ticketSlice
 import { RootState } from "../../../features/store";
 import { getProjectMembers } from "../../../lib/requestApi";
 import { useAppDispatch } from "../../../lib/hooks";
+import ContentWrapper from "../../Common/ContentWrapper";
 
-const Wrapper = styled.div`
+const Wrapper = styled(ContentWrapper)`
   display: flex;
-  background-color: white;
-  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
-  padding: 40px;
-  border-radius: 20px;
   form {
     display: flex;
     flex-direction: column;
@@ -156,13 +153,8 @@ const CreateTicketForm = ({ projectData }: Props) => {
         <InputWrapper>
           <Tiptap label={"Ticket details"} handleTipTap={getContentFromTipTap} />
         </InputWrapper>
-        <Button
-          disabled={isLoading}
-          color={!isLoading ? "primary" : "light"}
-          type="submit"
-          height="40px"
-        >
-          {!isLoading ? "Create Ticket" : <Loading color="dark" />}
+        <Button isLoading={isLoading} color="primary" type="submit">
+          Create Ticket
         </Button>
         {isError && <ErrorMessage>{message}</ErrorMessage>}
       </form>

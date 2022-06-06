@@ -84,7 +84,7 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
                 value={projectData.desc}
                 onChange={(e) => setProjectData({ ...projectData, desc: e.target.value })}
               />
-              <Button height="45px" padding="12px 0" type="submit" color="primary">
+              <Button type="submit" color="primary">
                 Continue
               </Button>
             </form>
@@ -105,14 +105,8 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
                 passDataToParent={handleMemberSearch}
                 handleData={searchUsers}
               />
-              <SecondStepButton
-                disabled={isLoading}
-                height="45px"
-                padding="12px 0"
-                type="submit"
-                color="primary"
-              >
-                {isLoading ? <Loading color="dark" /> : "Create Project"}
+              <SecondStepButton isLoading={isLoading} type="submit" color="primary">
+                Create Project
               </SecondStepButton>
             </form>
           </>

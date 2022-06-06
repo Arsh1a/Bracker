@@ -26,6 +26,20 @@ const getUserInfo = async () => {
   return response.data;
 };
 
+//Update User Info
+const updateUserInfo = async (userData: { username: string; email: string }) => {
+  const response = await axios.patch(API_URL + "user", userData, { withCredentials: true });
+  return response.data;
+};
+
+const uploadPicture = async (picture: File) => {
+  const formData = new FormData();
+  formData.append("image", picture);
+  console.log(formData);
+  const response = await axios.post(API_URL + "picture", formData, { withCredentials: true });
+  return response.data;
+};
+
 //Logout
 const logout = async () => {
   //Remove cookie from client and server
@@ -40,6 +54,8 @@ const authService = {
   logout,
   login,
   getUserInfo,
+  updateUserInfo,
+  uploadPicture,
 };
 
 export default authService;

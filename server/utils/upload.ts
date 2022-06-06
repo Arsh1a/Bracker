@@ -23,6 +23,10 @@ const filter = (req: any, file: any, cb: any) => {
 const upload = multer({
   storage: storage,
   fileFilter: filter,
+  limits: {
+    fileSize: 1024 * 1024 * 1,
+    files: 1,
+  },
 });
 
 export default upload;

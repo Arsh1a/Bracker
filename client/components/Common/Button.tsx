@@ -1,16 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import Loading from "./Loading";
 
 const Wrapper = styled.button<StyledProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  ${(props) => props.height && `height: ${props.height}`};
   background-color: ${(props) => props.theme.colors[props.color]};
-  border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "12px")};
-  padding: ${(props) => (props.padding ? props.padding : "8px 18px;")};
+  border-radius: 12px;
+  padding: 8px 18px;
   border-style: none;
   font-size: 1rem;
+  min-height: 36px;
   font-weight: 500;
   color: white;
   cursor: pointer;
@@ -30,34 +31,28 @@ const Wrapper = styled.button<StyledProps>`
 interface Props extends React.ComponentPropsWithRef<"button"> {
   children: React.ReactNode;
   color: "primary" | "secondary" | "light" | "dark" | "danger" | "success";
-  borderRadius?: string;
   fullWidth?: boolean;
-  height?: string;
-  padding?: string;
+  isLoading?: boolean;
 }
 
 interface StyledProps {
   color: "primary" | "secondary" | "light" | "dark" | "danger" | "success";
   fullWidth?: boolean;
-  borderRadius?: string;
-  height?: string;
-  padding?: string;
 }
 
 const Button = React.forwardRef<any, Props>(function Button(
-  { children, fullWidth, color, borderRadius, padding, height, ...rest },
+  { children, fullWidth, color, isLoading, ...rest },
   ref
 ) {
+  if (isLoading) {
+    return (
+      <Wrapper fullWidth={fullWidth} color={"light"} ref={ref} {...rest} disabled>
+        <Loading color="dark" />
+      </Wrapper>
+    );
+  }
   return (
-    <Wrapper
-      fullWidth={fullWidth}
-      color={color}
-      borderRadius={borderRadius}
-      padding={padding}
-      height={height}
-      ref={ref}
-      {...rest}
-    >
+    <Wrapper fullWidth={fullWidth} color={color} ref={ref} {...rest}>
       {children}
     </Wrapper>
   );
