@@ -75,14 +75,10 @@ const ChangePassword = ({ user, isLoading, isError, message, isSuccess }: Props)
           required
           onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
         />
-        <Button color="primary" type="submit">
+        <Button isLoading={isLoading} color="primary" type="submit">
           Change Password
         </Button>
-        {isError ? (
-          <StyledErrorMessage>{message}</StyledErrorMessage>
-        ) : (
-          confirmPasswordError && <StyledErrorMessage>Passwords do not match</StyledErrorMessage>
-        )}
+        {confirmPasswordError && <StyledErrorMessage>Passwords do not match</StyledErrorMessage>}
       </form>
     </Wrapper>
   );

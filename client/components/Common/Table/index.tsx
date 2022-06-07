@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useTable, usePagination, TableOptions, Column } from "react-table";
 import Pagination from "./Pagination";
@@ -69,6 +69,10 @@ const LoadingOverlay = styled.div`
   }
 `;
 
+const NoTickets = styled.p`
+  margin-bottom: 20px;
+`;
+
 interface Props extends React.ComponentPropsWithRef<"table"> {
   data: any[];
   columns: any;
@@ -113,10 +117,22 @@ const Table = ({
     usePagination
   );
 
+  const [isDataLoadedForFirstTime, setIsDataLoadedForFirstTime] = useState(false);
+
+  useEffect(() => {
+    setIsDataLoadedForFirstTime(true);
+  }, [data]);
+
+  console.log(data);
+  console.log(isLoading);
+
   return (
     <>
+      {data.length === 0 && isDataLoadedForFirstTime && !isLoading && (
+        <NoTickets>There are no available tickets.</NoTickets>
+      )}
       <Wrapper>
-        {(isLoading || data.length === 0) && (
+        {(isLoading || !isDataLoadedForFirstTime) && (
           <LoadingOverlay>
             <div>
               <Loading color="dark" />

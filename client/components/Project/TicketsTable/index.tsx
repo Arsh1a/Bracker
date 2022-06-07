@@ -111,6 +111,11 @@ const TicketsTable = ({ projectID }: Props) => {
   useEffect(() => {
     dispatch(getTickets({ projectID, ...filters }));
     setIsRefreshed(false);
+  }, []);
+
+  useEffect(() => {
+    dispatch(getTickets({ projectID, ...filters }));
+    setIsRefreshed(false);
   }, [filters, projectID, isRefreshed, dispatch]);
 
   useEffect(() => {

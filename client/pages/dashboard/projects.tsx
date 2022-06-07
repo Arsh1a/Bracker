@@ -9,7 +9,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "../../lib/requestApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/store";
-import { getProjects } from "../../features/slices/project/projectSlice";
+import { getProjects, reset } from "../../features/slices/project/projectSlice";
 import DashboardPagesLayout from "../../components/Common/DashboardPagesLayout";
 import ErrorMessage from "../../components/Common/ErrorMessage";
 import { useAppDispatch } from "../../lib/hooks";
@@ -43,13 +43,19 @@ const Projects = ({}: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useAppDispatch();
-  const { projects, isLoading, isError, message } = useSelector(
+  const { projects, isLoading, isError, message, isSuccess } = useSelector(
     (state: RootState) => state.project
   );
 
   useEffect(() => {
     dispatch(getProjects());
   }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(reset());
+    }
+  }, [isSuccess]);
 
   return (
     <DashboardPagesLayout

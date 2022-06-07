@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "../../lib/requestApi";
 import DashboardPagesLayout from "../../components/Common/DashboardPagesLayout";
 import Button from "../../components/Common/Button";
-import { getProjects } from "../../features/slices/project/projectSlice";
+import { getProjects, reset } from "../../features/slices/project/projectSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../features/store";
 import { useRouter } from "next/router";
@@ -60,7 +60,7 @@ interface Props {
 
 const Profile = ({ data }: Props) => {
   const dispatch = useAppDispatch();
-  const { projects, isLoading, isError, message } = useSelector(
+  const { projects, isLoading, isError, message, isSuccess } = useSelector(
     (state: RootState) => state.project
   );
 
@@ -69,6 +69,12 @@ const Profile = ({ data }: Props) => {
   useEffect(() => {
     dispatch(getProjects());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(reset());
+    }
+  }, [isSuccess]);
 
   const { username } = data;
 

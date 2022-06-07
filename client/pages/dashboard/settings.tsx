@@ -15,6 +15,7 @@ import ContentWrapper from "../../components/Common/ContentWrapper";
 import { MdModeEdit } from "react-icons/md";
 import EditProfile from "../../components/Dashboard/Setting/EditProfile";
 import ChangePassword from "../../components/Dashboard/Setting/ChangePassword";
+import { toast, ToastContainer } from "react-toastify";
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,6 +23,11 @@ const Wrapper = styled.div`
   align-items: flex-start;
   justify-content: space-between;
 `;
+
+const StyledErrorMessage = styled(ErrorMessage)`
+  margin-bottom: 20px;
+`;
+
 interface Props {}
 
 const Settings = ({}: Props) => {
@@ -37,12 +43,31 @@ const Settings = ({}: Props) => {
     isSuccess,
   };
 
+  const notify = () =>
+    toast("Operation was succesful.", {
+      type: "success",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+
+  useEffect(() => {
+    if (isSuccess) {
+      notify();
+    }
+  }, [isSuccess]);
+
   return (
     <DashboardPagesLayout headerContent={<h1>Profile Settings</h1>}>
+      {isError && <StyledErrorMessage>{message}</StyledErrorMessage>}
       <Wrapper>
         <EditProfile {...childrenProps} />
         <ChangePassword {...childrenProps} />
       </Wrapper>
+      <ToastContainer />
     </DashboardPagesLayout>
   );
 };

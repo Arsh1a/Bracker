@@ -119,20 +119,8 @@ const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) =>
     dispatch(uploadPicture(file));
   };
 
-  const notify = () =>
-    toast("Profile has been edited successfully", {
-      type: "success",
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-
   useEffect(() => {
     if (isSuccess) {
-      notify();
       dispatch(reset());
     }
   }, [isSuccess]);
@@ -183,9 +171,7 @@ const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) =>
         <Button color="primary" isLoading={isLoading} type="submit">
           Edit
         </Button>
-        {isError && <StyledErrorMessage>{message}</StyledErrorMessage>}
       </form>
-      <ToastContainer />
     </Wrapper>
   );
 };

@@ -144,6 +144,8 @@ export const updateProjectInfo = async (req: Request, res: Response, next: NextF
     project.title = title;
     project.desc = desc;
 
+    await project.save();
+
     res.status(200).json(project);
   } catch (err) {
     next(err);
