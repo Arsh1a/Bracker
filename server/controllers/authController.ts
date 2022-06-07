@@ -355,24 +355,28 @@ export const updateUserInfo = async (req: Request, res: Response, next: NextFunc
 /// @access private
 export const changePassword = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
-  const { currentPassword, password } = req.body;
+  const { currentPassword, newPassword } = req.body;
 
   if (!user) {
     return next(new ErrorResponse("Not authorized", 403));
   }
 
   try {
-    const foundUser = await User.findById(user._id);
+    const foundUser = await User.findById(user._id).select("+password");
 
     if (!foundUser) {
       return next(new ErrorResponse("User not found", 404));
     }
 
-    if (currentPassword === foundUser.password) {
-      foundUser.password = password;
-    } else {
-      return next(new ErrorResponse("Current password is incorrect", 400));
+    const isMatch = await foundUser.matchPasswords(currentPassword);
+
+    if (!isMatch) {
+      return next(new ErrorResponse("Current Password is wrong", 404));
     }
+
+    console.log("3");
+
+    foundUser.password = newPassword;
 
     await foundUser.save();
 

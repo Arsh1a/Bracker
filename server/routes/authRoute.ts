@@ -22,7 +22,7 @@ router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/logout").get(authMiddleware, logout);
 router.route("/user").get(authMiddleware, getUserInfo).patch(authMiddleware, updateUserInfo);
-router.route("/user/password").get(authMiddleware, changePassword);
+router.route("/user/password").patch(authMiddleware, changePassword);
 router.route("/user/search").get(authMiddleware, searchUsers);
 router.route("/user/:userID").get(authMiddleware, getUserInfoById);
 router.route("/picture/:userID").get(authMiddleware, getPicture);

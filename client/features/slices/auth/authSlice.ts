@@ -77,6 +77,21 @@ export const uploadPicture = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (userData: { currentPassword: string; newPassword: string }, thunkAPI) => {
+    try {
+      return await authService.changePassword(userData);
+    } catch (error: any) {
+      const message =
+        (error.response && error.response.data && error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 //Logout user
 export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
@@ -149,6 +164,18 @@ export const authSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(uploadPicture.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload as string;
+      })
+      .addCase(changePassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload as string;

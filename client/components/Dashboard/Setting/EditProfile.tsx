@@ -13,10 +13,10 @@ import { reset, updateUserInfo, uploadPicture } from "../../../features/slices/a
 import ErrorMessage from "../../Common/ErrorMessage";
 import ContentWrapper from "../../Common/ContentWrapper";
 import { MdModeEdit } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Wrapper = styled.div``;
-
-const EditProfileContentWrapper = styled(ContentWrapper)`
+const Wrapper = styled(ContentWrapper)`
   flex: 2;
   display: flex;
   flex-direction: column;
@@ -119,13 +119,25 @@ const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) =>
     dispatch(uploadPicture(file));
   };
 
+  const notify = () =>
+    toast("Profile has been edited successfully", {
+      type: "success",
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+
   useEffect(() => {
     if (isSuccess) {
+      notify();
       dispatch(reset());
     }
   }, [isSuccess]);
   return (
-    <EditProfileContentWrapper>
+    <Wrapper>
       <h2>Edit Profile</h2>
       <EditProfilePicture>
         <form onSubmit={handlePictureUpload} encType="multipart/form-data" method="POST">
@@ -171,9 +183,10 @@ const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) =>
         <Button color="primary" isLoading={isLoading} type="submit">
           Edit
         </Button>
-        {isError && <ErrorMessage>{message}</ErrorMessage>}
+        {isError && <StyledErrorMessage>{message}</StyledErrorMessage>}
       </form>
-    </EditProfileContentWrapper>
+      <ToastContainer />
+    </Wrapper>
   );
 };
 export default EditProfile;

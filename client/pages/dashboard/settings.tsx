@@ -14,6 +14,7 @@ import ErrorMessage from "../../components/Common/ErrorMessage";
 import ContentWrapper from "../../components/Common/ContentWrapper";
 import { MdModeEdit } from "react-icons/md";
 import EditProfile from "../../components/Dashboard/Setting/EditProfile";
+import ChangePassword from "../../components/Dashboard/Setting/ChangePassword";
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,11 +22,6 @@ const Wrapper = styled.div`
   align-items: flex-start;
   justify-content: space-between;
 `;
-
-const ChangePasswordContentWrapper = styled(ContentWrapper)`
-  flex: 1;
-`;
-
 interface Props {}
 
 const Settings = ({}: Props) => {
@@ -45,10 +41,7 @@ const Settings = ({}: Props) => {
     <DashboardPagesLayout headerContent={<h1>Profile Settings</h1>}>
       <Wrapper>
         <EditProfile {...childrenProps} />
-        <ChangePasswordContentWrapper>
-          <h2>Change Password</h2>
-          <form></form>
-        </ChangePasswordContentWrapper>
+        <ChangePassword {...childrenProps} />
       </Wrapper>
     </DashboardPagesLayout>
   );

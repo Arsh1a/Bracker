@@ -40,6 +40,13 @@ const uploadPicture = async (picture: File) => {
   return response.data;
 };
 
+const changePassword = async (userData: { currentPassword: string; newPassword: string }) => {
+  const response = await axios.patch(API_URL + "user/password", userData, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
 //Logout
 const logout = async () => {
   //Remove cookie from client and server
@@ -56,6 +63,7 @@ const authService = {
   getUserInfo,
   updateUserInfo,
   uploadPicture,
+  changePassword,
 };
 
 export default authService;

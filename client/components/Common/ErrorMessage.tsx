@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentPropsWithRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -10,11 +10,11 @@ const Wrapper = styled.div`
   border-radius: 10px;
 `;
 
-interface Props {
+interface Props extends ComponentPropsWithRef<"div"> {
   children: React.ReactNode;
 }
 
-const ErrorMessage = ({ children }: Props) => {
-  return <Wrapper>{children}</Wrapper>;
+const ErrorMessage = ({ children, ...rest }: Props) => {
+  return <Wrapper {...rest}>{children}</Wrapper>;
 };
 export default ErrorMessage;
