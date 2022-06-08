@@ -7,7 +7,7 @@ Bracker is an open source bug tracker that provides a simple but powerful soluti
 1. Clone the repo
 
 ```shell
-git clone https://github.com/Arsh1a/crypto-notifier.git
+git clone https://github.com/Arsh1a/Bracker.git
 ```
 
 2. Install the packages both in root, client and server folders.
