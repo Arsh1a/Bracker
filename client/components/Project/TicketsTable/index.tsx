@@ -158,7 +158,8 @@ const TicketsTable = ({ projectID }: Props) => {
   const renderShowMemberColumn = (cellData: any) => {
     return (
       <MemberColumnWrapper>
-        <ProfilePicture userID={cellData._id} height={30} width={30} />
+        {/**Fix: Loading profile picture is a taxing process. We should find a way to optimize this */}
+        {/* <ProfilePicture userID={cellData._id} height={30} width={30} /> */}
         {cellData.username}
       </MemberColumnWrapper>
     );

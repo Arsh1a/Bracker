@@ -174,9 +174,6 @@ const Tiptap = ({ handleTipTap, label, content }: Props) => {
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
-      CodeBlockLowlight.configure({
-        lowlight,
-      }),
     ],
     onUpdate: ({ editor }) => {
       const content = editor.getHTML();
@@ -324,13 +321,6 @@ const Tiptap = ({ handleTipTap, label, content }: Props) => {
             className={editor.isActive("orderedList") ? "is-active" : ""}
           >
             <BsListOl />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            className={editor.isActive("codeBlock") ? "is-active" : ""}
-          >
-            <BiCodeBlock />
           </button>
           <button
             type="button"

@@ -205,36 +205,28 @@ export const updateTicket = async (req: Request, res: Response, next: NextFuncti
 // @route DELETE /api/ticket/:ticketID
 // @access private
 export const deleteTicket = async (req: Request, res: Response, next: NextFunction) => {
-  const { projectID, ticketID } = req.params;
+  const { ticketID } = req.params;
   const { user } = <any>req;
-
-  //Checks if provided ticket id can be casted to ObjectId
-  if (!isValidObjectId(projectID)) {
-    return next(new ErrorResponse("Invalid project ID", 400));
-  }
 
   //Checks if provided ticket id can be casted to ObjectId
   if (!isValidObjectId(ticketID)) {
     return next(new ErrorResponse("Invalid ticket ID", 400));
   }
 
-  //Checks if provided project id exists in database and the user is part of the project
-  const project = await Project.findById(projectID).or([
-    { owner: user._id },
-    { members: user._id },
-  ]);
-
-  if (!project) {
-    return next(new ErrorResponse("There was an error deleting the ticket", 400));
-  }
-
   try {
-    const ticket = await Ticket.findOneAndDelete({ _id: ticketID, projectID });
+    //Check if user is reporter of the ticket
+    const ticket = await Ticket.findOne({ _id: ticketID });
+
+    if (!ticket) {
+      return next(new ErrorResponse("There was an error deleting the ticket", 404));
+    }
 
     //Checks if provided ticket id exists in database
-    if (!ticket) {
-      return next(new ErrorResponse("Ticket does not exist", 404));
+    if (ticket.reporter._id.toString() !== user._id.toString()) {
+      return next(new ErrorResponse("You are not reporter of the ticket", 404));
     }
+
+    await ticket.remove();
 
     res.status(200).json(ticket + " deleted");
   } catch (err) {

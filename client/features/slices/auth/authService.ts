@@ -27,7 +27,7 @@ const getUserInfo = async () => {
 };
 
 //Update User Info
-const updateUserInfo = async (userData: { username: string; email: string }) => {
+const updateUserInfo = async (userData: { email: string }) => {
   const response = await axios.patch(API_URL + "user", userData, { withCredentials: true });
   return response.data;
 };
@@ -35,7 +35,6 @@ const updateUserInfo = async (userData: { username: string; email: string }) => 
 const uploadPicture = async (picture: File) => {
   const formData = new FormData();
   formData.append("image", picture);
-  console.log(formData);
   const response = await axios.post(API_URL + "picture", formData, { withCredentials: true });
   return response.data;
 };

@@ -49,7 +49,7 @@ export const login = createAsyncThunk(
 //Update user info
 export const updateUserInfo = createAsyncThunk(
   "auth/updateUserInfo",
-  async (userData: { username: string; email: string }, thunkAPI) => {
+  async (userData: { email: string }, thunkAPI) => {
     try {
       return await authService.updateUserInfo(userData);
     } catch (error: any) {

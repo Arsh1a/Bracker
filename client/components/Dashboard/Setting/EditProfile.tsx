@@ -79,7 +79,6 @@ interface Props {
 
 const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) => {
   const [accountDetails, setAccountDetails] = useState({
-    username: user?.username,
     email: user?.email,
   });
 
@@ -93,7 +92,7 @@ const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) =>
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (user.username !== accountDetails.username || user.email !== accountDetails.email) {
+    if (user.email !== accountDetails.email) {
       dispatch(updateUserInfo(accountDetails));
     }
 
@@ -152,14 +151,6 @@ const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) =>
         </form>
       </EditProfilePicture>
       <form onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          label="Username"
-          id="username"
-          name="username"
-          value={accountDetails.username}
-          onChange={(e) => setAccountDetails({ ...accountDetails, username: e.target.value })}
-        />
         <Input
           type="email"
           label="Email"

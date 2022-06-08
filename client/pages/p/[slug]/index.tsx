@@ -11,45 +11,24 @@ import TicketsTable from "../../../components/Project/TicketsTable";
 import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
 import { useAppDispatch } from "../../../lib/hooks";
 import ContentWrapper from "../../../components/Common/ContentWrapper";
+import { PieChart, Pie, Legend, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import ProjectInfo from "../../../components/Project/Home/ProjectInfo";
+import dynamic from "next/dynamic";
+const ProjectChart = dynamic(() => import("../../../components/Project/Home/ProjectChart"), {
+  ssr: false,
+});
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 35px;
 `;
 
 const ProjectSubject = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-`;
-
-const ProjectInfo = styled(ContentWrapper)`
-  background-color: ${(props) => props.theme.colors.primary};
-  color: white;
-  gap: 40px;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  display: flex;
-  align-items: center;
-`;
-
-const ProjectInfoText = styled.div`
-  flex: 1 1 150px;
-  display: flex;
-  gap: 10px;
-  p {
-    font-weight: 800;
-  }
-  svg {
-    font-size: 2rem;
-    margin-top: 5px;
-  }
-  div {
-    display: flex;
-    flex-direction: column;
-  }
 `;
 
 interface Props {
@@ -75,6 +54,7 @@ const Project = ({ data }: Props) => {
   const { ticketStats, isLoading, isError, message } = useSelector(
     (state: RootState) => state.ticket
   );
+
   return (
     <DashboardPagesLayout
       headerContent={
@@ -85,36 +65,8 @@ const Project = ({ data }: Props) => {
       }
     >
       <Wrapper>
-        <ProjectInfo>
-          <ProjectInfoText>
-            <BsPerson />
-            <div>
-              <h1>{members.length}</h1>
-              <p>Members</p>
-            </div>
-          </ProjectInfoText>
-          <ProjectInfoText>
-            <BsListUl />
-            <div>
-              <h1>{ticketStats.totalTickets}</h1>
-              <p>Total tickets</p>
-            </div>
-          </ProjectInfoText>
-          <ProjectInfoText>
-            <BsCheck2Circle />
-            <div>
-              <h1>{ticketStats.openTickets}</h1>
-              <p>Open tickets</p>
-            </div>
-          </ProjectInfoText>
-          <ProjectInfoText>
-            <BsXCircle />
-            <div>
-              <h1>{ticketStats.closedTickets}</h1>
-              <p>Closed tickets</p>
-            </div>
-          </ProjectInfoText>
-        </ProjectInfo>
+        <ProjectInfo ticketStats={ticketStats} totalMembers={members.length} />
+        <ProjectChart ticketStats={ticketStats} />
       </Wrapper>
     </DashboardPagesLayout>
   );

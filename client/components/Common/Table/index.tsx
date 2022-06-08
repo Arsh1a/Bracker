@@ -123,9 +123,6 @@ const Table = ({
     setIsDataLoadedForFirstTime(true);
   }, [data]);
 
-  console.log(data);
-  console.log(isLoading);
-
   return (
     <>
       {data.length === 0 && isDataLoadedForFirstTime && !isLoading && (

@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import React, { Suspense } from "react";
 import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
+import Loading from "../../../components/Common/Loading";
 const CreateTicketForm = dynamic(
   () => import("../../../components/Project/CreateTicket/CreateTicketForm"),
   {
@@ -20,7 +21,7 @@ interface Props {
 const MyTickets = ({ data }: Props) => {
   return (
     <DashboardPagesLayout headerContent={<h1>Create Ticket</h1>}>
-      <Suspense fallback={<p>Place Loading Skeleton Here</p>}>
+      <Suspense fallback={<Loading color="dark" />}>
         <CreateTicketForm projectData={data.project} />
       </Suspense>
     </DashboardPagesLayout>

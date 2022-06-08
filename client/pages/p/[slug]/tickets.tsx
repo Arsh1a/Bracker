@@ -5,6 +5,7 @@ import Container from "../../../components/Common/Container";
 import dynamic from "next/dynamic";
 import DashboardPagesLayout from "../../../components/Common/DashboardPagesLayout";
 import { getProjectSession } from "../../../lib/requestApi";
+import Loading from "../../../components/Common/Loading";
 const TicketsTable = dynamic(() => import("../../../components/Project/TicketsTable"), {
   suspense: true,
 });
@@ -22,7 +23,7 @@ const TicketsPage = ({ data }: Props) => {
   return (
     <DashboardPagesLayout headerContent={<h1>Tickets</h1>}>
       <Wrapper>
-        <Suspense fallback={<p>Place Loading Skeleton Here</p>}>
+        <Suspense fallback={<Loading color="dark" />}>
           <TicketsTable projectID={_id} />
         </Suspense>
       </Wrapper>

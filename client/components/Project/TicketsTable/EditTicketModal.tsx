@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
 import Tiptap from "../../Common/Tiptap";
 import Button from "../../Common/Button";
-import { reset, updateTicket } from "../../../features/slices/ticket/ticketSlice";
+import { deleteTicket, reset, updateTicket } from "../../../features/slices/ticket/ticketSlice";
 import ErrorMessage from "../../Common/ErrorMessage";
 import Loading from "../../Common/Loading";
 import { useAppDispatch } from "../../../lib/hooks";
@@ -26,6 +26,15 @@ const InputWrapper = styled.div`
 
 const ModalHeader = styled.h3`
   margin-bottom: 20px;
+`;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+const StyledErrorMessage = styled(ErrorMessage)`
+  margin-top: 20px;
 `;
 
 interface Props {
@@ -70,6 +79,10 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
   const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     dispatch(updateTicket(formData));
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteTicket(formData._id));
   };
 
   useEffect(() => {
@@ -144,10 +157,15 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
             label="Ticket details"
           />
         </InputWrapper>
-        <Button isLoading={isLoading} color="primary" type="submit">
-          Edit
-        </Button>
-        {isError && <ErrorMessage>{message}</ErrorMessage>}
+        <ButtonsWrapper>
+          <Button isLoading={isLoading} color="primary" type="submit">
+            Edit
+          </Button>
+          <Button isLoading={isLoading} color="danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </ButtonsWrapper>
+        {isError && <StyledErrorMessage>{message}</StyledErrorMessage>}
       </Form>
     </Modal>
   );

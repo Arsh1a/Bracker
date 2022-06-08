@@ -26,7 +26,7 @@ const ProjectMembersSelect = ({ id, label, data, selectValue, hanldeOnChange, us
         data.map((member: { _id: string; username: string }) => {
           return (
             <option key={member._id} value={member._id}>
-              {member.username} {member.username === user.username ? "(You)" : ""}
+              {member.username} {member.username === user?.username ? "(You)" : ""}
             </option>
           );
         })}

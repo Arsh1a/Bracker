@@ -82,7 +82,7 @@ const CreateTicketForm = ({ projectData }: Props) => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push(`/p/${_id}`);
+      router.push(`/p/${_id}/tickets`);
     }
     dispatch(reset());
     // eslint-disable-next-line react-hooks/exhaustive-deps

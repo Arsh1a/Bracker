@@ -11,10 +11,10 @@ const Wrapper = styled.ul`
   gap: 5px;
   padding: 10px 0;
   right: 25px;
-  top: 65px;
+  top: 75px;
   width: 130px;
   background-color: white;
-  box-shadow: rgb(10 19 23 / 5%) 0px 2px 8px 0px;
+  box-shadow: rgb(10 19 23 / 15%) 0px 2px 8px 0px;
   border-radius: 10px;
   list-style: none;
   font-weight: 500;

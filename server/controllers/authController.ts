@@ -320,14 +320,14 @@ export const getPicture = async (req: Request, res: Response, next: NextFunction
 /// @access private
 export const updateUserInfo = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
-  const { username, email } = req.body;
+  const { email } = req.body;
 
   if (!user) {
     return next(new ErrorResponse("Not authorized", 403));
   }
 
   try {
-    const foundUser = await User.findByIdAndUpdate(user._id, { username, email }, { new: true });
+    const foundUser = await User.findByIdAndUpdate(user._id, { email }, { new: true });
 
     if (!foundUser) {
       return next(new ErrorResponse("User not found", 404));
