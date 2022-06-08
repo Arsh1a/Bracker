@@ -18,7 +18,11 @@ const app = express();
 
 //Middlewares
 app.use(
-  cors({ credentials: true, origin: "https://bracker-frontend-8krvazb7z-arsh1a.vercel.app" })
+  cors({
+    credentials: true,
+    origin: "https://bracker-frontend-8krvazb7z-arsh1a.vercel.app",
+    exposedHeaders: "Set-Cookie",
+  })
 );
 app.use(
   helmet({
