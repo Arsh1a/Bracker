@@ -17,7 +17,9 @@ connectDB();
 const app = express();
 
 //Middlewares
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(
+  cors({ credentials: true, origin: "https://bracker-frontend-8krvazb7z-arsh1a.vercel.app" })
+);
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
