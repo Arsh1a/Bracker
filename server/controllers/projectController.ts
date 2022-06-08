@@ -84,7 +84,7 @@ export const getProjectMembers = async (req: Request, res: Response, next: NextF
 
     const member = await User.findById(projectMembersIds[i]);
 
-    projectMembers.push({ _id: member._id, username: member.username });
+    projectMembers.push({ _id: member._id, name: member.name });
   }
 
   try {

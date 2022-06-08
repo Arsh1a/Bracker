@@ -12,13 +12,15 @@ import { useAppDispatch } from "../../../lib/hooks";
 
 const Wrapper = styled.nav`
   border-top: none;
-  padding: 20px;
+  padding: 20px 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
   top: 0;
+  z-index: 100;
   background-color: white;
+  box-shadow: 0px 5px 11px -2px rgba(0, 0, 0, 0.02);
 `;
 
 const Logo = styled.div`

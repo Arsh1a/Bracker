@@ -79,6 +79,7 @@ interface Props {
 
 const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) => {
   const [accountDetails, setAccountDetails] = useState({
+    username: user?.username,
     email: user?.email,
   });
 
@@ -151,6 +152,16 @@ const EditProfile = ({ user, isLoading, isError, message, isSuccess }: Props) =>
         </form>
       </EditProfilePicture>
       <form onSubmit={handleSubmit}>
+        <Input
+          style={{ cursor: "not-allowed" }}
+          type="text"
+          label="Username"
+          id="username"
+          name="username"
+          disabled
+          value={accountDetails.username}
+          onChange={(e) => setAccountDetails({ ...accountDetails, email: e.target.value })}
+        />
         <Input
           type="email"
           label="Email"

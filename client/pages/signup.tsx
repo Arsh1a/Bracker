@@ -50,6 +50,7 @@ interface Props {}
 
 const Signup = ({}: Props) => {
   const [userData, setUserData] = useState({
+    name: "",
     username: "",
     email: "",
     password: "",
@@ -85,6 +86,15 @@ const Signup = ({}: Props) => {
       <StyledContentWrapper>
         <h1>Sign up</h1>
         <Form onSubmit={handleSubmit}>
+          <Input
+            borderRadius="6px"
+            type="text"
+            name="name"
+            placeholder="Name"
+            required
+            value={userData.name}
+            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+          />
           <Input
             borderRadius="6px"
             type="text"

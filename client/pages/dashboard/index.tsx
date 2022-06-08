@@ -76,10 +76,10 @@ const Profile = ({ data }: Props) => {
     }
   }, [isSuccess]);
 
-  const { username } = data;
+  const { name } = data;
 
   return (
-    <DashboardPagesLayout headerContent={<h1>Hello {username}</h1>}>
+    <DashboardPagesLayout headerContent={<h1>Hello {name}</h1>}>
       <Wrapper>
         {projects.length > 0 ? (
           <WelcomeBox>

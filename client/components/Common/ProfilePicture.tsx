@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   justify-content: flex-start;
 `;
 
-const StyledImage = styled(Image)`
+const StyledImage = styled.img`
   border-radius: 100%;
 `;
 
@@ -21,42 +21,50 @@ interface Props {
 }
 
 const ProfilePicture = ({ userID, width, height }: Props) => {
-  const [image, setImage] = useState<any>();
+  const [picture, setPicture] = useState<string>("");
 
   const { isSuccess } = useSelector((state: RootState) => state.auth);
 
-  useEffect(() => {
-    //Reset image cause if we dont, it will keep on showing the old image
-    setImage(null);
+  const fetchPicure = () => {
     axios
-      .get(`http://localhost:5000/api/auth/picture/${userID}`, {
+      .get(process.env.NEXT_PUBLIC_API_URL + `/auth/picture/${userID}`, {
         withCredentials: true,
       })
       .then((res) => {
-        setImage(res.data);
+        setPicture(res.data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchPicure();
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      fetchPicure();
+    }
   }, [isSuccess]);
+
+  console.log(picture);
 
   return (
     <Wrapper>
-      {image ? (
+      {picture ? (
         <StyledImage
-          src={`data:${image.contentType};base64,${Buffer.from(image.data.data).toString(
-            "base64"
-          )}`}
+          src={process.env.NEXT_PUBLIC_UPLOADS_URL + "/profile-pictures/" + picture}
           alt="Profile Picture"
           height={height ? height : 40}
           width={width ? width : 40}
-          layout="fixed"
         />
       ) : (
-        <StyledImage
+        <Image
           src="/images/user.png"
-          alt="Default user picture"
+          alt="Profile Picture"
           height={height ? height : 40}
           width={width ? width : 40}
-          layout="fixed"
         />
       )}
     </Wrapper>

@@ -8,6 +8,8 @@ import authRouter from "./routes/authRoute";
 import projectRouter from "./routes/projectRoute";
 import ticketRouter from "./routes/ticketRoute";
 import cors from "cors";
+import path from "path";
+import authMiddleware from "./middlewares/authMiddleware";
 
 dotenv.config({ path: __dirname + "/.env" });
 
@@ -16,7 +18,11 @@ const app = express();
 
 //Middlewares
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/auth", authRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/ticket", ticketRouter);
+app.use("/uploads", authMiddleware, express.static(path.join(__dirname, "uploads")));
 
 app.use(errorMiddleware);
 

@@ -64,7 +64,7 @@ const UserSetting = ({ handleLogout }: Props) => {
     <>
       <Wrapper ref={wrapperRef} onClick={() => setIsOpen(!isOpen)}>
         <ProfilePicture userID={user?._id} />
-        {user && <span>{user.username}</span>}
+        {user && <span>{user.name}</span>}
       </Wrapper>
       {isOpen && (
         <DropDown ref={dropDownRef}>

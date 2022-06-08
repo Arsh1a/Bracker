@@ -23,10 +23,10 @@ const ProjectMembersSelect = ({ id, label, data, selectValue, hanldeOnChange, us
       onChange={(e) => hanldeOnChange(e.target.value)}
     >
       {data &&
-        data.map((member: { _id: string; username: string }) => {
+        data.map((member: { _id: string; name: string }) => {
           return (
             <option key={member._id} value={member._id}>
-              {member.username} {member.username === user?.username ? "(You)" : ""}
+              {member.name} {member.name === user?.name ? "(You)" : ""}
             </option>
           );
         })}

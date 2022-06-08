@@ -4,18 +4,16 @@ import ErrorResponse from "../utils/errorResponse";
 import Project from "../models/projectModel";
 import Invite from "../models/inviteModel";
 import { isValidObjectId } from "mongoose";
-import Image from "../models/imageModel";
-import path from "path";
-import fs from "fs";
 
 // @desc Register new user
 // @route POST /auth/register
 // @access public
 export const register = async (req: Request, res: Response, next: NextFunction) => {
-  const { username, email, password } = req.body;
+  const { name, username, email, password } = req.body;
 
   try {
     const user = await User.create({
+      name,
       username,
       email,
       password,
@@ -24,7 +22,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     if (user) {
       res.cookie(
         "user",
-        `{"_id": "${user._id}", "username":"${user.username}", "email":"${user.email}"}`,
+        `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
         {
           httpOnly: false,
           secure: process.env.NODE_ENV === "production",
@@ -36,7 +34,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
-        .json({ username: user.username, email: user.email, _id: user._id });
+        .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
     }
   } catch (err) {
     next(err);
@@ -73,7 +71,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     if (user) {
       res.cookie(
         "user",
-        `{"_id": "${user._id}", "username":"${user.username}", "email":"${user.email}"}`,
+        `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
         {
           httpOnly: false,
           secure: process.env.NODE_ENV === "production",
@@ -85,7 +83,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
-        .json({ username: user.username, email: user.email, _id: user._id });
+        .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
     }
   } catch (err: any) {
     res.status(500).json({ success: false, error: err.message });
@@ -112,6 +110,7 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
   try {
     const loggedInUser = await User.findById(user._id);
     res.status(200).json({
+      name: loggedInUser.name,
       username: loggedInUser.username,
       email: loggedInUser.email,
     });
@@ -262,28 +261,11 @@ export const uploadPicture = async (req: Request, res: Response, next: NextFunct
 
   try {
     //Check if user already has a picture, if yes then update the picture instead of making new one.
-    const foundImage = await Image.findOne({ user: user._id });
+    const foundUser = await User.findById(user._id);
 
-    if (foundImage) {
-      foundImage.img = {
-        data: fs.readFileSync(
-          path.join(__dirname, "..", "uploads", "profile-pictures", file.filename)
-        ),
-        contentType: file.mimetype,
-      };
-      await foundImage.save();
-    } else {
-      await Image.create({
-        user: user._id,
-        name: file.filename,
-        img: {
-          data: fs.readFileSync(
-            path.join(__dirname, "..", "uploads", "profile-pictures", file.filename)
-          ),
-          contentType: file.mimetype,
-        },
-      });
-    }
+    foundUser.profilePicture = file.filename;
+
+    await foundUser.save();
 
     res.status(200).json({ success: true, message: "Picture uploaded" });
   } catch (err) {
@@ -292,8 +274,9 @@ export const uploadPicture = async (req: Request, res: Response, next: NextFunct
 };
 
 /// @desc get profile picture
-/// @route GET /api/auth/user/picture/:userID
+/// @route GET /api/auth/picture/:userID
 /// @access private
+
 export const getPicture = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
   const { userID } = req.params;
@@ -302,14 +285,18 @@ export const getPicture = async (req: Request, res: Response, next: NextFunction
     return next(new ErrorResponse("Not authorized", 403));
   }
 
-  try {
-    const image = await Image.findOne({ user: userID });
+  if (!isValidObjectId(userID)) {
+    return next(new ErrorResponse("Invalid id", 400));
+  }
 
-    if (!image) {
-      return next(new ErrorResponse("No image found", 404));
+  try {
+    const foundUser = await User.findById(userID);
+
+    if (!foundUser) {
+      return next(new ErrorResponse("User not found", 404));
     }
 
-    res.status(200).json(image.img);
+    res = res.status(200).json(foundUser.profilePicture);
   } catch (err) {
     next(err);
   }
@@ -335,16 +322,19 @@ export const updateUserInfo = async (req: Request, res: Response, next: NextFunc
 
     res.cookie(
       "user",
-      `{"_id": "${user._id}", "username":"${user.username}", "email":"${user.email}"}`,
+      `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
       {
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
       }
     );
 
-    res
-      .status(200)
-      .json({ _id: foundUser._id, username: foundUser.username, email: foundUser.email });
+    res.status(200).json({
+      _id: foundUser._id,
+      name: foundUser.name,
+      username: foundUser.username,
+      email: foundUser.email,
+    });
   } catch (err) {
     next(err);
   }

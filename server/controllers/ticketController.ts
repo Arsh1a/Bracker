@@ -143,11 +143,11 @@ export const createTicket = async (req: Request, res: Response, next: NextFuncti
       content,
       assignee: {
         _id: assignedUser._id,
-        username: assignedUser.username,
+        name: assignedUser.name,
       },
       reporter: {
         _id: reporterUser._id,
-        username: reporterUser.username,
+        name: reporterUser.name,
       },
       projectID,
     });
@@ -185,7 +185,7 @@ export const updateTicket = async (req: Request, res: Response, next: NextFuncti
         content,
         assignee: {
           _id: assignedUser._id,
-          username: assignedUser.username,
+          name: assignedUser.name,
         },
       },
       { new: true, runValidators: true }
