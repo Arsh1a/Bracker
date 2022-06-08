@@ -364,8 +364,6 @@ export const changePassword = async (req: Request, res: Response, next: NextFunc
       return next(new ErrorResponse("Current Password is wrong", 404));
     }
 
-    console.log("3");
-
     foundUser.password = newPassword;
 
     await foundUser.save();
