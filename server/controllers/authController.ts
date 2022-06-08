@@ -73,6 +73,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         "user",
         `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
         {
+          sameSite: "none",
           httpOnly: false,
           secure: process.env.NODE_ENV === "production",
         }
@@ -80,6 +81,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       res
         .cookie("access_token", user.getSignedToken(), {
           httpOnly: true,
+          sameSite: "none",
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
@@ -324,6 +326,7 @@ export const updateUserInfo = async (req: Request, res: Response, next: NextFunc
       "user",
       `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
       {
+        sameSite: "none",
         httpOnly: false,
         secure: process.env.NODE_ENV === "production",
       }
