@@ -1,6 +1,6 @@
 # Bracker
 
-Bracker is an open source ticket tracker that provides a simple but powerful solution.
+Bracker is an open source bug tracker that provides a simple but powerful solution.
 
 ## Installation
 
