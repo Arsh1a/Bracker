@@ -117,11 +117,26 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
 
   try {
     const loggedInUser = await User.findById(user._id);
-    res.status(200).json({
-      name: loggedInUser.name,
-      username: loggedInUser.username,
-      email: loggedInUser.email,
-    });
+
+    res.cookie(
+      "user",
+      `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
+      {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        sameSite: process.env.NODE_ENV === "production" && "none",
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+      }
+    );
+    res
+      .cookie("access_token", user.getSignedToken(), {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV === "production" && "none",
+        secure: process.env.NODE_ENV === "production",
+      })
+      .status(200)
+      .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
   } catch (err) {
     next(err);
   }
