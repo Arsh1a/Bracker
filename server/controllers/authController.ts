@@ -1,9 +1,17 @@
-import { NextFunction, Request, Response } from "express";
+import { CookieOptions, NextFunction, Request, Response } from "express";
 import User from "../models/userModel";
 import ErrorResponse from "../utils/errorResponse";
 import Project from "../models/projectModel";
 import Invite from "../models/inviteModel";
 import { isValidObjectId } from "mongoose";
+
+const cookieOptions = <CookieOptions>{
+  expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+  sameSite: process.env.NODE_ENV === "production" && "none",
+  httpOnly: false,
+  secure: process.env.NODE_ENV === "production",
+  domain: process.env.NODE_ENV === "production" && process.env.FRONTEND_URL,
+};
 
 // @desc Register new user
 // @route POST /auth/register
@@ -23,20 +31,10 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       res.cookie(
         "user",
         `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
-        {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          sameSite: process.env.NODE_ENV === "production" && "none",
-          httpOnly: false,
-          secure: process.env.NODE_ENV === "production",
-        }
+        cookieOptions
       );
       res
-        .cookie("access_token", user.getSignedToken(), {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          sameSite: process.env.NODE_ENV === "production" && "none",
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-        })
+        .cookie("access_token", user.getSignedToken(), cookieOptions)
         .status(200)
         .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
     }
@@ -76,20 +74,10 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       res.cookie(
         "user",
         `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
-        {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          sameSite: process.env.NODE_ENV === "production" && "none",
-          httpOnly: false,
-          secure: process.env.NODE_ENV === "production",
-        }
+        cookieOptions
       );
       res
-        .cookie("access_token", user.getSignedToken(), {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          httpOnly: true,
-          sameSite: process.env.NODE_ENV === "production" && "none",
-          secure: process.env.NODE_ENV === "production",
-        })
+        .cookie("access_token", user.getSignedToken(), cookieOptions)
         .status(200)
         .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
     }
@@ -332,12 +320,7 @@ export const updateUserInfo = async (req: Request, res: Response, next: NextFunc
     res.cookie(
       "user",
       `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
-      {
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-        sameSite: process.env.NODE_ENV === "production" && "none",
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-      }
+      cookieOptions
     );
 
     res.status(200).json({
