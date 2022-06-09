@@ -40,7 +40,6 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
         {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          sameSite: process.env.NODE_ENV === "production" && "none",
           httpOnly: false,
           secure: process.env.NODE_ENV === "production",
           domain: "bracker-frontend.vercel.app",
@@ -49,7 +48,6 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       res
         .cookie("access_token", user.getSignedToken(), {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          sameSite: process.env.NODE_ENV === "production" && "none",
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           domain: "bracker-frontend.vercel.app",
@@ -96,7 +94,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
         {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          sameSite: process.env.NODE_ENV === "production" && "none",
           httpOnly: false,
           secure: process.env.NODE_ENV === "production",
           domain: "bracker-frontend.vercel.app",
@@ -105,7 +102,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       res
         .cookie("access_token", user.getSignedToken(), {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          sameSite: process.env.NODE_ENV === "production" && "none",
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           domain: "bracker-frontend.vercel.app",
