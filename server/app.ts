@@ -18,16 +18,6 @@ connectDB();
 const app = express();
 
 //Middlewares
-app.enable("trust proxy");
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET!,
-    resave: false,
-    proxy: true,
-    saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === "production", maxAge: 5184000000 },
-  })
-);
 app.use(
   cors({
     credentials: true,
@@ -38,6 +28,7 @@ app.use(
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
+
     exposedHeaders: "Set-Cookie",
   })
 );
@@ -49,6 +40,16 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.enable("trust proxy");
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    proxy: true,
+    saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === "production", maxAge: 5184000000 },
+  })
+);
 
 //Routes
 app.use("/api/auth", authRouter);
