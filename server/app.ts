@@ -20,7 +20,13 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "*",
+    origin: [
+      "https://bracker-frontend-jf95wqgt6-arsh1a.vercel.app",
+      "localhost:3000",
+      "https://bracker-frontend.vercel.app",
+    ],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
     exposedHeaders: "Set-Cookie",
   })
 );
