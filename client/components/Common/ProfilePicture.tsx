@@ -33,9 +33,7 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
       .then((res) => {
         setPicture(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   useEffect(() => {
@@ -47,8 +45,6 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
       fetchPicure();
     }
   }, [isSuccess]);
-
-  console.log(picture);
 
   return (
     <Wrapper>
