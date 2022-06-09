@@ -50,7 +50,7 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
     <Wrapper>
       {picture ? (
         <StyledImage
-          src={process.env.NEXT_PUBLIC_UPLOADS_URL + "/profile-pictures/" + picture}
+          src={process.env.NEXT_PUBLIC_UPLOADS_URL + "/" + picture}
           alt="Profile Picture"
           height={height ? height : 40}
           width={width ? width : 40}

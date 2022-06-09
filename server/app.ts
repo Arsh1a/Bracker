@@ -22,7 +22,7 @@ app.use(
     credentials: true,
     origin: [
       "https://bracker-frontend-jf95wqgt6-arsh1a.vercel.app",
-      "localhost:3000",
+      "http://localhost:3000",
       "https://bracker-frontend.vercel.app",
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
