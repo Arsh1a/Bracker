@@ -17,6 +17,7 @@ connectDB();
 const app = express();
 
 //Middlewares
+app.enable("trust proxy");
 app.use(
   cors({
     credentials: true,
