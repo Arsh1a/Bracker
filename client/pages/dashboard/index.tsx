@@ -113,11 +113,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   console.log("SERVER SIDE WORKING BUDDY");
   if (!session) {
+    console.log("Seasion is not found");
     console.log(session + "when session is null");
     return {
       props: {},
     };
   }
+  console.log("Seasion is found");
   console.log(session + "when session is not null");
   return {
     props: { data: session.data },
