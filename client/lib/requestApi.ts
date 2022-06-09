@@ -2,16 +2,12 @@ import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 
 export const getSession = async (context: GetServerSidePropsContext) => {
-  if (!context.req.headers.cookie?.includes("access_token")) {
-    console.log("inside request api");
-    return null;
-  }
-
   return axios
     .get(process.env.NEXT_PUBLIC_API_URL + "/auth/user", {
       withCredentials: true,
       headers: {
-        Cookie: context.req.headers.cookie,
+        cookie: context.req.headers.cookie!,
+        Cookie: context.req.headers.cookie!,
       },
     })
     .then((response) => Promise.resolve(response))
