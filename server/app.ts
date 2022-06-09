@@ -20,19 +20,6 @@ const app = express();
 //Middlewares
 app.enable("trust proxy");
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET!,
-    resave: false,
-    proxy: true,
-    saveUninitialized: true,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 5184000000,
-      domain: "bracker-frontend.vercel.app",
-    },
-  })
-);
-app.use(
   cors({
     credentials: true,
     origin: [
