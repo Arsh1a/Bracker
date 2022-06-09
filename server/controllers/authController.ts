@@ -71,6 +71,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
 
     if (user) {
+      console.log("Yes commit happend");
       res.cookie(
         "user",
         `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
