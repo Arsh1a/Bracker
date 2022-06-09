@@ -10,6 +10,7 @@ import ticketRouter from "./routes/ticketRoute";
 import cors from "cors";
 import path from "path";
 import authMiddleware from "./middlewares/authMiddleware";
+import session from "express-session";
 
 dotenv.config({ path: __dirname + "/.env" });
 
@@ -18,6 +19,15 @@ const app = express();
 
 //Middlewares
 app.enable("trust proxy");
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    proxy: true,
+    saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === "production", maxAge: 5184000000 },
+  })
+);
 app.use(
   cors({
     credentials: true,

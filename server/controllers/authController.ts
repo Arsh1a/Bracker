@@ -12,6 +12,13 @@ const cookieOptions = <CookieOptions>{
   secure: process.env.NODE_ENV === "production",
   domain: process.env.NODE_ENV === "production" && process.env.FRONTEND_URL,
 };
+const accessTokenCookieOptions = <CookieOptions>{
+  expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+  sameSite: process.env.NODE_ENV === "production" && "none",
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  domain: process.env.NODE_ENV === "production" && process.env.FRONTEND_URL,
+};
 
 // @desc Register new user
 // @route POST /auth/register
@@ -34,7 +41,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         cookieOptions
       );
       res
-        .cookie("access_token", user.getSignedToken(), cookieOptions)
+        .cookie("access_token", user.getSignedToken(), accessTokenCookieOptions)
         .status(200)
         .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
     }
@@ -78,7 +85,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         cookieOptions
       );
       res
-        .cookie("access_token", user.getSignedToken(), cookieOptions)
+        .cookie("access_token", user.getSignedToken(), accessTokenCookieOptions)
         .status(200)
         .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
     }
