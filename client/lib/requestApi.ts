@@ -2,7 +2,8 @@ import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 
 export const getSession = async (context: GetServerSidePropsContext) => {
-  if (!context.req.headers.cookie || !context.req.headers.cookie.includes("access_token")) {
+  if (!context.req.headers.cookie?.includes("access_token")) {
+    console.log("inside request api");
     return null;
   }
 
