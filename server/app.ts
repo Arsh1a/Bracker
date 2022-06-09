@@ -25,7 +25,11 @@ app.use(
     resave: false,
     proxy: true,
     saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === "production", maxAge: 5184000000 },
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 5184000000,
+      domain: "bracker-frontend.vercel.app",
+    },
   })
 );
 app.use(
@@ -38,7 +42,6 @@ app.use(
     ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
-
     exposedHeaders: "Set-Cookie",
   })
 );

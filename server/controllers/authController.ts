@@ -10,14 +10,14 @@ const cookieOptions = <CookieOptions>{
   sameSite: process.env.NODE_ENV === "production" && "none",
   httpOnly: false,
   secure: process.env.NODE_ENV === "production",
-  domain: process.env.NODE_ENV === "production" && process.env.FRONTEND_URL,
+  domain: "bracker-frontend.vercel.app",
 };
 const accessTokenCookieOptions = <CookieOptions>{
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   sameSite: process.env.NODE_ENV === "production" && "none",
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  domain: process.env.NODE_ENV === "production" && process.env.FRONTEND_URL,
+  domain: "bracker-frontend.vercel.app",
 };
 
 // @desc Register new user
