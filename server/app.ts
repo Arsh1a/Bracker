@@ -46,7 +46,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/auth", authRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/ticket", ticketRouter);
-app.use("/uploads", authMiddleware, express.static(path.join(__dirname, "uploads")));
+app.use(
+  "/uploads",
+  authMiddleware,
+  express.static(
+    process.env.SERVER_ENV === "production"
+      ? path.join(__dirname, "../uploads")
+      : path.join(__dirname, "uploads")
+  )
+);
 
 app.use(errorMiddleware);
 
