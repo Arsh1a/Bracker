@@ -51,7 +51,7 @@ app.use(
   authMiddleware,
   express.static(
     process.env.SERVER_ENV === "production"
-      ? path.join(__dirname, "../uploads")
+      ? path.join("/uploads")
       : path.join(__dirname, "uploads")
   )
 );
