@@ -10,14 +10,14 @@ const cookieOptions = <CookieOptions>{
   sameSite: process.env.NODE_ENV === "production" && "none",
   httpOnly: false,
   secure: process.env.NODE_ENV === "production",
-  domain: "bracker-frontend.vercel.app",
+  domain: "bracker.ir",
 };
 const accessTokenCookieOptions = <CookieOptions>{
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   sameSite: process.env.NODE_ENV === "production" && "none",
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  domain: "bracker-frontend.vercel.app",
+  domain: "bracker.ir",
 };
 
 // @desc Register new user
@@ -42,7 +42,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
           httpOnly: false,
           secure: process.env.NODE_ENV === "production",
-          domain: "bracker-frontend.vercel.app",
+          domain: "bracker.ir",
         }
       );
       res
@@ -50,7 +50,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          domain: "bracker-frontend.vercel.app",
+          domain: "bracker.ir",
         })
         .status(200)
         .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
@@ -96,7 +96,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
           httpOnly: false,
           secure: process.env.NODE_ENV === "production",
-          domain: "bracker-frontend.vercel.app",
+          domain: "bracker.ir",
         }
       );
       res
@@ -104,7 +104,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          domain: "bracker-frontend.vercel.app",
+          domain: "bracker.ir",
         })
         .status(200)
         .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
