@@ -7,16 +7,15 @@ import { isValidObjectId } from "mongoose";
 
 const cookieOptions = <CookieOptions>{
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-  sameSite: process.env.NODE_ENV === "production" && "none",
   httpOnly: false,
-  secure: process.env.NODE_ENV === "production",
+  secure: process.env.SERVER_ENV === "production",
   domain: "bracker.ir",
 };
 const accessTokenCookieOptions = <CookieOptions>{
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-  sameSite: process.env.NODE_ENV === "production" && "none",
+  sameSite: process.env.SERVER_ENV === "production" && "none",
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  secure: process.env.SERVER_ENV === "production",
   domain: "bracker.ir",
 };
 
@@ -41,7 +40,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
           httpOnly: false,
-          secure: process.env.NODE_ENV === "production",
+          secure: process.env.SERVER_ENV === "production",
           domain: "bracker.ir",
         }
       );
@@ -49,7 +48,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         .cookie("access_token", user.getSignedToken(), {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: process.env.SERVER_ENV === "production",
           domain: "bracker.ir",
         })
         .status(200)
@@ -95,7 +94,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
           httpOnly: false,
-          secure: process.env.NODE_ENV === "production",
+          secure: process.env.SERVER_ENV === "production",
           domain: "bracker.ir",
         }
       );
@@ -103,7 +102,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         .cookie("access_token", user.getSignedToken(), {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: process.env.SERVER_ENV === "production",
           domain: "bracker.ir",
         })
         .status(200)
