@@ -9,14 +9,13 @@ const cookieOptions = <CookieOptions>{
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
   httpOnly: false,
   secure: process.env.SERVER_ENV === "production",
-  domain: "bracker.ir",
+  domain: process.env.SERVER_ENV === "production" ? "bracker.ir" : undefined,
 };
 const accessTokenCookieOptions = <CookieOptions>{
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-  sameSite: process.env.SERVER_ENV === "production" && "none",
   httpOnly: true,
   secure: process.env.SERVER_ENV === "production",
-  domain: "bracker.ir",
+  domain: process.env.SERVER_ENV === "production" ? "bracker.ir" : undefined,
 };
 
 // @desc Register new user
@@ -37,20 +36,10 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       res.cookie(
         "user",
         `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
-        {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          httpOnly: false,
-          secure: process.env.SERVER_ENV === "production",
-          domain: "bracker.ir",
-        }
+        cookieOptions
       );
       res
-        .cookie("access_token", user.getSignedToken(), {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          httpOnly: true,
-          secure: process.env.SERVER_ENV === "production",
-          domain: "bracker.ir",
-        })
+        .cookie("access_token", user.getSignedToken(), accessTokenCookieOptions)
         .status(200)
         .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
     }
@@ -87,24 +76,13 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
 
     if (user) {
-      console.log("Yes commit happend");
       res.cookie(
         "user",
         `{"_id": "${user._id}", "name":"${user.name}", "username":"${user.username}", "email":"${user.email}"}`,
-        {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          httpOnly: false,
-          secure: process.env.SERVER_ENV === "production",
-          domain: "bracker.ir",
-        }
+        cookieOptions
       );
       res
-        .cookie("access_token", user.getSignedToken(), {
-          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-          httpOnly: true,
-          secure: process.env.SERVER_ENV === "production",
-          domain: "bracker.ir",
-        })
+        .cookie("access_token", user.getSignedToken(), accessTokenCookieOptions)
         .status(200)
         .json({ name: user.name, username: user.username, email: user.email, _id: user._id });
     }
@@ -273,13 +251,13 @@ export const handleInvite = async (req: Request, res: Response, next: NextFuncti
 /// @access private
 export const uploadPicture = async (req: Request, res: Response, next: NextFunction) => {
   const { user } = <any>req;
-  const { file } = req;
+  const { path } = req.file!;
 
   if (!user) {
     return next(new ErrorResponse("Not authorized", 403));
   }
 
-  if (!file) {
+  if (!path) {
     return next(new ErrorResponse("No file uploaded", 400));
   }
 
@@ -287,7 +265,7 @@ export const uploadPicture = async (req: Request, res: Response, next: NextFunct
     //Check if user already has a picture, if yes then update the picture instead of making new one.
     const foundUser = await User.findById(user._id);
 
-    foundUser.profilePicture = file.filename;
+    foundUser.profilePicture = path;
 
     await foundUser.save();
 

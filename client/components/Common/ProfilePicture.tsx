@@ -31,6 +31,7 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res.data);
         setPicture(res.data);
       })
       .catch((err) => {});
@@ -50,7 +51,7 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
     <Wrapper>
       {picture ? (
         <StyledImage
-          src={process.env.NEXT_PUBLIC_UPLOADS_URL + "/" + picture}
+          src={picture}
           alt="Profile Picture"
           height={height ? height : 40}
           width={width ? width : 40}
