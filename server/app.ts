@@ -8,9 +8,6 @@ import authRouter from "./routes/authRoute";
 import projectRouter from "./routes/projectRoute";
 import ticketRouter from "./routes/ticketRoute";
 import cors from "cors";
-import path from "path";
-import authMiddleware from "./middlewares/authMiddleware";
-import session from "express-session";
 
 dotenv.config({ path: __dirname + "/.env" });
 
@@ -46,15 +43,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/auth", authRouter);
 app.use("/api/project", projectRouter);
 app.use("/api/ticket", ticketRouter);
-app.use(
-  "/uploads",
-  authMiddleware,
-  express.static(
-    process.env.SERVER_ENV === "production"
-      ? path.join("/uploads")
-      : path.join(__dirname, "uploads")
-  )
-);
 
 app.use(errorMiddleware);
 
