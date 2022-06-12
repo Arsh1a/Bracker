@@ -58,7 +58,7 @@ const Navbar = ({}: Props) => {
     <Wrapper>
       <Link href="/" passHref>
         <Logo>
-          <Image src="images/logo.svg" layout="fill" objectFit="contain" alt="Logo" />
+          <Image src="/images/logo.svg" layout="fill" objectFit="contain" alt="Logo" />
         </Logo>
       </Link>
       <UserStuff currentUser={currUser} handleLogout={handleLogout} />

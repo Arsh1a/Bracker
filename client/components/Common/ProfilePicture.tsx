@@ -58,7 +58,7 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
         />
       ) : (
         <Image
-          src="images/user.png"
+          src="/images/user.png"
           alt="Profile Picture"
           height={height ? height : 40}
           width={width ? width : 40}
