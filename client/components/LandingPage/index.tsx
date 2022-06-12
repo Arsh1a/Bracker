@@ -97,7 +97,7 @@ const LandingPage = ({}: Props) => {
           <MainImage>
             <Image
               style={{ borderRadius: "1rem" }}
-              src="/images/landing.png"
+              src="images/landing.png"
               alt="Bracker"
               width="778px"
               height="438px"

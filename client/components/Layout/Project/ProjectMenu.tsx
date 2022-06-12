@@ -83,7 +83,7 @@ const ProjectMenu = ({}: Props) => {
     <Menu>
       <Link href="/" passHref>
         <Logo>
-          <Image src="/images/logo.svg" height="50px" width="150px" alt="Logo" />
+          <Image src="images/logo.svg" height="50px" width="150px" alt="Logo" />
         </Logo>
       </Link>
       <Link
