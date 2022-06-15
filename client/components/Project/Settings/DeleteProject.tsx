@@ -32,6 +32,7 @@ const DeleteProject = ({ data }: Props) => {
   const router = useRouter();
 
   const handleDelete = () => {
+    setIsModalOpen(false);
     dispatch(deleteProject(data._id));
   };
 
@@ -57,7 +58,13 @@ const DeleteProject = ({ data }: Props) => {
             <Button isLoading={isLoading} color="danger" onClick={handleDelete}>
               Delete
             </Button>
-            <Button color="primary" onClick={() => setIsModalOpen(false)}>
+            <Button
+              color="primary"
+              onClick={() => {
+                setIsModalOpen(false);
+                dispatch(reset());
+              }}
+            >
               No, I was just looking around.
             </Button>
           </ModalButtons>

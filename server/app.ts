@@ -19,12 +19,7 @@ app.enable("trust proxy");
 app.use(
   cors({
     credentials: true,
-    origin: [
-      "https://bracker.ir",
-      "https://www.bracker.ir",
-      "http://localhost:3000",
-      "https://bracker-frontend.vercel.app",
-    ],
+    origin: ["https://bracker.ir", "https://www.bracker.ir", "http://localhost:3000"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
     exposedHeaders: "Set-Cookie",

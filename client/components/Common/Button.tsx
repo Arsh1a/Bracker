@@ -7,7 +7,7 @@ const Wrapper = styled.button<StyledProps>`
   justify-content: center;
   align-items: center;
   background-color: ${(props) => props.theme.colors[props.color]};
-  border-radius: 12px;
+  border-radius: 24px;
   padding: 8px 18px;
   border-style: none;
   font-size: 1rem;

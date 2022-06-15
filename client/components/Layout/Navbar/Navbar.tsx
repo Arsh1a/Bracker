@@ -9,24 +9,32 @@ import { logout, reset } from "../../../features/slices/auth/authSlice";
 import UserStuff from "./UserStuff";
 import Image from "next/image";
 import { useAppDispatch } from "../../../lib/hooks";
+import Container from "../../Common/Container";
 
 const Wrapper = styled.nav`
-  border-top: none;
-  padding: 20px 30px;
+  top: 0;
+  z-index: 100;
+  background-color: #fff;
+`;
+
+const StyledContainer = styled(Container)`
+  max-width: 1400px;
+`;
+
+const InnerWrapper = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  top: 0;
-  z-index: 100;
-  background-color: white;
-  box-shadow: 0px 5px 11px -2px rgba(0, 0, 0, 0.02);
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
 const Logo = styled.div`
   cursor: pointer;
-  width: 110px;
-  height: 100%;
   position: relative;
   transition: 0.3s;
   &:hover {
@@ -56,12 +64,16 @@ const Navbar = ({}: Props) => {
 
   return (
     <Wrapper>
-      <Link href="/" passHref>
-        <Logo>
-          <Image src="/images/logo.svg" layout="fill" objectFit="contain" alt="Logo" />
-        </Logo>
-      </Link>
-      <UserStuff currentUser={currUser} handleLogout={handleLogout} />
+      <StyledContainer>
+        <InnerWrapper>
+          <Link href="/" passHref>
+            <Logo>
+              <Image src="/images/logo.svg" height="32px" width="150px" alt="Logo" />
+            </Logo>
+          </Link>
+          <UserStuff currentUser={currUser} handleLogout={handleLogout} />
+        </InnerWrapper>
+      </StyledContainer>
     </Wrapper>
   );
 };

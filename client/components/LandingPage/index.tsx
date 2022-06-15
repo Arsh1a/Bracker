@@ -6,13 +6,7 @@ import Button from "../Common/Button";
 import Container from "../Common/Container";
 
 const Wrapper = styled.div`
-  background-color: white;
-  background: rgb(43, 138, 255);
-  background: linear-gradient(
-    180deg,
-    rgba(43, 138, 255, 0.10157566444546573) 0%,
-    rgba(255, 255, 255, 1) 100%
-  );
+  background-color: #fff;
 `;
 
 const StyledContainer = styled(Container)`
@@ -21,7 +15,6 @@ const StyledContainer = styled(Container)`
 
 const Main = styled.main`
   display: flex;
-  justify-content: center;
   align-items: center;
   width: 100%;
   height: 550px;
@@ -41,11 +34,12 @@ const Main = styled.main`
 const MainText = styled.div`
   flex: 2;
   h1 {
-    font-size: 3rem;
-    line-height: 3rem;
-    margin-bottom: 20px;
+    font-size: 4rem;
+    line-height: 4rem;
+    margin-bottom: 40px;
   }
   p {
+    color: #656565;
     font-size: 1.2rem;
   }
   button {
@@ -56,8 +50,9 @@ const MainText = styled.div`
 
   @media screen and (max-width: 1000px) {
     h1 {
-      font-size: 2rem;
-      line-height: 2rem;
+      font-size: 3rem;
+      line-height: 3rem;
+      margin-bottom: 20px;
     }
     p {
       font-size: 1rem;
@@ -82,10 +77,7 @@ const LandingPage = ({}: Props) => {
       <StyledContainer>
         <Main>
           <MainText>
-            <h1>
-              Bracker helps teams work <br />
-              together.
-            </h1>
+            <h1>Bracker helps teams work together.</h1>
             <p>
               A simple but powerful bug tracking system that helps you manage and deal with bugs
               easier and deliver great products on time.
@@ -97,10 +89,10 @@ const LandingPage = ({}: Props) => {
           <MainImage>
             <Image
               style={{ borderRadius: "1rem" }}
-              src="/images/landing.png"
+              src="/images/vector-illustrations.png"
               alt="Bracker"
-              width="778px"
-              height="438px"
+              width="1000px"
+              height="638px"
             />
           </MainImage>
         </Main>

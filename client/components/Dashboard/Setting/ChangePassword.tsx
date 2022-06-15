@@ -41,6 +41,7 @@ const ChangePassword = ({ user, isLoading, isError, message, isSuccess }: Props)
   const dispatch = useAppDispatch();
 
   const handleSubmit = (e: any) => {
+    setConfirmPasswordError(false);
     e.preventDefault();
     if (passwords.newPassword !== passwords.confirmPassword) {
       setConfirmPasswordError(true);

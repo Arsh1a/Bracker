@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Wrapper = styled.div<StyledProps>`
   padding: 30px;
   margin: 0 auto;
-  max-width: 1920px;
+  max-width: 1600px;
   width: 100%;
   display: flex;
   ${(props) => props.center && "justify-content: center;"}
