@@ -18,9 +18,9 @@ const accessTokenCookieOptions = <CookieOptions>{
   domain: process.env.SERVER_ENV === "production" ? "bracker.ir" : undefined,
 };
 
-// @desc Register new user
-// @route POST /auth/register
-// @access public
+/// @desc Register new user
+/// @route POST /auth/register
+/// @access public
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   const { name, username, email, password } = req.body;
 
@@ -48,9 +48,9 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-// @desc Authenticate a user
-// @route POST /api/auth/login
-// @access public
+/// @desc Authenticate a user
+/// @route POST /api/auth/login
+/// @access public
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 

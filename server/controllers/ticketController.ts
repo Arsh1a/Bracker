@@ -5,9 +5,9 @@ import ErrorResponse from "../utils/errorResponse";
 import { isValidObjectId } from "mongoose";
 import User from "../models/userModel";
 
-// @desc Get tickets
-// @route GET /api/ticket/:projectID
-// @access private
+/// @desc Get tickets
+/// @route GET /api/ticket/:projectID
+/// @access private
 export const getTickets = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { user } = <any>req;
@@ -64,9 +64,9 @@ export const getTickets = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-// @desc Count tickets
-// @route GET /api/ticket/:projectID/count
-// @access private
+/// @desc Count tickets
+/// @route GET /api/ticket/:projectID/count
+/// @access private
 export const countTickets = async (req: Request, res: Response, next: NextFunction) => {
   const { projectID } = req.params;
   const { user } = <any>req;
@@ -103,9 +103,9 @@ export const countTickets = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-// @desc Create new ticket
-// @route POST /api/ticket/:projectID
-// @access private
+/// @desc Create new ticket
+/// @route POST /api/ticket/:projectID
+/// @access private
 export const createTicket = async (req: Request, res: Response, next: NextFunction) => {
   const { title, desc, severity, status, content, assignee } = req.body;
   const { projectID } = req.params;
@@ -201,9 +201,9 @@ export const updateTicket = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-// @desc Delete ticket
-// @route DELETE /api/ticket/:ticketID
-// @access private
+/// @desc Delete ticket
+/// @route DELETE /api/ticket/:ticketID
+/// @access private
 export const deleteTicket = async (req: Request, res: Response, next: NextFunction) => {
   const { ticketID } = req.params;
   const { user } = <any>req;

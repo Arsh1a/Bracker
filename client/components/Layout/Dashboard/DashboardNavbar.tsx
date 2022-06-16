@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RootState } from "../../../features/store";
 import { logout, reset } from "../../../features/slices/auth/authSlice";
-import UserStuff from "../Navbar/UserStuff";
+import UserStuff from "../UserStuff";
 import { useAppDispatch } from "../../../lib/hooks";
 
 const Wrapper = styled.nav`

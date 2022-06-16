@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RootState } from "../../../features/store";
 import { logout, reset } from "../../../features/slices/auth/authSlice";
-import UserStuff from "./UserStuff";
+import UserStuff from "../UserStuff";
 import Image from "next/image";
 import { useAppDispatch } from "../../../lib/hooks";
 import Container from "../../Common/Container";
+import UserLinks from "./UserLinks";
 
 const Wrapper = styled.nav`
   top: 0;
@@ -71,7 +72,7 @@ const Navbar = ({}: Props) => {
               <Image src="/images/logo.svg" height="32px" width="150px" alt="Logo" />
             </Logo>
           </Link>
-          <UserStuff currentUser={currUser} handleLogout={handleLogout} />
+          <UserLinks currentUser={currUser} handleLogout={handleLogout} />
         </InnerWrapper>
       </StyledContainer>
     </Wrapper>
