@@ -31,7 +31,6 @@ const ProfilePicture = ({ userID, width, height }: Props) => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         setPicture(res.data);
       })
       .catch((err) => {});
