@@ -17,6 +17,7 @@ const Wrapper = styled.button<StyledProps>`
   cursor: pointer;
   transition: 0.3s;
   ${(props) => props.fullWidth && "width: 100%"};
+  box-shadow: 0 0.55em 1em -0.6em ${(props) => props.theme.colors[props.color]};
   &:hover {
     opacity: 0.8;
   }

@@ -9,7 +9,6 @@ const Wrapper = styled.footer`
   align-items: center;
   height: 70px;
   background-color: white;
-  box-shadow: 0px -5px 11px -2px rgba(0, 0, 0, 0.04);
 `;
 
 const Socials = styled.div`
@@ -17,7 +16,7 @@ const Socials = styled.div`
   justify-content: space-between;
   gap: 20px;
   svg {
-    fill: #70baff;
+    fill: #1f1f1f;
     cursor: pointer;
     transition: 0.3s;
     &:hover {

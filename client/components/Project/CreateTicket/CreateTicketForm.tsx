@@ -25,7 +25,15 @@ const Wrapper = styled(ContentWrapper)`
   }
 `;
 
-const InputWrapper = styled.div``;
+const InputsTogether = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 20px;
+`;
+
+const InputWrapper = styled.div`
+  flex: 1;
+`;
 
 interface Props {
   projectData: any;
@@ -103,53 +111,57 @@ const CreateTicketForm = ({ projectData }: Props) => {
   return (
     <Wrapper>
       <form onSubmit={handleSubmit}>
-        <InputWrapper>
-          <Input
-            type="text"
-            label="Title"
-            id="title"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <Input
-            type="text"
-            label="Description"
-            id="desc"
-            value={form.desc}
-            onChange={(e) => setForm({ ...form, desc: e.target.value })}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <div className="select">
-            <Select
-              required
-              label="Severity"
-              id="severity"
-              value={form.severity}
-              onChange={(e) =>
-                setForm({ ...form, severity: e.target.value as "Low" | "Medium" | "High" })
-              }
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </Select>
-          </div>
-        </InputWrapper>
-        <InputWrapper>
-          <div className="select">
-            <ProjectMembersSelect
-              label="Assignee"
-              id="assignee"
-              data={projectMembers}
-              selectValue={form.assignee}
-              hanldeOnChange={handleProjectMemberSelect}
-              user={user}
+        <InputsTogether>
+          <InputWrapper>
+            <Input
+              type="text"
+              label="Title"
+              id="title"
+              value={form.title}
+              onChange={(e) => setForm({ ...form, title: e.target.value })}
             />
-          </div>
-        </InputWrapper>
+          </InputWrapper>
+          <InputWrapper>
+            <Input
+              type="text"
+              label="Description"
+              id="desc"
+              value={form.desc}
+              onChange={(e) => setForm({ ...form, desc: e.target.value })}
+            />
+          </InputWrapper>
+        </InputsTogether>
+        <InputsTogether>
+          <InputWrapper>
+            <div className="select">
+              <Select
+                required
+                label="Severity"
+                id="severity"
+                value={form.severity}
+                onChange={(e) =>
+                  setForm({ ...form, severity: e.target.value as "Low" | "Medium" | "High" })
+                }
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </Select>
+            </div>
+          </InputWrapper>
+          <InputWrapper>
+            <div className="select">
+              <ProjectMembersSelect
+                label="Assignee"
+                id="assignee"
+                data={projectMembers}
+                selectValue={form.assignee}
+                hanldeOnChange={handleProjectMemberSelect}
+                user={user}
+              />
+            </div>
+          </InputWrapper>
+        </InputsTogether>
         <InputWrapper>
           <Tiptap label={"Ticket details"} handleTipTap={getContentFromTipTap} />
         </InputWrapper>

@@ -13,13 +13,16 @@ import Container from "../../Common/Container";
 import UserLinks from "./UserLinks";
 
 const Wrapper = styled.nav`
-  top: 0;
   z-index: 100;
   background-color: #fff;
+  position: fixed;
+  width: 100%;
 `;
 
 const StyledContainer = styled(Container)`
   max-width: 1400px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 `;
 
 const InnerWrapper = styled.div`

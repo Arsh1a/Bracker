@@ -62,7 +62,7 @@ const TicketsTable = ({ projectID }: Props) => {
     order: "desc" | "asc";
     status: "Open" | "Closed" | "Inprogress" | "All";
     severity: "Low" | "Medium" | "High" | "All";
-  }>({ page: 1, limit: 10, sort: "createdAt", order: "desc", status: "All", severity: "All" });
+  }>({ page: 1, limit: 8, sort: "createdAt", order: "desc", status: "All", severity: "All" });
 
   const [modalData, setModalData] = useState<TicketType>();
   const [isModalOpen, setIsModalOpen] = useState(false);
