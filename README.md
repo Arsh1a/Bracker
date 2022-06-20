@@ -1,4 +1,4 @@
-![Logo](/client/public/images/logo.svg?raw=true)
+<div style="text-align:center"><img src="/client/public/images/logo.svg" alt="Bracker Logo" /></div>
 
 # Bracker
 
