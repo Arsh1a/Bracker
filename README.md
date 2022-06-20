@@ -1,4 +1,4 @@
-<div style="text-align:center"><img src="/client/public/images/logo.svg" alt="Bracker Logo" /></div>
+<div style="text-align:center" align="center"><img src="/client/public/images/logo.svg" alt="Bracker Logo" /></div>
 
 # Bracker
 
