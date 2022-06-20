@@ -1,3 +1,5 @@
+![Logo](/client/public/images/logo.svg?raw=true)
+
 # Bracker
 
 Bracker is an open source bug tracker that provides a simple but powerful solution.
