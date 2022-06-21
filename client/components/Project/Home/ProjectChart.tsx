@@ -26,25 +26,29 @@ const ProjectChart = ({ ticketStats }: Props) => {
 
   return (
     <Wrapper>
-      <h2>Tickets</h2>
-      <PieChart width={500} height={270}>
-        <Pie
-          data={chartData}
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          outerRadius={100}
-          fill="#8884d8"
-          dataKey="value"
-          label={(entry) => entry.name}
-          isAnimationActive={false}
-        >
-          {chartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Tooltip />
-      </PieChart>
+      <h2>Tickets stats</h2>
+      {ticketStats.totalTickets ? (
+        <PieChart width={500} height={270}>
+          <Pie
+            data={chartData}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            outerRadius={100}
+            fill="#8884d8"
+            dataKey="value"
+            label={(entry) => entry.name}
+            isAnimationActive={false}
+          >
+            {chartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      ) : (
+        <p>No data</p>
+      )}
     </Wrapper>
   );
 };

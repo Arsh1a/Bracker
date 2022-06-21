@@ -3,6 +3,7 @@ import projectService from "./projectService";
 
 const initialState = {
   projects: <any[]>[],
+  lastCreatedProject: { _id: "" },
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -117,6 +118,7 @@ export const projectSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.projects.push(action.payload as never);
+        state.lastCreatedProject = action.payload;
       })
       .addCase(createProject.rejected, (state: typeof initialState, action) => {
         state.isLoading = false;

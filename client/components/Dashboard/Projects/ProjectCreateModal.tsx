@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { createProject, inviteToProject } from "../../../features/slices/project/projectSlice";
 import { RootState } from "../../../features/store";
 import { useAppDispatch } from "../../../lib/hooks";
+import { useRouter } from "next/router";
 
 const ModalInnerWrapper = styled.div`
   position: relative;
@@ -56,7 +57,10 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
   });
 
   const dispatch = useAppDispatch();
-  const { projects, isLoading } = useSelector((state: RootState) => state.project);
+  const router = useRouter();
+  const { projects, lastCreatedProject, isLoading } = useSelector(
+    (state: RootState) => state.project
+  );
 
   const renderStep = () => {
     switch (currentStep) {
@@ -133,6 +137,8 @@ const ProjectCreateModal = ({ setIsModalOpen }: Props) => {
 
     dispatch(inviteToProject(inviteData));
     setIsModalOpen(false);
+
+    router.push(`/p/${lastCreatedProject._id}`);
   };
 
   return (
