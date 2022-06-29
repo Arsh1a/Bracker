@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property="og:title" content="Bracker | Bug Tracker" />
         <meta
           property="og:description"
-          content="Learn about 13 features that set Ahrefs apart from the competition."
+          content="Bracker is an open source bug tracker that provides a simple but powerful solution."
         />
         <meta property="og:url" content="https://www.bracker.ir/" />
         <meta property="og:locale" content="en_GB" />
