@@ -19,7 +19,7 @@ const accessTokenCookieOptions = <CookieOptions>{
 };
 
 /// @desc Register new user
-/// @route POST /auth/register
+/// @route POST /api/auth/register
 /// @access public
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   const { name, username, email, password } = req.body;

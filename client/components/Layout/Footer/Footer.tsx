@@ -1,14 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import { GrGithub } from "react-icons/gr";
+import Container from "../../Common/Container";
 
 const Wrapper = styled.footer`
+  background-color: white;
+`;
+
+const InnerWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 20px 30px;
   align-items: center;
-  height: 70px;
-  background-color: white;
+  width: 100%;
 `;
 
 const Socials = styled.div`
@@ -30,12 +33,16 @@ interface Props {}
 const Footer = ({}: Props) => {
   return (
     <Wrapper>
-      <span> © 2022, Bracker</span>
-      <Socials>
-        <a href="https://github.com/Arsh1a/Bracker/" target="_blank" rel="noreferrer">
-          <GrGithub size={30} />
-        </a>
-      </Socials>
+      <Container>
+        <InnerWrapper>
+          <span> © 2022, Bracker</span>
+          <Socials>
+            <a href="https://github.com/Arsh1a/Bracker/" target="_blank" rel="noreferrer">
+              <GrGithub size={30} />
+            </a>
+          </Socials>
+        </InnerWrapper>
+      </Container>
     </Wrapper>
   );
 };
