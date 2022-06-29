@@ -17,6 +17,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 20px;
+  flex-wrap: wrap;
 `;
 
 const WelcomeBox = styled(ContentWrapper)`

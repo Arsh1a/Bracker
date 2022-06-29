@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Footer from "./Footer/Footer";
 import Navbar from "./Navbar/Navbar";
@@ -16,6 +16,7 @@ const InnerLayout = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-x: auto;
 `;
 
 interface Props {
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const Layout = ({ children }: Props) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
 
   // Layout for the dashboard
@@ -30,9 +32,9 @@ const Layout = ({ children }: Props) => {
     return (
       <>
         <Wrapper>
-          <DashboardMenu />
+          <DashboardMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           <InnerLayout>
-            <DashboardNavbar />
+            <DashboardNavbar setIsMenuOpen={setIsMenuOpen} />
             {children}
           </InnerLayout>
         </Wrapper>
@@ -44,9 +46,9 @@ const Layout = ({ children }: Props) => {
     return (
       <>
         <Wrapper>
-          <ProjectMenu />
+          <ProjectMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
           <InnerLayout>
-            <DashboardNavbar />
+            <DashboardNavbar setIsMenuOpen={setIsMenuOpen} />
             {children}
           </InnerLayout>
         </Wrapper>

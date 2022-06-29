@@ -21,6 +21,7 @@ const Wrapper = styled(ContentWrapper)`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
   input {
     margin-bottom: 20px;
   }

@@ -22,6 +22,9 @@ const Wrapper = styled.div`
   gap: 20px;
   align-items: flex-start;
   justify-content: space-between;
+  @media screen and (max-width: 1100px) {
+    flex-direction: column;
+  }
 `;
 
 const StyledErrorMessage = styled(ErrorMessage)`

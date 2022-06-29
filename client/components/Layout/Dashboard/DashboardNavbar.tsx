@@ -6,6 +6,7 @@ import { RootState } from "../../../features/store";
 import { logout, reset } from "../../../features/slices/auth/authSlice";
 import UserStuff from "../UserStuff";
 import { useAppDispatch } from "../../../lib/hooks";
+import { GrMenu } from "react-icons/gr";
 
 const Wrapper = styled.nav`
   border-top: none;
@@ -22,9 +23,25 @@ const UserStuffWrapper = styled.div`
   margin-left: auto;
 `;
 
-interface Props {}
+const OpenMenuButton = styled.div`
+  display: none;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    opacity: 0.6;
+  }
+  @media screen and (max-width: 700px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
 
-const DashboardNavbar = ({}: Props) => {
+interface Props {
+  setIsMenuOpen: (isOpen: boolean) => void;
+}
+
+const DashboardNavbar = ({ setIsMenuOpen }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -44,6 +61,9 @@ const DashboardNavbar = ({}: Props) => {
 
   return (
     <Wrapper>
+      <OpenMenuButton onClick={() => setIsMenuOpen(true)}>
+        <GrMenu size="25px" />
+      </OpenMenuButton>
       <UserStuffWrapper>
         <UserStuff currentUser={currUser} handleLogout={handleLogout} />
       </UserStuffWrapper>

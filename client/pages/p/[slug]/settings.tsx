@@ -16,6 +16,9 @@ const Wrapper = styled.div`
   align-items: flex-start;
   gap: 20px;
   width: 100%;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const FirstRow = styled.div`
@@ -24,6 +27,10 @@ const FirstRow = styled.div`
   flex-direction: column;
   flex: 1;
   gap: 20px;
+  width: 100%;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const StyledErrorMessage = styled(ErrorMessage)`

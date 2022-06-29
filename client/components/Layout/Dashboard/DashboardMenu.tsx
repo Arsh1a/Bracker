@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { GrApps, GrBriefcase, GrMailOption, GrUserSettings } from "react-icons/gr";
@@ -9,7 +9,7 @@ import { RootState } from "../../../features/store";
 import { getInvites } from "../../../features/slices/invite/inviteSlice";
 import { useAppDispatch } from "../../../lib/hooks";
 
-const Menu = styled.ul`
+const Menu = styled.ul<{ isMenuOpen: boolean }>`
   list-style: none;
   font-weight: 700;
   display: flex;
@@ -21,6 +21,13 @@ const Menu = styled.ul`
   top: 0;
   min-width: 220px;
   background-color: white;
+  transition: 0.3s;
+  @media screen and (max-width: 700px) {
+    position: fixed;
+    z-index: 50;
+    left: -250px;
+  }
+  ${(props) => props.isMenuOpen && "left: 0 !important;"}
 `;
 
 const Logo = styled.div`
@@ -77,10 +84,14 @@ interface StyledProps {
   isActive: boolean;
 }
 
-interface Props {}
+interface Props {
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isMenuOpen: boolean) => void;
+}
 
-const DashboardMenu = ({}: Props) => {
+const DashboardMenu = ({ isMenuOpen, setIsMenuOpen }: Props) => {
   const [invitesCount, setInvitesCount] = useState(0);
+  const menuRef = useRef<HTMLUListElement>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -95,34 +106,60 @@ const DashboardMenu = ({}: Props) => {
     setInvitesCount(invites.length);
   }, [invites, user]);
 
+  useEffect(() => {
+    const checkIfClickedOutside = (e: any) => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      if (isMenuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", checkIfClickedOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [isMenuOpen]);
+
   return (
-    <Menu>
+    <Menu ref={menuRef} isMenuOpen={isMenuOpen}>
       <Link href="/" passHref>
         <Logo>
           <Image src="/images/logo.svg" height="50px" width="150px" alt="Logo" />
         </Logo>
       </Link>
       <Link href={`/dashboard`} passHref>
-        <MenuLink isActive={router.pathname === "/dashboard"}>
+        <MenuLink onClick={() => setIsMenuOpen(false)} isActive={router.pathname === "/dashboard"}>
           <GrApps />
           Dashboard
         </MenuLink>
       </Link>
 
       <Link href={`/dashboard/projects`} passHref>
-        <MenuLink isActive={router.pathname === "/dashboard/projects"}>
+        <MenuLink
+          onClick={() => setIsMenuOpen(false)}
+          isActive={router.pathname === "/dashboard/projects"}
+        >
           <GrBriefcase />
           Projects
         </MenuLink>
       </Link>
       <Link href={`/dashboard/invites`} passHref>
-        <MenuLink isActive={router.pathname === "/dashboard/invites"}>
+        <MenuLink
+          onClick={() => setIsMenuOpen(false)}
+          isActive={router.pathname === "/dashboard/invites"}
+        >
           <GrMailOption />
           Invites {invitesCount > 0 && <span className="total-invites">{invitesCount}</span>}
         </MenuLink>
       </Link>
       <Link href={`/dashboard/settings`} passHref>
-        <MenuLink isActive={router.pathname === "/dashboard/settings"}>
+        <MenuLink
+          onClick={() => setIsMenuOpen(false)}
+          isActive={router.pathname === "/dashboard/settings"}
+        >
           <GrUserSettings />
           Settings
         </MenuLink>

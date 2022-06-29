@@ -27,12 +27,18 @@ const MainText = styled.div`
   top: 100px;
   h1 {
     font-size: 3rem;
+    @media screen and (max-width: 450px) {
+      font-size: 2rem;
+    }
   }
   p {
     font-size: 1.24rem;
     margin-top: 20px;
     margin-bottom: 50px;
     color: ${(props) => props.theme.colors.gray};
+    @media screen and (max-width: 450px) {
+      font-size: 1rem;
+    }
   }
   button {
     font-size: 1rem;
@@ -40,6 +46,10 @@ const MainText = styled.div`
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 2px;
+    @media screen and (max-width: 450px) {
+      font-size: 0.8rem;
+      padding: 10px 25px;
+    }
   }
 `;
 
@@ -49,6 +59,9 @@ const MainImage = styled.div`
   span {
     border-radius: 20px;
     box-shadow: 0px 0px 35px -14px rgba(0, 0, 0, 0.197);
+  }
+  @media screen and (max-width: 600px) {
+    top: 150px;
   }
 `;
 

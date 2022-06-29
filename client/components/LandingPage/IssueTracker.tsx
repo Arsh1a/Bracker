@@ -10,12 +10,19 @@ const Wrapper = styled.div`
 
 const InnerWrapper = styled.div`
   margin-top: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 180px;
 `;
 
 const InfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 80px;
+  align-items: center;
+  @media screen and (max-width: 680px) {
+    flex-direction: column;
+  }
 `;
 
 const InfoText = styled.div`
@@ -30,6 +37,14 @@ const InfoText = styled.div`
   p {
     font-size: 1.2rem;
   }
+  @media screen and (max-width: 450px) {
+    h2 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+  }
 `;
 
 const InfoImage = styled.div`
@@ -43,15 +58,25 @@ const InfoImage = styled.div`
     right: 0px;
     bottom: 0px;
     background-color: ${(props) => props.theme.colors.primary};
-    border-radius: 15px;
+    border-radius: 1rem;
     transition: all 1s ease-in-out 0s;
     left: -30px;
     top: -25px;
     right: 25px;
     transform: rotate(-3deg);
+    @media screen and (max-width: 450px) {
+      left: -15px;
+      right: 35px;
+    }
   }
   img {
-    border-radius: 20px;
+    border-radius: 1rem;
+  }
+  @media screen and (max-width: 680px) {
+    margin: 0 40px;
+  }
+  @media screen and (max-width: 450px) {
+    margin: 0;
   }
 `;
 
@@ -65,7 +90,7 @@ const IssueTracker = ({}: Props) => {
           <InfoWrapper>
             <InfoText>
               <h2>Issue management</h2>
-              <p>Record, manage and track bugs easily and sort them based on your criteria.</p>
+              <p>Record, manage and track bugs easily and sort them based on your criteria. </p>
             </InfoText>
             <InfoImage>
               <Image

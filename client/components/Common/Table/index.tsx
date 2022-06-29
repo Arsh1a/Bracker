@@ -8,6 +8,7 @@ import Loading from "../Loading";
 
 const Wrapper = styled.div`
   position: relative;
+  overflow-x: auto;
 `;
 
 const StyledTable = styled.table`

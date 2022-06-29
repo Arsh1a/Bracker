@@ -7,6 +7,7 @@ const Wrapper = styled.div`
   gap: 20px;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 `;
 
 interface Props {

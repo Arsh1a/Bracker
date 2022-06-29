@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { GrTicket, GrLock, GrDocumentUser, GrAddCircle, GrHomeRounded } from "react-icons/gr";
 import { FiSettings } from "react-icons/fi";
 
-const Menu = styled.ul`
+const Menu = styled.ul<{ isMenuOpen: boolean }>`
   list-style: none;
   font-weight: 700;
   display: flex;
@@ -18,6 +18,13 @@ const Menu = styled.ul`
   height: 100vh;
   top: 0;
   min-width: 220px;
+  transition: 0.3s;
+  @media screen and (max-width: 700px) {
+    position: fixed;
+    z-index: 50;
+    left: -250px;
+  }
+  ${(props) => props.isMenuOpen && "left: 0 !important;"}
 `;
 
 const Logo = styled.div`
@@ -74,13 +81,34 @@ interface StyledProps {
   isActive: boolean;
 }
 
-interface Props {}
+interface Props {
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isMenuOpen: boolean) => void;
+}
 
-const ProjectMenu = ({}: Props) => {
+const ProjectMenu = ({ isMenuOpen, setIsMenuOpen }: Props) => {
+  const menuRef = useRef<HTMLUListElement>(null);
   const router = useRouter();
 
+  useEffect(() => {
+    const checkIfClickedOutside = (e: any) => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      if (isMenuOpen && menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", checkIfClickedOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [isMenuOpen]);
+
   return (
-    <Menu>
+    <Menu ref={menuRef} isMenuOpen={isMenuOpen}>
       <Link href="/" passHref>
         <Logo>
           <Image src="/images/logo.svg" height="50px" width="150px" alt="Logo" />
