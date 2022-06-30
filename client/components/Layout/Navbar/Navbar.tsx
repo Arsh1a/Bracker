@@ -20,7 +20,6 @@ const Wrapper = styled.nav`
 `;
 
 const StyledContainer = styled(Container)`
-  max-width: 1400px;
   padding-top: 20px;
   padding-bottom: 20px;
 `;
