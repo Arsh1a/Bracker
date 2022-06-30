@@ -7,6 +7,11 @@ const Wrapper = styled.footer`
   background-color: white;
 `;
 
+const StyledContainer = styled(Container)`
+  padding-top: 20px;
+  padding-bottom: 20px;
+`;
+
 const InnerWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -33,7 +38,7 @@ interface Props {}
 const Footer = ({}: Props) => {
   return (
     <Wrapper>
-      <Container>
+      <StyledContainer>
         <InnerWrapper>
           <span> © 2022, Bracker</span>
           <Socials>
@@ -42,7 +47,7 @@ const Footer = ({}: Props) => {
             </a>
           </Socials>
         </InnerWrapper>
-      </Container>
+      </StyledContainer>
     </Wrapper>
   );
 };

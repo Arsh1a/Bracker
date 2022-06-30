@@ -15,6 +15,7 @@ import ContentWrapper from "../components/Common/ContentWrapper";
 
 const AuthContainer = styled(Container)`
   margin: auto auto;
+  margin-top: 110px;
 `;
 
 const StyledContentWrapper = styled(ContentWrapper)`
