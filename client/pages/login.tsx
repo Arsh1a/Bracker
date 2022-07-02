@@ -78,7 +78,7 @@ const Login = ({}: Props) => {
   };
 
   const loginAsGuest = () => {
-    dispatch(login({ email: "demouser@gmail.com", password: "12345678" }));
+    dispatch(login({ email: "demouser@demo.com", password: "12345678" }));
   };
 
   return (
