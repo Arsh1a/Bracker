@@ -6,6 +6,8 @@ import { searchUsers } from "../../../lib/requestApi";
 import { useAppDispatch } from "../../../lib/hooks";
 import { inviteToProject } from "../../../features/slices/project/projectSlice";
 import Button from "../../Common/Button";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../features/store";
 
 const StyledContentWrapper = styled(ContentWrapper)`
   display: flex;
@@ -20,6 +22,10 @@ interface Props {
 
 const InviteMemberToProject = ({ data }: Props) => {
   const [members, setMembers] = useState<string[]>([]);
+
+  const { isError, isLoading, isSuccess, message } = useSelector(
+    (state: RootState) => state.project
+  );
 
   const dispatch = useAppDispatch();
 
@@ -38,7 +44,12 @@ const InviteMemberToProject = ({ data }: Props) => {
         <MemberSearch passDataToParent={handleMemberSearch} handleData={searchUsers} />
       </div>
       <div>
-        <Button color="primary" onClick={handleSubmit}>
+        <Button
+          disabled={members.length <= 0}
+          isLoading={isLoading}
+          color="primary"
+          onClick={handleSubmit}
+        >
           Invite
         </Button>
       </div>

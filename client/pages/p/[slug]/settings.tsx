@@ -10,6 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../features/store";
 import ErrorMessage from "../../../components/Common/ErrorMessage";
+import "react-toastify/dist/ReactToastify.css";
 
 const Wrapper = styled.div`
   display: flex;

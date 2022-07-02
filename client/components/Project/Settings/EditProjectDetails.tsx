@@ -30,6 +30,13 @@ const EditProjectDetails = ({ data }: Props) => {
     title: data.title,
     desc: data.desc,
   });
+  const [isFormEdited, setIsFormEdited] = useState(false);
+
+  useEffect(() => {
+    if (data.title !== formData.title || data.desc !== formData.desc) {
+      setIsFormEdited(true);
+    }
+  }, [formData]);
 
   const { isError, isLoading, isSuccess, message } = useSelector(
     (state: RootState) => state.project
@@ -62,7 +69,7 @@ const EditProjectDetails = ({ data }: Props) => {
           value={formData.desc}
           onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
         />
-        <Button type="submit" color="primary" isLoading={isLoading}>
+        <Button disabled={!isFormEdited} type="submit" color="primary" isLoading={isLoading}>
           Save
         </Button>
       </form>

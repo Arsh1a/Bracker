@@ -16,6 +16,7 @@ import { MdModeEdit } from "react-icons/md";
 import EditProfile from "../../components/Dashboard/Setting/EditProfile";
 import ChangePassword from "../../components/Dashboard/Setting/ChangePassword";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Wrapper = styled.div`
   display: flex;
