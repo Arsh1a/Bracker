@@ -4,18 +4,41 @@
 
 Bracker is an open source bug tracker that provides a simple but powerful solution.
 
+
 ## Installation
 
-1. Clone the repo
+1. Make sure MongoDB is running on your system.
+
+2. Clone the repo
 
 ```shell
 git clone https://github.com/Arsh1a/Bracker.git
 ```
 
-2. Install the packages in root, client and server folders.
+3. Install the packages in root, client and server folders
 
 ```shell
 yarn install
+```
+
+4. Create ```.env``` file for both client and server and fill the variables
+
+- client/.env:
+```
+NEXT_PUBLIC_API_URL = http://localhost:5000/api
+```
+
+- server/.env:
+```
+NODE_ENV = development
+SERVER_ENV = development
+PORT = 5000
+MONGO_URI = 
+JWT_SECRET = 
+# Optional if you want to use profile picture upload feature
+CLOUDINARY_NAME = 
+CLOUDINARY_KEY = 
+CLOUDINARY_SECRET = 
 ```
 
 3. Start the app in root directory
@@ -23,6 +46,7 @@ yarn install
 ```shell
 yarn dev
 ```
+
 
 ## Contributing
 
