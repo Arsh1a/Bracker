@@ -64,7 +64,7 @@ const Settings = ({ data }: Props) => {
 
   return (
     <DashboardPagesLayout headerContent={<h1>Project Settings</h1>}>
-      {isError && <StyledErrorMessage>{message}</StyledErrorMessage>}
+      {isError && message && <StyledErrorMessage>{message}</StyledErrorMessage>}
       <Wrapper>
         <EditProjectDetails data={data} />
         <FirstRow>

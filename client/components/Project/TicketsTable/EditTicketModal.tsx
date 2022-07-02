@@ -165,7 +165,7 @@ const EditTicketModal = ({ data, projectID, closeModal, handleDataChange }: Prop
             Delete
           </Button>
         </ButtonsWrapper>
-        {isError && <StyledErrorMessage>{message}</StyledErrorMessage>}
+        {isError && message && <StyledErrorMessage>{message}</StyledErrorMessage>}
       </Form>
     </Modal>
   );

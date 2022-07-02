@@ -66,7 +66,7 @@ const Settings = ({}: Props) => {
 
   return (
     <DashboardPagesLayout headerContent={<h1>Profile Settings</h1>}>
-      {isError && <StyledErrorMessage>{message}</StyledErrorMessage>}
+      {isError && message && <StyledErrorMessage>{message}</StyledErrorMessage>}
       <Wrapper>
         <EditProfile {...childrenProps} />
         <ChangePassword {...childrenProps} />

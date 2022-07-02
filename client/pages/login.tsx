@@ -76,6 +76,11 @@ const Login = ({}: Props) => {
     setErrorMessage("");
     dispatch(login(userData));
   };
+
+  const loginAsGuest = () => {
+    dispatch(login({ email: "demouser@gmail.com", password: "12345678" }));
+  };
+
   return (
     <AuthContainer center={true}>
       <StyledContentWrapper>
@@ -107,6 +112,7 @@ const Login = ({}: Props) => {
         <Link href="/signup" passHref>
           <span>Don&apos;t have an account yet? Sign Up</span>
         </Link>
+        <span onClick={loginAsGuest}>Login as a guest</span>
       </StyledContentWrapper>
     </AuthContainer>
   );

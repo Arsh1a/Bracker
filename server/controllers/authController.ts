@@ -265,6 +265,16 @@ export const uploadPicture = async (req: Request, res: Response, next: NextFunct
     //Check if user already has a picture, if yes then update the picture instead of making new one.
     const foundUser = await User.findById(user._id);
 
+    //Check if user's username is "demouser"
+    if (foundUser.username === "demouser") {
+      return next(
+        new ErrorResponse(
+          "Demo user can't change their profile picture. Please sign up to use all the features.",
+          400
+        )
+      );
+    }
+
     foundUser.profilePicture = path;
 
     await foundUser.save();
@@ -318,6 +328,17 @@ export const updateUserInfo = async (req: Request, res: Response, next: NextFunc
   try {
     const foundUser = await User.findByIdAndUpdate(user._id, { email }, { new: true });
 
+    //Check if user's username is "demouser"
+
+    if (foundUser.username === "demouser") {
+      return next(
+        new ErrorResponse(
+          "Demo user can't change their profile info. Please sign up to use all the features.",
+          400
+        )
+      );
+    }
+
     if (!foundUser) {
       return next(new ErrorResponse("User not found", 404));
     }
@@ -352,6 +373,17 @@ export const changePassword = async (req: Request, res: Response, next: NextFunc
 
   try {
     const foundUser = await User.findById(user._id).select("+password");
+
+    //Check if user's username is "demouser"
+
+    if (foundUser.username === "demouser") {
+      return next(
+        new ErrorResponse(
+          "Demo user can't change their password. Please sign up to use all the features.",
+          400
+        )
+      );
+    }
 
     if (!foundUser) {
       return next(new ErrorResponse("User not found", 404));

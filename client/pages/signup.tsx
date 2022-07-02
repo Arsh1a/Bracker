@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "../components/Common/Button";
 import Input from "../components/Common/Input";
 import { useSelector, useDispatch } from "react-redux";
-import { register, reset } from "../features/slices/auth/authSlice";
+import { login, register, reset } from "../features/slices/auth/authSlice";
 import { RootState, AppDispatch } from "../features/store";
 import { useRouter } from "next/router";
 import Loading from "../components/Common/Loading";
@@ -82,6 +82,10 @@ const Signup = ({}: Props) => {
     dispatch(register(userData));
   };
 
+  const loginAsGuest = () => {
+    dispatch(login({ email: "demouser@gmail.com", password: "12345678" }));
+  };
+
   return (
     <AuthContainer center={true}>
       <StyledContentWrapper>
@@ -130,6 +134,7 @@ const Signup = ({}: Props) => {
         <Link href="/login" passHref>
           <span>Already have an account? Log In</span>
         </Link>
+        <span onClick={loginAsGuest}>Login as a guest</span>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </StyledContentWrapper>
     </AuthContainer>
