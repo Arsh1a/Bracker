@@ -9,7 +9,7 @@ const Wrapper = styled.div`
 `;
 
 const InnerWrapper = styled.div`
-  margin-top: 300px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   gap: 180px;
@@ -90,10 +90,15 @@ const IssueTracker = ({}: Props) => {
           <InfoWrapper>
             <InfoText>
               <h2>Issue management</h2>
-              <p>Record, manage and track bugs easily and sort them based on your criteria. </p>
+              <p>
+                Record, manage and track bugs easily and sort them based on your criteria. Bracker
+                helps to manage your issue log instead of messy spreadsheets or bulky software for
+                bug, task, and issue tracking.
+              </p>
             </InfoText>
             <InfoImage>
               <Image
+                priority
                 src="/images/create-ticket.jpg"
                 alt="Create Ticket"
                 width="688px"
