@@ -180,7 +180,7 @@ export const deleteProject = async (req: Request, res: Response, next: NextFunct
     await project.remove();
 
     //Delete project tickets
-    await Ticket.deleteMany({ id: projectID });
+    await Ticket.deleteMany({ projectID: projectID });
 
     res.status(200).json(projectID);
   } catch (err) {
