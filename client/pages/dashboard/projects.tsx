@@ -9,7 +9,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "../../lib/requestApi";
 import { useSelector } from "react-redux";
 import { RootState } from "../../features/store";
-import { getProjects, reset } from "../../features/slices/project/projectSlice";
+import { getProjects, reset, resetAllProjects } from "../../features/slices/project/projectSlice";
 import DashboardPagesLayout from "../../components/Common/DashboardPagesLayout";
 import ErrorMessage from "../../components/Common/ErrorMessage";
 import { useAppDispatch } from "../../lib/hooks";
@@ -49,6 +49,7 @@ const Projects = ({}: Props) => {
 
   useEffect(() => {
     dispatch(getProjects());
+    dispatch(resetAllProjects());
   }, []);
 
   useEffect(() => {

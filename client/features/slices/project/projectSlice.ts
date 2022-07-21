@@ -89,6 +89,14 @@ export const projectSlice = createSlice({
       state.isSuccess = false;
       state.message = "";
     },
+    resetAllProjects: (state) => {
+      state.projects = [];
+      state.lastCreatedProject = { _id: "" };
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -175,5 +183,5 @@ export const projectSlice = createSlice({
   },
 });
 
-export const { reset } = projectSlice.actions;
+export const { reset, resetAllProjects } = projectSlice.actions;
 export default projectSlice.reducer;

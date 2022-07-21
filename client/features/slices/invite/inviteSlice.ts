@@ -46,6 +46,13 @@ export const inviteSlice = createSlice({
       state.isSuccess = false;
       state.message = "";
     },
+    resetAllInvites: (state) => {
+      state.invites = [];
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -91,5 +98,5 @@ export const inviteSlice = createSlice({
   },
 });
 
-export const { reset } = inviteSlice.actions;
+export const { reset, resetAllInvites } = inviteSlice.actions;
 export default inviteSlice.reducer;

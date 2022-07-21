@@ -7,6 +7,7 @@ import { logout, reset } from "../../../features/slices/auth/authSlice";
 import UserStuff from "../UserStuff";
 import { useAppDispatch } from "../../../lib/hooks";
 import { GrMenu } from "react-icons/gr";
+import { resetAll } from "../../../lib/utils";
 
 const Wrapper = styled.nav`
   border-top: none;
@@ -51,7 +52,7 @@ const DashboardNavbar = ({ setIsMenuOpen }: Props) => {
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(reset());
+    resetAll(dispatch);
     router.push("/");
   };
 

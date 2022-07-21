@@ -133,6 +133,25 @@ export const ticketSlice = createSlice({
       state.isSuccess = false;
       state.message = "";
     },
+    resetAllTickets: (state) => {
+      state.ticketsData = {
+        tickets: [],
+        currentPage: 1,
+        totalPages: 1,
+        totalTickets: 0,
+      };
+      state.ticketStats = {
+        totalTickets: 0,
+        openTickets: 0,
+        inProgressTickets: 0,
+        closedTickets: 0,
+      };
+
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = false;
+      state.message = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -222,5 +241,5 @@ export const ticketSlice = createSlice({
   },
 });
 
-export const { reset } = ticketSlice.actions;
+export const { reset, resetAllTickets } = ticketSlice.actions;
 export default ticketSlice.reducer;
