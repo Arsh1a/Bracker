@@ -1,4 +1,3 @@
-<div style="text-align:center;margin-bottom:20px" align="center"><img src="/client/public/images/logo.svg" alt="Bracker logo" /></div>
 <div style="text-align:center" align="center"><img src="/client/public/images/landing-image.png" alt="Bracker landing page" /></div>
 
 # Bracker
